@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login & Registration | PW Premium Hub</title>
+  <meta name="description" content="Sign in with Google or create your student account to access premium competition exam batches, notes, and DPPs.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .auth-page-container {
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    .auth-card-glass {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(16px);
+    }
+  </style>
+</head>
+<body>
+
+  <main class="auth-page-container">
+    
+    <!-- Top Brand & Return Link -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <a href="index.html" class="brand-badge" style="font-size: 1rem;">
+        <span class="brand-icon">⚡</span>
+        <span>PW Premium Hub</span>
+      </a>
+      <a href="index.html" class="nav-link-btn" style="font-size: 0.76rem; padding: 6px 12px;">
+        ← Back to Batches
+      </a>
+    </div>
+
+    <!-- Main Auth Card -->
+    <div class="auth-card-glass">
+
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">
+          Student Access Portal
+        </h1>
+        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0;">
+          Sign in to secure batch passes, study material & 50% referral cashback.
+        </p>
+      </div>
+
+      <!-- Logged In Status Banner -->
+      <div id="authLoggedInBanner" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-size: 0.78rem; color: #86efac; font-weight: 700;">Currently Active As:</div>
+          <div id="loggedInUserDisplay" style="font-size: 0.92rem; color: #ffffff; font-weight: 700;">Student</div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="index.html" class="btn-enroll" style="padding: 6px 12px; font-size: 0.74rem;">Go to Batches</a>
+          <button type="button" id="btnLogoutUser" class="btn-danger" style="padding: 6px 10px; font-size: 0.74rem;">Logout</button>
+        </div>
+      </div>
+
+      <!-- One-Click Google Sign In (Primary & Mandatory) -->
+      <div class="google-auth-wrap" style="margin-bottom: 18px;">
+        <button type="button" class="btn-google-auth" id="btnGoogleSignIn" style="padding: 13px 18px; box-shadow: 0 4px 18px rgba(0,0,0,0.3);">
+          <svg width="22" height="22" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+          </svg>
+          <span>Continue with Google (1-Click)</span>
+        </button>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 16px; margin-bottom: 12px;">
+          <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
+          <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">OR USE PASSWORD</span>
+          <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
+        </div>
+      </div>
+
+      <!-- Auth Nav Tabs -->
+      <div class="auth-tabs-nav" style="margin-bottom: 18px;">
+        <button type="button" class="auth-tab-btn active" id="tabBtnLogin" data-target="authViewLogin">🔑 Student Login</button>
+        <button type="button" class="auth-tab-btn" id="tabBtnRegister" data-target="authViewRegister">📝 New Register</button>
+        <button type="button" class="auth-tab-btn" id="tabBtnReset" data-target="authViewReset">🔄 Reset</button>
+      </div>
+
+      <!-- VIEW 1: LOGIN -->
+      <div class="auth-view-section active" id="authViewLogin">
+        <form id="formStudentLogin">
+          <div class="form-group">
+            <label class="form-label" for="loginContact">Email Address or WhatsApp Mobile</label>
+            <input type="text" id="loginContact" class="form-input" placeholder="e.g. rahul@gmail.com or 9876543210" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" required>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 14px; width: 100%;">
+            <span>Login to Student Portal</span>
+          </button>
+        </form>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 14px; font-size: 0.76rem;">
+          <button type="button" class="auth-link-hint" id="linkToReset">Forgot Password?</button>
+          <button type="button" class="auth-link-hint" id="linkToRegister">New Student? Register here</button>
+        </div>
+      </div>
+
+      <!-- VIEW 2: REGISTER -->
+      <div class="auth-view-section" id="authViewRegister" style="display: none;">
+        <form id="formStudentRegister">
+          <div class="form-group">
+            <label class="form-label" for="regName">Student Full Name</label>
+            <input type="text" id="regName" class="form-input" placeholder="e.g. Rahul Kumar" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Email Address</label>
+            <input type="email" id="regEmail" class="form-input" placeholder="e.g. rahul@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPhone">WhatsApp Mobile Number</label>
+            <input type="tel" id="regPhone" class="form-input" placeholder="e.g. 9876543210" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Create Account Password</label>
+            <input type="password" id="regPassword" class="form-input" placeholder="Min 4 characters" minlength="4" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regExam">Target Exam Category</label>
+            <select id="regExam" class="form-input">
+              <option value="jee">IIT-JEE (Mains + Advanced)</option>
+              <option value="neet">NEET UG Medical</option>
+              <option value="defence">NDA & Defence</option>
+              <option value="foundation">Class 9th & 10th</option>
+              <option value="upsc">UPSC & Civil Services</option>
+              <option value="ssc">SSC & Railway</option>
+              <option value="other">Other Exams</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 14px; width: 100%;">
+            <span>Create Account & Continue</span>
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 14px; font-size: 0.76rem;">
+          <button type="button" class="auth-link-hint" id="linkToLogin">Already registered? Login</button>
+        </div>
+      </div>
+
+      <!-- VIEW 3: RESET -->
+      <div class="auth-view-section" id="authViewReset" style="display: none;">
+        <form id="formStudentReset">
+          <div class="form-group">
+            <label class="form-label" for="resetContact">Registered Email or WhatsApp</label>
+            <input type="text" id="resetContact" class="form-input" placeholder="Enter your registered contact" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="resetNewPassword">New Password</label>
+            <input type="password" id="resetNewPassword" class="form-input" placeholder="Enter new password" minlength="4" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="resetConfirmPassword">Confirm New Password</label>
+            <input type="password" id="resetConfirmPassword" class="form-input" placeholder="Confirm new password" minlength="4" required>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 14px; width: 100%;">
+            <span>Update Password</span>
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 14px; font-size: 0.76rem;">
+          <button type="button" class="auth-link-hint" id="linkResetToLogin">Back to Login</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 24x7 Help Hint -->
+    <div style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--text-muted);">
+      Need assistance? <a href="https://wa.me/917631442934?text=Hello%20Support%2C%20I%20need%20help%20with%20login" target="_blank" rel="noopener noreferrer" style="color: #4ade80; text-decoration: none; font-weight: 700;">🟢 Contact WhatsApp Support</a>
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Notification</span>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+
+      const authLoggedInBanner = document.getElementById("authLoggedInBanner");
+      const loggedInUserDisplay = document.getElementById("loggedInUserDisplay");
+      const btnLogoutUser = document.getElementById("btnLogoutUser");
+      const btnGoogleSignIn = document.getElementById("btnGoogleSignIn");
+
+      const tabBtnLogin = document.getElementById("tabBtnLogin");
+      const tabBtnRegister = document.getElementById("tabBtnRegister");
+      const tabBtnReset = document.getElementById("tabBtnReset");
+
+      const authViewLogin = document.getElementById("authViewLogin");
+      const authViewRegister = document.getElementById("authViewRegister");
+      const authViewReset = document.getElementById("authViewReset");
+
+      function switchTab(viewId) {
+        [authViewLogin, authViewRegister, authViewReset].forEach(v => v.style.display = "none");
+        [tabBtnLogin, tabBtnRegister, tabBtnReset].forEach(b => b.classList.remove("active"));
+
+        if (viewId === "authViewLogin") {
+          authViewLogin.style.display = "block";
+          tabBtnLogin.classList.add("active");
+        } else if (viewId === "authViewRegister") {
+          authViewRegister.style.display = "block";
+          tabBtnRegister.classList.add("active");
+        } else if (viewId === "authViewReset") {
+          authViewReset.style.display = "block";
+          tabBtnReset.classList.add("active");
+        }
+      }
+
+      tabBtnLogin.addEventListener("click", () => switchTab("authViewLogin"));
+      tabBtnRegister.addEventListener("click", () => switchTab("authViewRegister"));
+      tabBtnReset.addEventListener("click", () => switchTab("authViewReset"));
+
+      document.getElementById("linkToRegister")?.addEventListener("click", () => switchTab("authViewRegister"));
+      document.getElementById("linkToReset")?.addEventListener("click", () => switchTab("authViewReset"));
+      document.getElementById("linkToLogin")?.addEventListener("click", () => switchTab("authViewLogin"));
+      document.getElementById("linkResetToLogin")?.addEventListener("click", () => switchTab("authViewLogin"));
+
+      function updateUI() {
+        if (APP_STATE.currentUser) {
+          authLoggedInBanner.style.display = "flex";
+          loggedInUserDisplay.textContent = `${APP_STATE.currentUser.name} (${APP_STATE.currentUser.email || APP_STATE.currentUser.phone})`;
+        } else {
+          authLoggedInBanner.style.display = "none";
+        }
+      }
+
+      function proceedPostLogin() {
+        const pending = sessionStorage.getItem("pending_enroll_batch");
+        if (pending) {
+          sessionStorage.removeItem("pending_enroll_batch");
+          window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
+        } else {
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1000);
+        }
+      }
+
+      // Google Sign In
+      btnGoogleSignIn?.addEventListener("click", () => {
+        const last = localStorage.getItem("last_google_email") || "";
+        const email = prompt("Enter your Google Account Email to Sign In:", last || "student.aspirant@gmail.com");
+        if (!email || !email.includes("@")) {
+          showToast("⚠️ Valid Google Email required.");
+          return;
+        }
+
+        const clean = email.trim().toLowerCase();
+        const raw = clean.split("@")[0].replace(/[._0-9]/g, " ").trim();
+        const name = raw.charAt(0).toUpperCase() + raw.slice(1) || "Student";
+
+        const user = {
+          name: name,
+          email: clean,
+          phone: "",
+          authType: "google",
+          avatar: name.charAt(0).toUpperCase(),
+          loggedIn: true,
+          lastActive: new Date().toISOString()
+        };
+
+        localStorage.setItem("last_google_email", clean);
+        setCurrentUser(user);
+        updateUI();
+        showToast(`✓ Google Sign-In Successful! Welcome, ${name}.`);
+        proceedPostLogin();
+      });
+
+      // Login Form
+      document.getElementById("formStudentLogin")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const contact = document.getElementById("loginContact").value.trim();
+        const pass = document.getElementById("loginPassword").value;
+        const res = verifyUserLogin(contact, pass);
+        if (res.success) {
+          updateUI();
+          showToast(`Welcome back, ${res.user.name}!`);
+          proceedPostLogin();
+        } else {
+          showToast(`⚠️ ${res.message}`);
+        }
+      });
+
+      // Register Form
+      document.getElementById("formStudentRegister")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const phone = document.getElementById("regPhone").value.trim();
+        const password = document.getElementById("regPassword").value;
+        const exam = document.getElementById("regExam").value;
+
+        const saved = saveRegisteredUser(email, {
+          name, email, phone, password, exam, registeredAt: new Date().toISOString()
+        });
+
+        if (saved) {
+          setCurrentUser(saved);
+          updateUI();
+          showToast(`Account created! Welcome, ${name}.`);
+          proceedPostLogin();
+        }
+      });
+
+      // Reset Form
+      document.getElementById("formStudentReset")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const contact = document.getElementById("resetContact").value.trim();
+        const p1 = document.getElementById("resetNewPassword").value;
+        const p2 = document.getElementById("resetConfirmPassword").value;
+
+        if (p1 !== p2) {
+          showToast("⚠️ Passwords do not match!");
+          return;
+        }
+
+        const res = resetUserPassword(contact, p1);
+        if (res.success) {
+          showToast(`✓ ${res.message}`);
+          switchTab("authViewLogin");
+        } else {
+          showToast(`⚠️ ${res.message}`);
+        }
+      });
+
+      btnLogoutUser?.addEventListener("click", () => {
+        localStorage.removeItem("pw_user");
+        APP_STATE.currentUser = null;
+        updateUI();
+        showToast("Logged out successfully.");
+      });
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(window.t);
+        window.t = setTimeout(() => toast.classList.remove("show"), 3200);
+      }
+
+      updateUI();
+    });
+  </script>
+</body>
+</html>

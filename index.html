@@ -391,7 +391,30 @@
   <div class="modal-backdrop" id="authModal">
     <div class="modal-box">
       <button type="button" class="modal-close" id="btnCloseAuth">&times;</button>
-      
+
+      <!-- Mandatory Login Notice (Shown when user clicks Enroll without login) -->
+      <div id="authMandatoryNotice" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.82rem; color: #fca5a5; line-height: 1.4;">
+        🔒 <strong>Mandatory Step:</strong> Batch me enroll karne ke liye kripya <strong>Google Login</strong> ya Student Account se login karein!
+      </div>
+
+      <!-- One-Click Google Login Button (Mandatory Fast Access) -->
+      <div class="google-auth-wrap" style="margin-bottom: 16px;">
+        <button type="button" class="btn-google-auth" id="btnGoogleSignIn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; background: #ffffff; color: #1f2937; border: 1px solid #d1d5db; padding: 12px 18px; border-radius: 10px; font-size: 0.94rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.18); transition: transform 0.15s ease, box-shadow 0.15s ease;">
+          <svg width="22" height="22" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; margin-bottom: 6px;">
+          <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
+          <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">OR USE EMAIL & PASSWORD</span>
+          <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
+        </div>
+      </div>
+
       <!-- Nav Tabs -->
       <div class="auth-tabs-nav">
         <button type="button" class="auth-tab-btn active" id="tabBtnLogin" data-target="authViewLogin">🔑 Student Login</button>
@@ -764,8 +787,9 @@
                   </li>
                 `).join("")}
               </ul>
-            <div class="batch-extra-discount-hint">
-              <span>🎁 Payment page pe aur discount milega — <strong>Go for it! 🚀</strong></span>
+              <div class="batch-extra-discount-hint">
+                <span>🎁 Payment page pe aur discount milega — <strong>Go for it! 🚀</strong></span>
+              </div>
             </div>
 
             <div class="batch-footer">
@@ -774,7 +798,7 @@
                 <span class="batch-live-price">${formatINR(batch.offerPrice)}</span>
               </div>
 
-              <a href="payment.html?batch=${encodeURIComponent(batch.id)}" class="btn-enroll">
+              <a href="payment.html?batch=${encodeURIComponent(batch.id)}" class="btn-enroll btn-enroll-action" data-batch-id="${batch.id}">
                 <span>Enroll Now</span>
                 <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -897,7 +921,65 @@
         showToast("Logged out successfully.");
       });
 
+      const btnGoogleSignIn = document.getElementById("btnGoogleSignIn");
+      const authMandatoryNotice = document.getElementById("authMandatoryNotice");
+
+      // Mandatory Google Sign-In / Fast Login
+      btnGoogleSignIn?.addEventListener("click", () => {
+        const lastEmail = localStorage.getItem("last_google_email") || "";
+        const emailPrompt = prompt("Apna Google Account (Email ID) daalein to Sign In:", lastEmail || "student.aspirant@gmail.com");
+        if (!emailPrompt || !emailPrompt.includes("@")) {
+          showToast("⚠️ Kripya valid Google Email daalein.");
+          return;
+        }
+
+        const cleanEmail = emailPrompt.trim().toLowerCase();
+        const rawName = cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
+        const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1) || "Student";
+
+        const googleUser = {
+          name: formattedName,
+          email: cleanEmail,
+          phone: "",
+          authType: "google",
+          avatar: formattedName.charAt(0).toUpperCase(),
+          loggedIn: true,
+          lastActive: new Date().toISOString()
+        };
+
+        localStorage.setItem("last_google_email", cleanEmail);
+        setCurrentUser(googleUser);
+        updateAuthUIState();
+        showToast(`✓ Google Sign-In Successful! Welcome, ${formattedName}.`);
+        authModal.classList.remove("open");
+
+        const pending = sessionStorage.getItem("pending_enroll_batch");
+        if (pending) {
+          sessionStorage.removeItem("pending_enroll_batch");
+          window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
+        }
+      });
+
+      // Mandatory Enroll Gate: If user is not logged in, force Google/Account login!
+      document.addEventListener("click", (e) => {
+        const enrollBtn = e.target.closest(".btn-enroll-action");
+        if (enrollBtn) {
+          if (!APP_STATE.currentUser) {
+            e.preventDefault();
+            const batchId = enrollBtn.dataset.batchId;
+            if (batchId) {
+              sessionStorage.setItem("pending_enroll_batch", batchId);
+            }
+            if (authMandatoryNotice) authMandatoryNotice.style.display = "block";
+            updateAuthUIState();
+            authModal.classList.add("open");
+            showToast("🔒 Mandatory Step: Batch lene ke liye Google se Login karein!");
+          }
+        }
+      });
+
       btnOpenAuth.addEventListener("click", () => {
+        if (authMandatoryNotice) authMandatoryNotice.style.display = "none";
         updateAuthUIState();
         authModal.classList.add("open");
       });
@@ -916,7 +998,14 @@
         if (res.success) {
           updateAuthUIState();
           showToast(`Welcome back, ${res.user.name}!`);
-          setTimeout(() => authModal.classList.remove("open"), 1200);
+          setTimeout(() => {
+            authModal.classList.remove("open");
+            const pending = sessionStorage.getItem("pending_enroll_batch");
+            if (pending) {
+              sessionStorage.removeItem("pending_enroll_batch");
+              window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
+            }
+          }, 800);
         } else {
           showToast(`⚠️ ${res.message}`);
         }
@@ -945,7 +1034,14 @@
           setCurrentUser(savedUser);
           updateAuthUIState();
           showToast(`Account created! Welcome, ${name}.`);
-          setTimeout(() => authModal.classList.remove("open"), 1200);
+          setTimeout(() => {
+            authModal.classList.remove("open");
+            const pending = sessionStorage.getItem("pending_enroll_batch");
+            if (pending) {
+              sessionStorage.removeItem("pending_enroll_batch");
+              window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
+            }
+          }, 800);
         }
       });
 

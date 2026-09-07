@@ -75,13 +75,55 @@
       <!-- ================================================================== -->
       <div class="admin-tab-content" id="tabContent-orders">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-          <h3 style="font-size: 1rem; font-weight: 700; color: #ffffff;">
-            Student Payment & UTR Requests
-          </h3>
-          <div style="display: flex; gap: 8px;">
+          <div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 2px;">
+              Student Payment & UTR Requests
+            </h3>
+            <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0;">
+              All orders from mobile, laptop & WhatsApp submissions. Tap Approve to unlock batch access.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn-enroll" id="btnToggleQuickAddOrder" style="padding: 6px 14px; font-size: 0.78rem; background: #6366f1;">➕ Quick Add Order</button>
+            <button type="button" class="nav-link-btn" id="btnRefreshAdminOrders" style="padding: 6px 12px; font-size: 0.78rem;">🔄 Refresh Orders</button>
             <button type="button" class="nav-link-btn active" id="btnFilterAllOrders">All Orders</button>
             <button type="button" class="nav-link-btn" id="btnFilterPendingOrders">Pending Only</button>
           </div>
+        </div>
+
+        <!-- Quick Add / Paste Order Box (e.g. when student shares proof on WhatsApp) -->
+        <div id="quickAddOrderBox" style="display: none; background: rgba(0,0,0,0.35); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: var(--radius-md); padding: 16px; margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <strong style="font-size: 0.92rem; color: #a5b4fc;">➕ Quickly Add Student Order (From WhatsApp / Direct Payment)</strong>
+            <button type="button" id="btnCloseQuickAdd" class="auth-link-hint" style="color: #f87171;">✕ Close</button>
+          </div>
+          <form id="formQuickAddOrder" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: end;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Student Name</label>
+              <input type="text" id="qaStudentName" class="form-input" placeholder="e.g. Aman Sharma" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">WhatsApp Mobile / Email</label>
+              <input type="text" id="qaStudentContact" class="form-input" placeholder="e.g. 9876543210" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Batch Name</label>
+              <input type="text" id="qaBatchName" class="form-input" placeholder="e.g. Lakshya JEE 2026" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Amount (₹)</label>
+              <input type="number" id="qaAmount" class="form-input" placeholder="e.g. 299" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">12-Digit UTR Number</label>
+              <input type="text" id="qaUtr" class="form-input" placeholder="UTR / Ref Number" required>
+            </div>
+            <div>
+              <button type="submit" class="btn-primary" style="height: 42px; width: 100%; justify-content: center; background: #10b981;">
+                <span>✓ Save & Approve Now</span>
+              </button>
+            </div>
+          </form>
         </div>
 
         <div style="overflow-x: auto;">
@@ -443,10 +485,88 @@
         populateSettings();
       }
 
+      function getAllStoredOrders() {
+        let o1 = [];
+        let o2 = [];
+        let o3 = [];
+        try { o1 = JSON.parse(localStorage.getItem("pw_orders") || "[]"); } catch(e){}
+        try { o2 = JSON.parse(localStorage.getItem("pw_all_orders") || "[]"); } catch(e){}
+        try { o3 = JSON.parse(localStorage.getItem("thor_orders") || "[]"); } catch(e){}
+        const appO = APP_STATE.orders || [];
+
+        const map = new Map();
+        [...o1, ...o2, ...o3, ...appO].forEach(o => {
+          if (o && o.orderId && !map.has(o.orderId)) {
+            map.set(o.orderId, o);
+          }
+        });
+
+        const merged = Array.from(map.values());
+        merged.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        APP_STATE.orders = merged;
+        saveOrders(merged);
+        return merged;
+      }
+
+      // Quick Add Order Elements
+      const btnToggleQuickAddOrder = document.getElementById("btnToggleQuickAddOrder");
+      const quickAddOrderBox = document.getElementById("quickAddOrderBox");
+      const btnCloseQuickAdd = document.getElementById("btnCloseQuickAdd");
+      const formQuickAddOrder = document.getElementById("formQuickAddOrder");
+      const btnRefreshAdminOrders = document.getElementById("btnRefreshAdminOrders");
+
+      btnToggleQuickAddOrder?.addEventListener("click", () => {
+        const isHidden = quickAddOrderBox.style.display === "none";
+        quickAddOrderBox.style.display = isHidden ? "block" : "none";
+      });
+
+      btnCloseQuickAdd?.addEventListener("click", () => {
+        quickAddOrderBox.style.display = "none";
+      });
+
+      btnRefreshAdminOrders?.addEventListener("click", () => {
+        renderOrders();
+        showToast("Orders refreshed from local and device storage!");
+      });
+
+      formQuickAddOrder?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("qaStudentName").value.trim();
+        const contact = document.getElementById("qaStudentContact").value.trim();
+        const batchName = document.getElementById("qaBatchName").value.trim();
+        const amount = parseFloat(document.getElementById("qaAmount").value) || 299;
+        const utr = document.getElementById("qaUtr").value.trim();
+
+        const newId = createNewOrderId();
+        const manualOrder = {
+          orderId: newId,
+          batchId: "manual-" + Date.now(),
+          batchName: batchName,
+          amount: amount,
+          utr: utr,
+          screenshot: null,
+          userName: name,
+          userEmail: contact.includes("@") ? contact : "",
+          userPhone: contact.includes("@") ? "" : contact,
+          status: "approved",
+          createdAt: new Date().toISOString()
+        };
+
+        const current = getAllStoredOrders();
+        current.unshift(manualOrder);
+        saveOrders(current);
+        try { localStorage.setItem("pw_all_orders", JSON.stringify(current)); } catch(err) {}
+
+        formQuickAddOrder.reset();
+        quickAddOrderBox.style.display = "none";
+        renderOrders();
+        showToast(`✓ Order ${newId} created & approved! Student access unlocked.`);
+      });
+
       // Render Orders
       let orderFilter = "all";
       function renderOrders() {
-        const allOrders = APP_STATE.orders || [];
+        const allOrders = getAllStoredOrders();
         const pendingCount = allOrders.filter(o => o.status === "pending_verification").length;
         countPendingOrders.textContent = pendingCount;
 

@@ -497,8 +497,15 @@
               })
             : "Today";
 
-          // Update WhatsApp help link with Order ID
-          btnSupportLink.href = `https://wa.me/917631442934?text=${encodeURIComponent(`Hello Support, my Order ID is ${currentOrder.orderId}. Please check my batch verification.`)}`;
+          // Update WhatsApp help link with full formatted order details
+          const waProofMsg = `⚡ *PW BATCH PAYMENT SUBMITTED* ⚡\n\n` +
+            `📋 *Order ID:* ${currentOrder.orderId}\n` +
+            `👤 *Student:* ${currentOrder.userName || 'Student'}\n` +
+            `📚 *Batch:* ${currentOrder.batchName}\n` +
+            `💰 *Amount:* ${formatINR(currentOrder.amount)}\n` +
+            `🔢 *UTR / Ref:* ${currentOrder.utr || 'Screenshot uploaded'}\n\n` +
+            `_Sir, maine payment complete kar di hai. Kripya batch access approve karein!_`;
+          btnSupportLink.href = `https://wa.me/917631442934?text=${encodeURIComponent(waProofMsg)}`;
 
           if (currentOrder.status === "approved") {
             congratsBanner.style.display = "block";
