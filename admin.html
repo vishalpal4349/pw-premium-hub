@@ -1081,10 +1081,12 @@
 
         <div class="form-grid-2">
           <div class="form-group-light">
-            <label class="form-label-light" for="settingTxnNote">
-              <span>UPI Transaction Note</span>
+            <label class="form-label-light" for="settingUpiPhone">
+              <span>UPI Mobile Number (PhonePe/GPay) <span style="color: #e11d48;">*</span></span>
+              <span class="label-desc">Direct mobile payment</span>
             </label>
-            <input type="text" id="settingTxnNote" class="form-input-light" placeholder="PW Batch Infinity Access">
+            <input type="text" id="settingUpiPhone" class="form-input-light" placeholder="7970870147" required>
+            <span class="form-hint">Direct 10-digit number for students to pay via PhonePe/GPay (bypasses 2000 gallery limit).</span>
           </div>
 
           <div class="form-group-light">
@@ -1093,6 +1095,15 @@
             </label>
             <input type="text" id="settingQrImage" class="form-input-light" placeholder="payment_qr.jpg">
             <span class="form-hint">Path to your high-resolution scanner QR code image.</span>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group-light">
+            <label class="form-label-light" for="settingTxnNote">
+              <span>UPI Transaction Note</span>
+            </label>
+            <input type="text" id="settingTxnNote" class="form-input-light" placeholder="PW Batch Infinity Access">
           </div>
         </div>
 
@@ -1936,6 +1947,7 @@
       function populateSettings() {
         const cfg = APP_STATE.config || {};
         document.getElementById("settingUpiId").value = cfg.UPI_ID || "7970870147@fam";
+        document.getElementById("settingUpiPhone").value = cfg.UPI_PHONE || "7970870147";
         document.getElementById("settingPaymentName").value = cfg.PAYMENT_NAME || "Aditya Kumar Dubey";
         document.getElementById("settingTxnNote").value = cfg.TRANSACTION_NOTE || "PW Batch Infinity Access";
         document.getElementById("settingQrImage").value = cfg.PRIMARY_QR_IMAGE || "payment_qr.jpg";
@@ -1955,6 +1967,7 @@
 
         const cfg = { ...APP_STATE.config };
         cfg.UPI_ID = document.getElementById("settingUpiId").value.trim() || "7970870147@fam";
+        cfg.UPI_PHONE = document.getElementById("settingUpiPhone").value.trim() || "7970870147";
         cfg.PAYMENT_NAME = document.getElementById("settingPaymentName").value.trim() || "Aditya Kumar Dubey";
         cfg.TRANSACTION_NOTE = document.getElementById("settingTxnNote").value.trim() || "PW Batch Infinity Access";
         cfg.PRIMARY_QR_IMAGE = document.getElementById("settingQrImage").value.trim() || "payment_qr.jpg";

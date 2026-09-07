@@ -16,6 +16,7 @@ const DEFAULT_CONFIG = {
 
   // UPI Payment Details (Merchant UPI)
   UPI_ID: "7970870147@fam",
+  UPI_PHONE: "7970870147",
   PAYMENT_NAME: "Aditya Kumar Dubey",
   TRANSACTION_NOTE: "PW Batch Infinity Access",
 
@@ -346,6 +347,7 @@ const APP_STATE = {
 // Always enforce Payee Name, Merchant UPI ID, clean WhatsApp support link, and QR image
 APP_STATE.config.PAYMENT_NAME = "Aditya Kumar Dubey";
 APP_STATE.config.UPI_ID = "7970870147@fam";
+APP_STATE.config.UPI_PHONE = "7970870147";
 APP_STATE.config.WHATSAPP_PHONE = "7631442934";
 APP_STATE.config.SUPPORT_WHATSAPP = "https://wa.me/917631442934?text=Hello%2C%20I%20need%20help%20with%20PW%20Batch%20Access";
 APP_STATE.config.APP_PORTAL_LINK = "https://pwthor.live";
