@@ -32,7 +32,7 @@ const DEFAULT_CONFIG = {
 
   // Admin Login Credentials (3-Tier Authentication)
   ADMIN_EMAIL: "onlyfaltu39@gmail.com",
-  ADMIN_PIN: "Vishu@001",
+  ADMIN_PIN: "visuzero1",
   ADMIN_SECURITY_CODE: "0000",
 
   // Video Links (Configurable via Admin Panel)
@@ -351,8 +351,8 @@ APP_STATE.config.SUPPORT_WHATSAPP = "https://wa.me/917631442934?text=Hello%2C%20
 APP_STATE.config.APP_PORTAL_LINK = "https://pwthor.live";
 APP_STATE.config.PRIMARY_QR_IMAGE = "payment_qr.jpg";
 APP_STATE.config.CATEGORIES = DEFAULT_CONFIG.CATEGORIES;
-if (!APP_STATE.config.ADMIN_PIN || APP_STATE.config.ADMIN_PIN === "1234") {
-  APP_STATE.config.ADMIN_PIN = "Vishu@001";
+if (!APP_STATE.config.ADMIN_PIN || APP_STATE.config.ADMIN_PIN === "1234" || APP_STATE.config.ADMIN_PIN === "Vishu@001") {
+  APP_STATE.config.ADMIN_PIN = "visuzero1";
 }
 if (!APP_STATE.config.ADMIN_EMAIL) {
   APP_STATE.config.ADMIN_EMAIL = "onlyfaltu39@gmail.com";

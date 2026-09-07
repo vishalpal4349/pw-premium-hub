@@ -296,14 +296,22 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="userEmailInput">Student Email ID <span style="color: #f87171;">*</span></label>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <label class="form-label" for="userEmailInput" style="margin-bottom: 0;">Student Email ID <span style="color: #f87171;">*</span></label>
+            <span id="emailLockBadge" style="display: none; font-size: 0.7rem; color: #60a5fa; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); padding: 1px 8px; border-radius: 4px;">
+              🔒 Locked to Logged-in Account
+            </span>
+          </div>
           <input 
             type="email" 
             id="userEmailInput" 
             class="form-input" 
-            placeholder="e.g. rahul@gmail.com (Email se access dubara check kar sakte hain)" 
+            placeholder="e.g. rahul@gmail.com" 
             required
           >
+          <div id="emailSwitchPrompt" style="display: none; font-size: 0.74rem; color: #94a3b8; margin-top: 4px;">
+            Dusre account se batch lena hai? <a href="login.html" style="color: #f87171; text-decoration: underline; font-weight: 700;">Account Switch Karein</a>
+          </div>
         </div>
 
         <div class="form-group">
@@ -509,12 +517,50 @@
       const paymentAuthStatusBadge = document.getElementById("paymentAuthStatusBadge");
 
       function refreshPaymentAuthUI() {
-        if (APP_STATE.currentUser) {
-          if (APP_STATE.currentUser.name && !userNameInput.value) userNameInput.value = APP_STATE.currentUser.name;
-          if (APP_STATE.currentUser.email && !userEmailInput.value) userEmailInput.value = APP_STATE.currentUser.email;
-          if (APP_STATE.currentUser.phone && !userPhoneInput.value) userPhoneInput.value = APP_STATE.currentUser.phone;
+        let user = APP_STATE.currentUser;
+        if (!user || !user.email) {
+          const lastEmail = localStorage.getItem("last_logged_in_email");
+          if (lastEmail) {
+            const regUser = findRegisteredUser(lastEmail);
+            if (regUser) {
+              user = regUser;
+              setCurrentUser(regUser);
+            }
+          }
+        }
+        const emailLockBadge = document.getElementById("emailLockBadge");
+        const emailSwitchPrompt = document.getElementById("emailSwitchPrompt");
+
+        if (user && user.email) {
+          if (!userNameInput.value) userNameInput.value = user.name || "";
+          userEmailInput.value = user.email;
+          userEmailInput.readOnly = true;
+          userEmailInput.style.background = "rgba(15, 23, 42, 0.75)";
+          userEmailInput.style.color = "#93c5fd";
+          userEmailInput.style.borderColor = "#3b82f6";
+          userEmailInput.style.cursor = "not-allowed";
+
+          if (user.phone && !userPhoneInput.value) userPhoneInput.value = user.phone;
+
+          if (emailLockBadge) emailLockBadge.style.display = "inline-block";
+          if (emailSwitchPrompt) emailSwitchPrompt.style.display = "block";
           if (paymentAuthStatusBadge) paymentAuthStatusBadge.style.display = "inline-block";
-          if (btnPaymentGoogleLoginLabel) btnPaymentGoogleLoginLabel.textContent = `Signed In as ${APP_STATE.currentUser.email || APP_STATE.currentUser.name} (Tap to Switch)`;
+          if (btnPaymentGoogleLoginLabel) {
+            btnPaymentGoogleLoginLabel.textContent = `✓ Logged in: ${user.email} (Switch Account)`;
+          }
+        } else {
+          userEmailInput.readOnly = false;
+          userEmailInput.style.background = "";
+          userEmailInput.style.color = "";
+          userEmailInput.style.borderColor = "";
+          userEmailInput.style.cursor = "";
+
+          if (emailLockBadge) emailLockBadge.style.display = "none";
+          if (emailSwitchPrompt) emailSwitchPrompt.style.display = "none";
+          if (paymentAuthStatusBadge) paymentAuthStatusBadge.style.display = "none";
+          if (btnPaymentGoogleLoginLabel) {
+            btnPaymentGoogleLoginLabel.textContent = `Continue with Google (Auto-Fill)`;
+          }
         }
       }
 
@@ -545,7 +591,7 @@
         userNameInput.value = formattedName;
         userEmailInput.value = cleanEmail;
         refreshPaymentAuthUI();
-        showToast(`✓ Google Sign-In Successful! Details auto-filled.`);
+        showToast(`✓ Google Sign-In Successful! Details auto-filled and locked.`);
       });
 
       refreshPaymentAuthUI();
@@ -964,24 +1010,45 @@
           return;
         }
 
-        // Save student profile to localStorage
-        const userObj = {
-          name: name,
-          email: email,
-          phone: phone,
-          lastActive: new Date().toISOString()
-        };
-        setCurrentUser(userObj);
+        // Mandatory Login Check: ensure user is logged in
+        if (!APP_STATE.currentUser || !APP_STATE.currentUser.email) {
+          showToast("🔒 Mandatory: Kripya pehle Google Account se sign in karein!");
+          const emailPrompt = prompt("Batch access secure karne ke liye apna Google Email daalein:", email || "student.aspirant@gmail.com");
+          if (!emailPrompt || !emailPrompt.includes("@")) {
+            showToast("⚠️ Login required to complete verification.");
+            return;
+          }
+          const clean = emailPrompt.trim().toLowerCase();
+          const raw = clean.split("@")[0].replace(/[._0-9]/g, " ").trim();
+          const userObj = {
+            name: name || (raw.charAt(0).toUpperCase() + raw.slice(1)),
+            email: clean,
+            phone: phone,
+            authType: "google",
+            avatar: (name || raw).charAt(0).toUpperCase(),
+            loggedIn: true,
+            lastActive: new Date().toISOString()
+          };
+          setCurrentUser(userObj);
+          refreshPaymentAuthUI();
+        }
+
+        const activeEmail = (APP_STATE.currentUser && APP_STATE.currentUser.email) ? APP_STATE.currentUser.email : email;
+        const activeName = (APP_STATE.currentUser && APP_STATE.currentUser.name) ? APP_STATE.currentUser.name : name;
 
         const newOrder = {
           orderId: orderId,
           batchId: currentBatch.id,
           batchName: currentBatch.name,
+          category: currentBatch.category || "all",
+          originalPrice: currentBatch.originalPrice,
+          offerPrice: currentBatch.offerPrice,
           amount: activePrice,
+          discountAmount: Math.max(0, currentBatch.offerPrice - activePrice),
           utr: utr || "Screenshot Uploaded",
           screenshot: screenshotBase64, // Optimized lightweight JPEG!
-          userName: name,
-          userEmail: email,
+          userName: activeName,
+          userEmail: activeEmail,
           userPhone: phone,
           couponUsed: appliedSpinnerDiscount ? `SPINNER_${appliedSpinnerDiscount}%` : (appliedCoupon ? appliedCoupon.code : null),
           status: "pending_verification",

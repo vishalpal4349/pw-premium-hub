@@ -5,20 +5,396 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Login & Registration | PW Premium Hub</title>
   <meta name="description" content="Sign in with Google or create your student account to access premium competition exam batches, notes, and DPPs.">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
   <style>
-    .auth-page-container {
-      max-width: 480px;
-      margin: 40px auto;
-      padding: 0 16px;
+    /* ==========================================================================
+       VIBRANT & ULTRA-SMOOTH MODERN STUDENT AUTH PORTAL
+       ========================================================================== */
+    :root {
+      --auth-bg: #070a14;
+      --auth-card-bg: rgba(15, 23, 42, 0.82);
+      --auth-card-border: rgba(99, 102, 241, 0.28);
+      --auth-glow: rgba(99, 102, 241, 0.35);
+      
+      --brand-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3b82f6 100%);
+      --emerald-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      
+      --text-white: #ffffff;
+      --text-soft: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --input-bg: rgba(8, 12, 24, 0.85);
+      --input-border: rgba(255, 255, 255, 0.14);
+      --input-focus: #6366f1;
+      
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+      
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    .auth-card-glass {
-      background: rgba(15, 23, 42, 0.85);
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--auth-bg);
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99, 102, 241, 0.32), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 85% 85%, rgba(16, 185, 129, 0.16), transparent 60%),
+        radial-gradient(ellipse 50% 35% at 15% 75%, rgba(59, 130, 246, 0.18), transparent 55%),
+        linear-gradient(180deg, #070a14 0%, #04060d 100%);
+      background-attachment: fixed;
+      color: var(--text-soft);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .auth-page-container {
+      width: 100%;
+      max-width: 490px;
+      margin: 0 auto;
+    }
+
+    /* Brand Header */
+    .brand-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .brand-icon-shield {
+      width: 36px;
+      height: 36px;
+      background: var(--brand-gradient);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 28px 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, 0.04);
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-back:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Main Auth Card */
+    .auth-card-glass {
+      background: var(--auth-card-bg);
+      border: 1.5px solid var(--auth-card-border);
+      border-radius: var(--radius-lg);
+      padding: 30px 26px;
+      box-shadow: 
+        0 24px 60px -15px rgba(0, 0, 0, 0.75),
+        0 0 40px -10px rgba(99, 102, 241, 0.25);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card-glass::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #6366f1, #10b981, transparent);
+    }
+
+    /* Active Logged In Badge */
+    .active-session-banner {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .active-session-text .session-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #86efac;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .active-session-text .session-user {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* Google 1-Click Button */
+    .btn-google-auth {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 13px 20px;
+      background: #ffffff;
+      color: #1e293b;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-google-auth:hover {
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.25);
+    }
+
+    /* Divider */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0 16px;
+    }
+
+    .auth-divider-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .auth-divider-text {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Segmented Navigation Tabs */
+    .auth-tabs-nav {
+      display: flex;
+      background: rgba(8, 12, 24, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 22px;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+
+    .auth-tab-btn:hover {
+      color: #ffffff;
+    }
+
+    .auth-tab-btn.active {
+      background: var(--brand-gradient);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Form Elements */
+    .form-group-auth {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .form-label-auth {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-input-auth {
+      padding: 12px 15px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      color: #ffffff;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input-auth:focus {
+      border-color: var(--input-focus);
+      background: rgba(12, 18, 36, 0.95);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    }
+
+    .form-input-auth::placeholder {
+      color: #64748b;
+    }
+
+    /* Action Buttons */
+    .btn-auth-submit {
+      width: 100%;
+      padding: 13px 20px;
+      background: var(--brand-gradient);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 22px rgba(99, 102, 241, 0.45);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-top: 4px;
+    }
+
+    .btn-auth-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(99, 102, 241, 0.6);
+    }
+
+    .btn-auth-emerald {
+      background: var(--emerald-gradient);
+      box-shadow: 0 6px 22px rgba(16, 185, 129, 0.45);
+    }
+
+    .btn-auth-emerald:hover {
+      box-shadow: 0 8px 28px rgba(16, 185, 129, 0.6);
+    }
+
+    .auth-footer-links {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      font-size: 0.78rem;
+    }
+
+    .auth-link-hint {
+      background: none;
+      border: none;
+      color: #818cf8;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0;
+      transition: color 0.15s ease;
+    }
+
+    .auth-link-hint:hover {
+      color: #a5b4fc;
+      text-decoration: underline;
+    }
+
+    /* Benefits Strip */
+    .benefits-strip {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.76rem;
+      color: #cbd5e1;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .benefit-icon {
+      color: #34d399;
+      font-weight: 800;
+    }
+
+    /* Toast */
+    .auth-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #ffffff;
+      padding: 11px 22px;
+      border-radius: var(--radius-full);
+      font-size: 0.86rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .auth-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
@@ -27,175 +403,217 @@
   <main class="auth-page-container">
     
     <!-- Top Brand & Return Link -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <a href="index.html" class="brand-badge" style="font-size: 1rem;">
-        <span class="brand-icon">⚡</span>
-        <span>PW Premium Hub</span>
+    <header class="brand-top-bar">
+      <a href="index.html" class="brand-badge">
+        <div class="brand-icon-shield">⚡</div>
+        <div>
+          <span style="letter-spacing: -0.01em;">PW Premium Hub</span>
+        </div>
       </a>
-      <a href="index.html" class="nav-link-btn" style="font-size: 0.76rem; padding: 6px 12px;">
+      <a href="index.html" class="btn-nav-back">
         ← Back to Batches
       </a>
-    </div>
+    </header>
 
     <!-- Main Auth Card -->
     <div class="auth-card-glass">
 
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h1 style="font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">
+      <div style="text-align: center; margin-bottom: 22px;">
+        <h1 style="font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 6px; letter-spacing: -0.02em;">
           Student Access Portal
         </h1>
-        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0;">
-          Sign in to secure batch passes, study material & 50% referral cashback.
+        <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0;">
+          Log in with your registered email to unlock batch lectures, notes & 50% referral rewards.
         </p>
       </div>
 
       <!-- Logged In Status Banner -->
-      <div id="authLoggedInBanner" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; justify-content: space-between; align-items: center;">
-        <div>
-          <div style="font-size: 0.78rem; color: #86efac; font-weight: 700;">Currently Active As:</div>
-          <div id="loggedInUserDisplay" style="font-size: 0.92rem; color: #ffffff; font-weight: 700;">Student</div>
+      <div id="authLoggedInBanner" class="active-session-banner" style="display: none;">
+        <div class="active-session-text">
+          <div class="session-label">Active Account</div>
+          <div id="loggedInUserDisplay" class="session-user">Student</div>
         </div>
         <div style="display: flex; gap: 8px;">
-          <a href="index.html" class="btn-enroll" style="padding: 6px 12px; font-size: 0.74rem;">Go to Batches</a>
-          <button type="button" id="btnLogoutUser" class="btn-danger" style="padding: 6px 10px; font-size: 0.74rem;">Logout</button>
+          <a href="index.html" class="btn-auth-submit" style="padding: 6px 12px; font-size: 0.74rem; text-decoration: none; width: auto;">
+            Go to Batches
+          </a>
+          <button type="button" id="btnLogoutUser" class="auth-link-hint" style="color: #f87171; font-size: 0.76rem;">
+            Logout
+          </button>
         </div>
       </div>
 
-      <!-- One-Click Google Sign In (Primary & Mandatory) -->
-      <div class="google-auth-wrap" style="margin-bottom: 18px;">
-        <button type="button" class="btn-google-auth" id="btnGoogleSignIn" style="padding: 13px 18px; box-shadow: 0 4px 18px rgba(0,0,0,0.3);">
-          <svg width="22" height="22" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-          </svg>
-          <span>Continue with Google (1-Click)</span>
-        </button>
-        <div style="display: flex; align-items: center; gap: 10px; margin-top: 16px; margin-bottom: 12px;">
-          <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
-          <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">OR USE PASSWORD</span>
-          <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
-        </div>
+      <!-- One-Click Google Sign In -->
+      <button type="button" class="btn-google-auth" id="btnGoogleSignIn">
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+        </svg>
+        <span>Continue with Google (1-Click Instant)</span>
+      </button>
+
+      <div class="auth-divider">
+        <div class="auth-divider-line"></div>
+        <span class="auth-divider-text">OR WITH REGISTERED EMAIL</span>
+        <div class="auth-divider-line"></div>
       </div>
 
-      <!-- Auth Nav Tabs -->
-      <div class="auth-tabs-nav" style="margin-bottom: 18px;">
+      <!-- Segmented Tab Navigation -->
+      <nav class="auth-tabs-nav" aria-label="Student Auth Navigation">
         <button type="button" class="auth-tab-btn active" id="tabBtnLogin" data-target="authViewLogin">🔑 Student Login</button>
         <button type="button" class="auth-tab-btn" id="tabBtnRegister" data-target="authViewRegister">📝 New Register</button>
-        <button type="button" class="auth-tab-btn" id="tabBtnReset" data-target="authViewReset">🔄 Reset</button>
-      </div>
+        <button type="button" class="auth-tab-btn" id="tabBtnReset" data-target="authViewReset">🔄 Reset Password</button>
+      </nav>
 
       <!-- VIEW 1: LOGIN -->
-      <div class="auth-view-section active" id="authViewLogin">
+      <div class="auth-view-section" id="authViewLogin">
         <form id="formStudentLogin">
-          <div class="form-group">
-            <label class="form-label" for="loginContact">Email Address or WhatsApp Mobile</label>
-            <input type="text" id="loginContact" class="form-input" placeholder="e.g. rahul@gmail.com or 9876543210" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="loginContact">
+              <span>📧 Registered Email or WhatsApp Number</span>
+            </label>
+            <input type="text" id="loginContact" class="form-input-auth" placeholder="e.g. rahul@gmail.com or 9876543210" required autocomplete="username">
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="loginPassword">
+              <span>🔒 Account Password</span>
+            </label>
+            <input type="password" id="loginPassword" class="form-input-auth" placeholder="Enter your password" required autocomplete="current-password">
           </div>
 
-          <button type="submit" class="btn-primary" style="margin-top: 14px; width: 100%;">
+          <button type="submit" class="btn-auth-submit">
             <span>Login to Student Portal</span>
           </button>
         </form>
 
-        <div style="display: flex; justify-content: space-between; margin-top: 14px; font-size: 0.76rem;">
-          <button type="button" class="auth-link-hint" id="linkToReset">Forgot Password?</button>
-          <button type="button" class="auth-link-hint" id="linkToRegister">New Student? Register here</button>
+        <div class="auth-footer-links">
+          <button type="button" class="auth-link-hint" id="linkToReset">Forgot password?</button>
+          <button type="button" class="auth-link-hint" id="linkToRegister">New student? Register here</button>
         </div>
       </div>
 
       <!-- VIEW 2: REGISTER -->
       <div class="auth-view-section" id="authViewRegister" style="display: none;">
         <form id="formStudentRegister">
-          <div class="form-group">
-            <label class="form-label" for="regName">Student Full Name</label>
-            <input type="text" id="regName" class="form-input" placeholder="e.g. Rahul Kumar" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regName">
+              <span>👤 Student Full Name</span>
+            </label>
+            <input type="text" id="regName" class="form-input-auth" placeholder="e.g. Rahul Kumar" required>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="regEmail">Email Address</label>
-            <input type="email" id="regEmail" class="form-input" placeholder="e.g. rahul@gmail.com" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regEmail">
+              <span>📧 Email Address (Used at Checkout)</span>
+            </label>
+            <input type="email" id="regEmail" class="form-input-auth" placeholder="e.g. rahul@gmail.com" required>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="regPhone">WhatsApp Mobile Number</label>
-            <input type="tel" id="regPhone" class="form-input" placeholder="e.g. 9876543210" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regPhone">
+              <span>📱 WhatsApp Mobile Number</span>
+            </label>
+            <input type="tel" id="regPhone" class="form-input-auth" placeholder="e.g. 9876543210" required>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="regPassword">Create Account Password</label>
-            <input type="password" id="regPassword" class="form-input" placeholder="Min 4 characters" minlength="4" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regPassword">
+              <span>🔒 Create Password</span>
+            </label>
+            <input type="password" id="regPassword" class="form-input-auth" placeholder="Min 4 characters" minlength="4" required>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="regExam">Target Exam Category</label>
-            <select id="regExam" class="form-input">
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regExam">
+              <span>🎯 Target Exam Vertical</span>
+            </label>
+            <select id="regExam" class="form-input-auth" style="color: #ffffff;">
               <option value="jee">IIT-JEE (Mains + Advanced)</option>
               <option value="neet">NEET UG Medical</option>
               <option value="defence">NDA & Defence</option>
               <option value="foundation">Class 9th & 10th</option>
               <option value="upsc">UPSC & Civil Services</option>
               <option value="ssc">SSC & Railway</option>
-              <option value="other">Other Exams</option>
+              <option value="other">Other Competitive Exams</option>
             </select>
           </div>
 
-          <button type="submit" class="btn-primary" style="margin-top: 14px; width: 100%;">
+          <button type="submit" class="btn-auth-submit btn-auth-emerald">
             <span>Create Account & Continue</span>
           </button>
         </form>
 
-        <div style="text-align: center; margin-top: 14px; font-size: 0.76rem;">
-          <button type="button" class="auth-link-hint" id="linkToLogin">Already registered? Login</button>
+        <div style="text-align: center; margin-top: 14px; font-size: 0.78rem;">
+          <button type="button" class="auth-link-hint" id="linkToLogin">Already registered? Click here to Login</button>
         </div>
       </div>
 
-      <!-- VIEW 3: RESET -->
+      <!-- VIEW 3: RESET PASSWORD -->
       <div class="auth-view-section" id="authViewReset" style="display: none;">
         <form id="formStudentReset">
-          <div class="form-group">
-            <label class="form-label" for="resetContact">Registered Email or WhatsApp</label>
-            <input type="text" id="resetContact" class="form-input" placeholder="Enter your registered contact" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="resetContact">
+              <span>Registered Email or WhatsApp Number</span>
+            </label>
+            <input type="text" id="resetContact" class="form-input-auth" placeholder="Enter your registered contact" required>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="resetNewPassword">New Password</label>
-            <input type="password" id="resetNewPassword" class="form-input" placeholder="Enter new password" minlength="4" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="resetNewPassword">
+              <span>New Password</span>
+            </label>
+            <input type="password" id="resetNewPassword" class="form-input-auth" placeholder="Min 4 characters" minlength="4" required>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="resetConfirmPassword">Confirm New Password</label>
-            <input type="password" id="resetConfirmPassword" class="form-input" placeholder="Confirm new password" minlength="4" required>
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="resetConfirmPassword">
+              <span>Confirm New Password</span>
+            </label>
+            <input type="password" id="resetConfirmPassword" class="form-input-auth" placeholder="Re-enter new password" minlength="4" required>
           </div>
 
-          <button type="submit" class="btn-primary" style="margin-top: 14px; width: 100%;">
+          <button type="submit" class="btn-auth-submit">
             <span>Update Password</span>
           </button>
         </form>
 
-        <div style="text-align: center; margin-top: 14px; font-size: 0.76rem;">
-          <button type="button" class="auth-link-hint" id="linkResetToLogin">Back to Login</button>
+        <div style="text-align: center; margin-top: 14px; font-size: 0.78rem;">
+          <button type="button" class="auth-link-hint" id="linkResetToLogin">Remember password? Back to Login</button>
+        </div>
+      </div>
+
+      <!-- Student Perks Strip -->
+      <div class="benefits-strip">
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span>Automatic email lock-in at checkout prevents account mismatch.</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span>Direct access to full lectures, notes & test series on pwthor.live.</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">✓</span>
+          <span>Earn 50% referral cashback on every friend you invite.</span>
         </div>
       </div>
 
     </div>
 
     <!-- 24x7 Help Hint -->
-    <div style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--text-muted);">
-      Need assistance? <a href="https://wa.me/917631442934?text=Hello%20Support%2C%20I%20need%20help%20with%20login" target="_blank" rel="noopener noreferrer" style="color: #4ade80; text-decoration: none; font-weight: 700;">🟢 Contact WhatsApp Support</a>
+    <div style="text-align: center; margin-top: 22px; font-size: 0.82rem; color: var(--text-muted);">
+      Need login assistance? <a href="https://wa.me/917631442934?text=Hello%20Support%2C%20I%20need%20help%20with%20student%20login" target="_blank" rel="noopener noreferrer" style="color: #4ade80; text-decoration: none; font-weight: 700;">🟢 Chat on WhatsApp Support</a>
     </div>
 
   </main>
 
-  <!-- Toast -->
-  <div id="toast" class="toast">
-    <span id="toastMsg">Notification</span>
+  <!-- Toast Notification -->
+  <div id="toast" class="auth-toast">
+    <span id="toastIcon">⚡</span>
+    <span id="toastMsg">Action completed!</span>
   </div>
 
   <script src="config.js"></script>
@@ -203,6 +621,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       const toast = document.getElementById("toast");
       const toastMsg = document.getElementById("toastMsg");
+      const toastIcon = document.getElementById("toastIcon");
 
       const authLoggedInBanner = document.getElementById("authLoggedInBanner");
       const loggedInUserDisplay = document.getElementById("loggedInUserDisplay");
@@ -216,6 +635,14 @@
       const authViewLogin = document.getElementById("authViewLogin");
       const authViewRegister = document.getElementById("authViewRegister");
       const authViewReset = document.getElementById("authViewReset");
+
+      function showToast(msg, icon = "⚡") {
+        toastIcon.textContent = icon;
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(window.toastT);
+        window.toastT = setTimeout(() => toast.classList.remove("show"), 3200);
+      }
 
       function switchTab(viewId) {
         [authViewLogin, authViewRegister, authViewReset].forEach(v => v.style.display = "none");
@@ -243,9 +670,10 @@
       document.getElementById("linkResetToLogin")?.addEventListener("click", () => switchTab("authViewLogin"));
 
       function updateUI() {
-        if (APP_STATE.currentUser) {
+        const u = APP_STATE.currentUser;
+        if (u && u.email) {
           authLoggedInBanner.style.display = "flex";
-          loggedInUserDisplay.textContent = `${APP_STATE.currentUser.name} (${APP_STATE.currentUser.email || APP_STATE.currentUser.phone})`;
+          loggedInUserDisplay.textContent = `${u.name || 'Student'} (${u.email})`;
         } else {
           authLoggedInBanner.style.display = "none";
         }
@@ -259,16 +687,16 @@
         } else {
           setTimeout(() => {
             window.location.href = "index.html";
-          }, 1000);
+          }, 800);
         }
       }
 
-      // Google Sign In
+      // One-Click Google Sign In
       btnGoogleSignIn?.addEventListener("click", () => {
-        const last = localStorage.getItem("last_google_email") || "";
+        const last = localStorage.getItem("last_google_email") || localStorage.getItem("last_logged_in_email") || "";
         const email = prompt("Enter your Google Account Email to Sign In:", last || "student.aspirant@gmail.com");
         if (!email || !email.includes("@")) {
-          showToast("⚠️ Valid Google Email required.");
+          showToast("⚠️ Valid Google Email required.", "⚠️");
           return;
         }
 
@@ -287,9 +715,11 @@
         };
 
         localStorage.setItem("last_google_email", clean);
+        localStorage.setItem("last_logged_in_email", clean);
+        saveRegisteredUser(clean, user);
         setCurrentUser(user);
         updateUI();
-        showToast(`✓ Google Sign-In Successful! Welcome, ${name}.`);
+        showToast(`✓ Welcome, ${name}! Redirecting...`, "✓");
         proceedPostLogin();
       });
 
@@ -299,12 +729,36 @@
         const contact = document.getElementById("loginContact").value.trim();
         const pass = document.getElementById("loginPassword").value;
         const res = verifyUserLogin(contact, pass);
+
         if (res.success) {
+          localStorage.setItem("last_logged_in_email", res.user.email || contact);
           updateUI();
-          showToast(`Welcome back, ${res.user.name}!`);
+          showToast(`Welcome back, ${res.user.name}!`, "✓");
           proceedPostLogin();
         } else {
-          showToast(`⚠️ ${res.message}`);
+          // If user entered email and password >= 4 chars but hadn't registered, offer instant auto-registration
+          if (contact.includes("@") && pass.length >= 4) {
+            const raw = contact.split("@")[0].replace(/[._0-9]/g, " ").trim();
+            const autoName = raw.charAt(0).toUpperCase() + raw.slice(1) || "Student";
+            const autoSaved = saveRegisteredUser(contact, {
+              name: autoName,
+              email: contact.toLowerCase(),
+              phone: "",
+              password: pass,
+              exam: "all",
+              registeredAt: new Date().toISOString()
+            });
+
+            if (autoSaved) {
+              localStorage.setItem("last_logged_in_email", contact.toLowerCase());
+              setCurrentUser(autoSaved);
+              updateUI();
+              showToast(`✓ Account created & logged in! Welcome, ${autoName}.`, "✓");
+              proceedPostLogin();
+              return;
+            }
+          }
+          showToast(`⚠️ ${res.message}`, "⚠️");
         }
       });
 
@@ -322,9 +776,10 @@
         });
 
         if (saved) {
+          localStorage.setItem("last_logged_in_email", email.toLowerCase());
           setCurrentUser(saved);
           updateUI();
-          showToast(`Account created! Welcome, ${name}.`);
+          showToast(`Account created! Welcome, ${name}.`, "✓");
           proceedPostLogin();
         }
       });
@@ -337,16 +792,16 @@
         const p2 = document.getElementById("resetConfirmPassword").value;
 
         if (p1 !== p2) {
-          showToast("⚠️ Passwords do not match!");
+          showToast("⚠️ Passwords do not match!", "⚠️");
           return;
         }
 
         const res = resetUserPassword(contact, p1);
         if (res.success) {
-          showToast(`✓ ${res.message}`);
+          showToast(`✓ ${res.message}`, "✓");
           switchTab("authViewLogin");
         } else {
-          showToast(`⚠️ ${res.message}`);
+          showToast(`⚠️ ${res.message}`, "⚠️");
         }
       });
 
@@ -356,13 +811,6 @@
         updateUI();
         showToast("Logged out successfully.");
       });
-
-      function showToast(msg) {
-        toastMsg.textContent = msg;
-        toast.classList.add("show");
-        clearTimeout(window.t);
-        window.t = setTimeout(() => toast.classList.remove("show"), 3200);
-      }
 
       updateUI();
     });
