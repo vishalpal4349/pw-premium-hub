@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PW Premium Hub | All-Exam Infinity Passes & Competition Batches</title>
+  <meta name="description" content="Get complete access to all PW competition exam batches for JEE, NEET, Foundation, NDA, and Commerce with live classes, DPPs, and test series.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main class="app-container wide">
+    
+    <!-- Navigation Bar -->
+    <header class="site-nav">
+      <a href="index.html" class="brand-badge">
+        <span class="brand-icon">⚡</span>
+        <span>PW Premium Hub</span>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Sleek Single Referral & Earnings Pill Badge -->
+        <a href="refer.html" class="nav-earnings-pill" id="navEarningsBtn" title="Track your referral earnings & claim cash payouts">
+          <span class="earnings-pill-icon">💰</span>
+          <span class="earnings-pill-text">Earn: <strong id="navEarningsAmt">₹0</strong></span>
+        </a>
+
+        <!-- User Login / Profile Button -->
+        <button type="button" id="btnOpenAuth" class="nav-link-btn primary" style="padding: 6px 13px; font-size: 0.8rem;">
+          <span id="navUserLabel">👤 Login</span>
+        </button>
+
+        <!-- Corner 3-Line Hamburger Menu Button -->
+        <button type="button" class="btn-hamburger" id="btnHamburgerMenu" aria-label="Open Navigation Menu" title="Menu & All Features">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Urgency Flash Banner -->
+    <div class="banner-alert">
+      <div>
+        <span>🔥 <strong>Mega Flash Sale:</strong> All Competition Batches at 70%-85% Price Cut!</span>
+      </div>
+      <div>
+        <span>Offer Ends In: <span class="banner-timer" id="bannerTimer">01:45:30</span></span>
+      </div>
+    </div>
+
+    <!-- Main Content Glass Card -->
+    <section class="glass-card">
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <div>
+          <h1 class="headline">Explore Competition Batches</h1>
+          <p class="subheadline" style="margin-bottom: 0;">IIT-JEE, NEET, NDA, UPSC, SSC, Banking, GATE, CUET & Foundation batches at lowest prices.</p>
+        </div>
+        <div class="badge-pill success">
+          <span class="dot"></span>
+          <span>Instant Access Guaranteed</span>
+        </div>
+      </div>
+
+      <!-- Portal Clarification & Motivation Notice Banner (Videos Play on Website) -->
+      <div class="portal-info-notice" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1.5px solid rgba(99, 102, 241, 0.35); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+        <div style="font-size: 1.6rem; line-height: 1; flex-shrink: 0; background: rgba(99, 102, 241, 0.15); padding: 8px; border-radius: 10px; border: 1px solid rgba(99, 102, 241, 0.3);">
+          📺
+        </div>
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 5px;">
+            <strong style="color: #ffffff; font-size: 0.92rem;">📢 Zaroori Jankari: Sabhi Videos & Lectures Website Par Chalenge!</strong>
+            <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #86efac; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px;">100% Smooth Web Playback</span>
+          </div>
+          <p style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 0; line-height: 1.55;">
+            Ye batches PW official app par nahi, balki hamari <strong>Dedicated High-Speed Web Portal (Website)</strong> par chalenge. Koi alag app download karne ka jhanjhat nahi—kisi bhi Phone, Laptop ya Tablet ke browser me <strong>Full HD Video Lectures, DPP solutions, test series aur revision notes 100% smoothly</strong> chalte hain. Kyunki ye batches 90% saste limited price me mil rahe hain, isliye lagan aur <strong>sincere efforts</strong> se mehnat karein aur top ranks achieve karein!
+          </p>
+        </div>
+      </div>
+
+      <!-- Smart Search Bar & Explore All Exams Section -->
+      <div class="search-section-wrap">
+        <div class="search-input-box">
+          <span class="search-icon-symbol">🔍</span>
+          <input 
+            type="text" 
+            id="batchSearchInput" 
+            class="search-input-field" 
+            placeholder="Search any exam, batch, or stream (e.g. JEE, NEET, UPSC, SSC, Banking, NDA, GATE, CUET)..." 
+            autocomplete="off"
+          >
+          <button type="button" id="btnClearSearch" class="btn-clear-search" style="display: none;" title="Clear search">✕</button>
+        </div>
+
+        <div class="search-meta-bar">
+          <div class="search-stats-text" id="searchStatsText">
+            <span>Showing <strong id="searchCountNum">13</strong> Complete Exam Infinity Passes</span>
+          </div>
+          <button type="button" class="btn-explore-all-exams" id="btnToggleAllExamsDrawer">
+            <span>✨ Explore All 12+ Exams</span>
+            <svg id="arrowExploreExams" width="12" height="12" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Collapsible All Exams Grid Drawer -->
+        <div class="all-exams-drawer" id="allExamsDrawer" style="display: none;">
+          <div class="all-exams-grid" id="allExamsGrid">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- How to Buy & Instant Access 1-Min Video Guide (Compact & Smooth Inline Player) -->
+      <div class="how-to-buy-card" id="howToBuyCard">
+        <div class="how-to-buy-header">
+          <div class="how-to-buy-title-group">
+            <div class="how-to-buy-icon-wrap">
+              <span>▶</span>
+            </div>
+            <div>
+              <div class="how-to-buy-title">🎥 Kaise Buy Karein? (1-Min Quick Video Guide)</div>
+              <p class="how-to-buy-sub">Easy words me dekhein: Batch select karein, QR scan karke pay karein aur 10-15 minute me access payein.</p>
+            </div>
+          </div>
+          <button type="button" class="btn-toggle-video" id="btnToggleBuyVideo">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span id="btnBuyVideoLabel">Watch 1-Min Video</span>
+          </button>
+        </div>
+
+        <!-- Collapsible Inline Video Drawer (Does not leave website or open external page) -->
+        <div class="buy-video-drawer" id="buyVideoDrawer">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 0.78rem; font-weight: 700; color: #a5b4fc;">📺 Step-by-Step Purchase Walkthrough:</span>
+            <button type="button" id="btnCloseBuyVideo" class="auth-link-hint" style="color: #f87171; text-decoration: none; font-weight: 700;">✕ Close Video</button>
+          </div>
+          <div class="buy-video-player-wrap">
+            <iframe 
+              id="buyVideoIframe" 
+              src="" 
+              title="How to Buy Batch Guide" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- 3 Quick Steps Chips -->
+        <div class="buy-steps-chips-row">
+          <div class="buy-step-chip">
+            <span class="buy-step-num">1</span>
+            <span>Apna Exam Batch Select Karein</span>
+          </div>
+          <div class="buy-step-chip">
+            <span class="buy-step-num">2</span>
+            <span>GPay / PhonePe / Paytm UPI QR se Pay Karein</span>
+          </div>
+          <div class="buy-step-chip">
+            <span class="buy-step-num">3</span>
+            <span>UTR Daalein & 10-15 Min me Access Unlock</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cute Extra Discount Teaser Badge -->
+      <div class="checkout-bonus-teaser">
+        <span class="teaser-emoji">🎁</span>
+        <span class="teaser-text">
+          Payment checkout page pe aur EXTRA discount milega — <span class="teaser-highlight">Go for it! 🚀</span>
+        </span>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="category-filter-wrap" id="categoryFilterWrap">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Batches Grid -->
+      <div class="batches-grid" id="batchesGrid">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Coupon Code Section -->
+      <div class="coupon-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <strong style="font-size: 0.88rem; color: #ffffff;">🎟️ Available Discount Coupons</strong>
+          <span style="font-size: 0.75rem; color: #a5b4fc;">Tap any coupon to copy & apply</span>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px;">
+          Use code <strong>PREMIUM20</strong> for 20% discount on batches above ₹199!
+        </p>
+        <div class="coupon-chips-list" id="couponChipsList">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Refer & Earn 30%-50% Commission Box (Compact & Space-Optimized) -->
+      <div class="refer-card" style="padding: 16px 18px; margin-bottom: 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+          <span class="refer-commission-badge" style="margin-bottom: 0;">💰 EARN UPTO 30% - 50% COMMISSION</span>
+          <a href="refer.html" class="auth-link-hint" style="font-size: 0.78rem; color: #d8b4fe; font-weight: 700; text-decoration: none;">Claim Cash Payouts ↗</a>
+        </div>
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
+          Refer Friends & Earn Direct UPI Cash
+        </h3>
+        <p style="font-size: 0.8rem; color: #cbd5e1; margin-bottom: 10px;">
+          Har friend ke batch enrollment par 30% se 50% direct cash payout payein apne UPI ID me.
+        </p>
+        
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <input 
+            type="text" 
+            id="refLinkInput" 
+            readonly 
+            class="form-input" 
+            style="flex: 1; min-width: 200px; font-family: monospace; font-size: 0.78rem; background: rgba(0,0,0,0.4); padding: 8px 12px;"
+            value="https://example.com/?ref=PW_PARTNER"
+          >
+          <button type="button" id="btnCopyRefLink" class="btn-enroll" style="background: #a855f7; padding: 8px 16px; font-size: 0.8rem;">
+            <span>Copy Link</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Verified Student Reviews Section -->
+      <div class="reviews-section">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: #ffffff;">
+            ⭐ Verified Student Reviews
+          </h3>
+          <span style="font-size: 0.8rem; color: #fbbf24;">★★★★★ 4.9/5 (2,800+ Students)</span>
+        </div>
+
+        <div class="reviews-grid">
+          <!-- Review 1 -->
+          <div class="review-card">
+            <div class="reviewer-meta">
+              <img src="https://images.unsplash.com/photo-1618641986557-1ecd230959ac?auto=format&fit=crop&w=120&h=120&q=80" alt="Aryan Sharma" class="reviewer-img">
+              <div>
+                <div class="reviewer-name">Aryan Sharma</div>
+                <div class="reviewer-badge">✓ AIR 412 (JEE Advanced Aspirant)</div>
+              </div>
+            </div>
+            <p class="review-comment">
+              "Maine Lakshya JEE complete batch liya tha. DPPs aur video solutions ka level ekdum top hai. Itne kam price me poora material mil gaya, best decision ever!"
+            </p>
+          </div>
+
+          <!-- Review 2 -->
+          <div class="review-card">
+            <div class="reviewer-meta">
+              <img src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=120&h=120&q=80" alt="Rohan Verma" class="reviewer-img">
+              <div>
+                <div class="reviewer-name">Rohan Verma</div>
+                <div class="reviewer-badge">✓ NEET 660+ Target Member</div>
+              </div>
+            </div>
+            <p class="review-comment">
+              "Yakeen NEET fastrack batch se meri Biology aur Physical Chemistry ki speed double ho gayi hai. Payment ke baad UTR submit karte hi 7 minute me access link mil gaya."
+            </p>
+          </div>
+
+          <!-- Review 3 -->
+          <div class="review-card">
+            <div class="reviewer-meta">
+              <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=120&h=120&q=80" alt="Ankit Mishra" class="reviewer-img">
+              <div>
+                <div class="reviewer-name">Ankit Mishra</div>
+                <div class="reviewer-badge">✓ NDA Written Qualified</div>
+              </div>
+            </div>
+            <p class="review-comment">
+              "Shaurya NDA batch ki Maths tricks bohot tagdi hain. Jo batch 4,000 ka milta tha wo yahan 249 me mil gaya. Private video me step-by-step samjhaya gaya tha kaise access karein."
+            </p>
+          </div>
+
+          <!-- Review 4 -->
+          <div class="review-card">
+            <div class="reviewer-meta">
+              <img src="https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=120&h=120&q=80" alt="Vikas Yadav" class="reviewer-img">
+              <div>
+                <div class="reviewer-name">Vikas Yadav</div>
+                <div class="reviewer-badge">✓ Class 12th Board 96%</div>
+              </div>
+            </div>
+            <p class="review-comment">
+              "Sabse badhiya cheez hai refer karke 30% commission! Maine apne dosto ko link share kiya aur 800 rupees direct UPI me earn kiye."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom High-Value CTA Banner -->
+      <div style="margin-top: 30px; text-align: center; padding: 22px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md);">
+        <h4 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">
+          🎯 Complete Batch Infinity Access at Lowest Price
+        </h4>
+        <p style="font-size: 0.84rem; color: #cbd5e1; margin-bottom: 14px; max-width: 500px; margin-left: auto; margin-right: auto;">
+          Enroll in any pass above to get unlimited access to live lectures, recorded archives, chapter-wise DPPs, test series, and Khazana modules.
+        </p>
+        <a href="#batchesGrid" class="btn-primary" style="display: inline-flex; width: auto; padding: 10px 26px; font-size: 0.88rem;">
+          <span>Browse All Infinity Passes ↑</span>
+        </a>
+      </div>
+
+    </section>
+
+    <!-- Rich Categorized Footer with Discreet Staff Portal Link -->
+    <footer class="site-footer-rich">
+      <div class="footer-main-grid">
+        
+        <!-- Col 1: About & Trust -->
+        <div>
+          <div class="footer-col-title">
+            <span style="font-size: 1.1rem;">⚡</span>
+            <span>PW Premium Hub</span>
+          </div>
+          <p class="footer-desc-text">
+            Affordable, high-yield preparation passes for India's top competitive exams. Instant automated UPI verification & access delivery.
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+            <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px;">✓ 100% Encrypted UPI</span>
+            <span style="font-size: 0.72rem; background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); padding: 3px 8px; border-radius: 4px;">⚡ 10-15m Verification</span>
+            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 4px;">⭐ 50K+ Students</span>
+          </div>
+        </div>
+
+        <!-- Col 2: All 12 Exam Categories Directory -->
+        <div>
+          <div class="footer-col-title">
+            <span>📚</span>
+            <span>All Exam Categories & Batches</span>
+          </div>
+          <div class="footer-exam-pills-wrap">
+            <a href="index.html?cat=jee" class="footer-exam-pill">🎯 IIT-JEE</a>
+            <a href="index.html?cat=neet" class="footer-exam-pill">🩺 NEET UG</a>
+            <a href="index.html?cat=class9_10" class="footer-exam-pill">📖 Class 9th & 10th</a>
+            <a href="index.html?cat=class6_8" class="footer-exam-pill">🌱 Class 6th - 8th</a>
+            <a href="index.html?cat=nda" class="footer-exam-pill">🎖️ NDA & Defence</a>
+            <a href="index.html?cat=upsc" class="footer-exam-pill">🏛️ UPSC Civil Services</a>
+            <a href="index.html?cat=ssc" class="footer-exam-pill">💼 SSC (CGL / CHSL)</a>
+            <a href="index.html?cat=banking" class="footer-exam-pill">🏦 Banking & Insurance</a>
+            <a href="index.html?cat=gate" class="footer-exam-pill">⚙️ GATE & PSU</a>
+            <a href="index.html?cat=cuet" class="footer-exam-pill">🎓 CUET (UG & PG)</a>
+            <a href="index.html?cat=teaching" class="footer-exam-pill">👩‍🏫 Teaching (TET)</a>
+            <a href="index.html?cat=commerce" class="footer-exam-pill">📊 Commerce & CA</a>
+            <a href="index.html" class="footer-exam-pill" style="background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.35); color: #f472b6;">👑 Super VIP All-Pass</a>
+          </div>
+        </div>
+
+        <!-- Col 3: Quick Links & Support -->
+        <div>
+          <div class="footer-col-title">
+            <span>🔗</span>
+            <span>Student Help & Links</span>
+          </div>
+          <ul class="footer-quick-links-list">
+            <li class="footer-quick-link-item"><a href="index.html"><span>📚</span> All Batch Passes</a></li>
+            <li class="footer-quick-link-item"><a href="refer.html"><span>💰</span> Refer & Earn (Upto 50%)</a></li>
+            <li class="footer-quick-link-item"><a href="contact.html"><span>💬</span> Help & Contact Support</a></li>
+            <li class="footer-quick-link-item"><a href="privacy.html"><span>🔒</span> Privacy Policy</a></li>
+            <li class="footer-quick-link-item"><a href="terms.html"><span>📜</span> Terms & Refund Policy</a></li>
+            <li class="footer-quick-link-item"><a href="https://wa.me/917631442934?text=Hello%20Support" target="_blank" rel="noopener noreferrer" style="color: #4ade80;"><span>🟢</span> WhatsApp: 7631442934</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Bar with Discreet Admin Access -->
+      <div class="footer-bottom-bar">
+        <div>
+          © 2025-2026 PW Premium Hub. All Rights Reserved. Trusted by 50,000+ Indian Aspirants.
+        </div>
+        <div>
+          <!-- Discreet Admin Portal Link at bottom -->
+          <a href="admin-login.html" class="discreet-admin-link" title="Authorized Staff Access">
+            <span>🔒 Staff / Admin Portal</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Enhanced Login / Register / Reset Password Modal -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-box">
+      <button type="button" class="modal-close" id="btnCloseAuth">&times;</button>
+      
+      <!-- Nav Tabs -->
+      <div class="auth-tabs-nav">
+        <button type="button" class="auth-tab-btn active" id="tabBtnLogin" data-target="authViewLogin">🔑 Student Login</button>
+        <button type="button" class="auth-tab-btn" id="tabBtnRegister" data-target="authViewRegister">📝 New Register</button>
+        <button type="button" class="auth-tab-btn" id="tabBtnReset" data-target="authViewReset">🔄 Reset Password</button>
+      </div>
+
+      <!-- Logged In Header (if already logged in) -->
+      <div id="authLoggedInBanner" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-size: 0.8rem; color: #86efac; font-weight: 700;">Currently Logged In As:</div>
+          <div id="loggedInUserDisplay" style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">Student</div>
+        </div>
+        <button type="button" id="btnLogoutUser" class="nav-link-btn" style="padding: 4px 10px; font-size: 0.72rem; color: #f87171; border-color: rgba(248,113,113,0.3);">
+          Logout
+        </button>
+      </div>
+
+      <!-- VIEW 1: STUDENT LOGIN -->
+      <div class="auth-view-section active" id="authViewLogin">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
+          Student Profile Login
+        </h3>
+        <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Apne Email ya WhatsApp number aur Password se login karein.
+        </p>
+
+        <form id="formStudentLogin">
+          <div class="form-group">
+            <label class="form-label" for="loginContact">Email Address or WhatsApp Number</label>
+            <input type="text" id="loginContact" class="form-input" placeholder="e.g. rahul@gmail.com or 9876543210" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 14px;">
+            <span>Login & Check Batch Access</span>
+          </button>
+        </form>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.76rem;">
+          <button type="button" class="auth-link-hint" id="linkToReset">Forgot Password? Reset Here</button>
+          <button type="button" class="auth-link-hint" id="linkToRegister">New Student? Register</button>
+        </div>
+      </div>
+
+      <!-- VIEW 2: NEW REGISTRATION -->
+      <div class="auth-view-section" id="authViewRegister">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
+          Create Student Account
+        </h3>
+        <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Apna student profile banayein taaki batches aur 30% referral commission save rahein.
+        </p>
+
+        <form id="formStudentRegister">
+          <div class="form-group">
+            <label class="form-label" for="regName">Full Name</label>
+            <input type="text" id="regName" class="form-input" placeholder="e.g. Rahul Sharma" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Email Address</label>
+            <input type="email" id="regEmail" class="form-input" placeholder="e.g. rahul@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPhone">WhatsApp / Mobile Number</label>
+            <input type="tel" id="regPhone" class="form-input" placeholder="e.g. 9876543210" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Create Password</label>
+            <input type="password" id="regPassword" class="form-input" placeholder="Choose a secure password (min 4 chars)" required minlength="4">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regExam">Target Exam</label>
+            <select id="regExam" class="form-input">
+              <option value="jee">IIT-JEE 2025/2026</option>
+              <option value="neet">NEET UG 2025</option>
+              <option value="class9_10">Class 9th & 10th Foundation</option>
+              <option value="class6_8">Class 6th - 8th Foundation</option>
+              <option value="nda">NDA / Defence</option>
+              <option value="upsc">UPSC Civil Services</option>
+              <option value="ssc">SSC (CGL / CHSL)</option>
+              <option value="banking">Banking & Insurance</option>
+              <option value="gate">GATE & PSU</option>
+              <option value="cuet">CUET (UG / PG)</option>
+              <option value="teaching">Teaching Exams</option>
+              <option value="commerce">Commerce & CA</option>
+              <option value="all">👑 All-Exam Super VIP Pass</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 14px;">
+            <span>Register & Save Profile</span>
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 12px;">
+          <button type="button" class="auth-link-hint" id="linkToLoginFromReg">Already registered? Login here</button>
+        </div>
+      </div>
+
+      <!-- VIEW 3: RESET PASSWORD -->
+      <div class="auth-view-section" id="authViewReset">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
+          Reset Account Password
+        </h3>
+        <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Apna registered Email ya WhatsApp number enter karke naya password set karein.
+        </p>
+
+        <form id="formStudentReset">
+          <div class="form-group">
+            <label class="form-label" for="resetContact">Registered Email or WhatsApp Number</label>
+            <input type="text" id="resetContact" class="form-input" placeholder="e.g. rahul@gmail.com or 9876543210" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="resetNewPassword">New Password</label>
+            <input type="password" id="resetNewPassword" class="form-input" placeholder="Enter new password (min 4 chars)" required minlength="4">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="resetConfirmPassword">Confirm New Password</label>
+            <input type="password" id="resetConfirmPassword" class="form-input" placeholder="Re-enter new password" required minlength="4">
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 14px; background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);">
+            <span>Update Password & Login</span>
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 12px;">
+          <button type="button" class="auth-link-hint" id="linkToLoginFromReset">Remember password? Back to Login</button>
+        </div>
+      </div>
+
+      <!-- User Orders List (If any) -->
+      <div id="userOrdersListBox" style="display: none; margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; text-align: left;">
+        <h4 style="font-size: 0.88rem; font-weight: 700; color: #a5b4fc; margin-bottom: 8px;">
+          📦 Your Enrolled Batches
+        </h4>
+        <div id="userOrdersList" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Notification message</span>
+  </div>
+
+  <!-- Central Scripts -->
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const categoryFilterWrap = document.getElementById("categoryFilterWrap");
+      const batchesGrid = document.getElementById("batchesGrid");
+      const couponChipsList = document.getElementById("couponChipsList");
+      const refLinkInput = document.getElementById("refLinkInput");
+      const btnCopyRefLink = document.getElementById("btnCopyRefLink");
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+
+      // Auth Elements
+      const btnOpenAuth = document.getElementById("btnOpenAuth");
+      const authModal = document.getElementById("authModal");
+      const btnCloseAuth = document.getElementById("btnCloseAuth");
+      const authForm = document.getElementById("authForm");
+      const navUserLabel = document.getElementById("navUserLabel");
+      const authName = document.getElementById("authName");
+      const authPhone = document.getElementById("authPhone");
+      const authExam = document.getElementById("authExam");
+
+      // Search & Drawer elements
+      const batchSearchInput = document.getElementById("batchSearchInput");
+      const btnClearSearch = document.getElementById("btnClearSearch");
+      const searchCountNum = document.getElementById("searchCountNum");
+      const btnToggleAllExamsDrawer = document.getElementById("btnToggleAllExamsDrawer");
+      const allExamsDrawer = document.getElementById("allExamsDrawer");
+      const allExamsGrid = document.getElementById("allExamsGrid");
+      const navEarningsAmt = document.getElementById("navEarningsAmt");
+
+      let activeCategory = "all";
+      let searchQuery = "";
+
+      // Calculate & display referral earnings
+      function updateEarningsDisplay() {
+        const claims = APP_STATE.referralClaims || [];
+        let total = 0;
+        claims.forEach(c => {
+          if (c.status === "paid") {
+            total += Number(c.amount || 0);
+          }
+        });
+        if (APP_STATE.currentUser && APP_STATE.currentUser.earnings) {
+          total = Math.max(total, APP_STATE.currentUser.earnings);
+        }
+        if (navEarningsAmt) {
+          navEarningsAmt.textContent = formatINR(total);
+        }
+      }
+
+      // Check current user state
+      if (APP_STATE.currentUser) {
+        navUserLabel.textContent = `👤 ${APP_STATE.currentUser.name.split(" ")[0]}`;
+        refLinkInput.value = `${window.location.origin}${window.location.pathname}?ref=${encodeURIComponent(APP_STATE.currentUser.phone || "USER")}`;
+      } else {
+        refLinkInput.value = `${window.location.origin}${window.location.pathname}?ref=PW_PARTNER`;
+      }
+      updateEarningsDisplay();
+
+      // Render Category Filter Tabs
+      function renderCategories() {
+        categoryFilterWrap.innerHTML = CONFIG.CATEGORIES.map(cat => `
+          <button 
+            type="button" 
+            class="btn-category-tab ${cat.id === activeCategory ? 'active' : ''}" 
+            data-cat-id="${cat.id}"
+          >
+            <span>${cat.icon || '📚'}</span>
+            <span>${cat.name}</span>
+          </button>
+        `).join("");
+
+        document.querySelectorAll(".btn-category-tab").forEach(tab => {
+          tab.addEventListener("click", () => {
+            activeCategory = tab.dataset.catId;
+            renderCategories();
+            renderAllExamsDrawer();
+            renderBatches();
+          });
+        });
+      }
+
+      // Render Collapsible All Exams Grid Drawer
+      function renderAllExamsDrawer() {
+        if (!allExamsGrid) return;
+        allExamsGrid.innerHTML = CONFIG.CATEGORIES.map(cat => {
+          const count = cat.id === "all" 
+            ? APP_STATE.batches.length 
+            : APP_STATE.batches.filter(b => b.category === cat.id).length;
+          const isActive = cat.id === activeCategory;
+          return `
+            <div class="exam-drawer-chip ${isActive ? 'active' : ''}" data-cat-id="${cat.id}">
+              <span class="exam-drawer-icon">${cat.icon || '📚'}</span>
+              <div>
+                <span class="exam-drawer-name">${cat.name}</span>
+                <span class="exam-drawer-count">${count} ${count === 1 ? 'Infinity Pass' : 'Passes'}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        document.querySelectorAll(".exam-drawer-chip").forEach(chip => {
+          chip.addEventListener("click", () => {
+            activeCategory = chip.dataset.catId;
+            renderCategories();
+            renderAllExamsDrawer();
+            renderBatches();
+            allExamsDrawer.style.display = "none";
+            btnToggleAllExamsDrawer.classList.remove("open");
+            // Scroll to batches grid
+            batchesGrid.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        });
+      }
+
+      // Toggle All Exams Drawer
+      btnToggleAllExamsDrawer.addEventListener("click", () => {
+        const isClosed = allExamsDrawer.style.display === "none";
+        allExamsDrawer.style.display = isClosed ? "block" : "none";
+        btnToggleAllExamsDrawer.classList.toggle("open", isClosed);
+      });
+
+      // Smart Search Listener
+      batchSearchInput.addEventListener("input", (e) => {
+        searchQuery = e.target.value.trim().toLowerCase();
+        btnClearSearch.style.display = searchQuery ? "flex" : "none";
+        renderBatches();
+      });
+
+      btnClearSearch.addEventListener("click", () => {
+        batchSearchInput.value = "";
+        searchQuery = "";
+        btnClearSearch.style.display = "none";
+        renderBatches();
+      });
+
+      // Render Batches with Category & Search Filters
+      function renderBatches() {
+        let filtered = APP_STATE.batches;
+
+        // Apply Category Filter
+        if (activeCategory !== "all") {
+          filtered = filtered.filter(b => b.category === activeCategory);
+        }
+
+        // Apply Live Search Query Filter
+        if (searchQuery) {
+          filtered = filtered.filter(b => {
+            const n = (b.name || "").toLowerCase();
+            const d = (b.description || "").toLowerCase();
+            const c = (b.category || "").toLowerCase();
+            const t = (b.tag || "").toLowerCase();
+            const f = (b.features || []).join(" ").toLowerCase();
+            return n.includes(searchQuery) || d.includes(searchQuery) || c.includes(searchQuery) || t.includes(searchQuery) || f.includes(searchQuery);
+          });
+        }
+
+        if (searchCountNum) {
+          searchCountNum.textContent = filtered.length;
+        }
+
+        if (filtered.length === 0) {
+          batchesGrid.innerHTML = `
+            <div style="text-align: center; padding: 44px 20px; background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px dashed rgba(255,255,255,0.12); grid-column: 1 / -1;">
+              <div style="font-size: 2.2rem; margin-bottom: 8px;">🔍</div>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 6px;">No Batches Found</h3>
+              <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 16px;">
+                "${searchQuery}" se match karta koi batch nahi mila. Dusra exam try karein (JEE, NEET, UPSC, SSC, Banking, NDA).
+              </p>
+              <button type="button" class="btn-enroll" id="btnResetSearch">
+                <span>View All 13 Exam Passes</span>
+              </button>
+            </div>
+          `;
+          document.getElementById("btnResetSearch")?.addEventListener("click", () => {
+            activeCategory = "all";
+            batchSearchInput.value = "";
+            searchQuery = "";
+            btnClearSearch.style.display = "none";
+            renderCategories();
+            renderAllExamsDrawer();
+            renderBatches();
+          });
+          return;
+        }
+
+        batchesGrid.innerHTML = filtered.map(batch => {
+          const discountPct = Math.round(((batch.originalPrice - batch.offerPrice) / batch.originalPrice) * 100);
+          return `
+          <div class="batch-card" data-batch-id="${batch.id}">
+            <div>
+              <div class="batch-header">
+                <span class="batch-tag" style="background: rgba(99, 102, 241, 0.15); color: ${batch.badgeColor || '#a5b4fc'}; border: 1px solid ${batch.badgeColor || 'rgba(99, 102, 241, 0.3)'};">
+                  ${batch.tag || 'Popular Batch'}
+                </span>
+                <span class="batch-discount-badge">-${discountPct}% OFF</span>
+              </div>
+
+              <h3 class="batch-title">${batch.name}</h3>
+              <p class="batch-desc">${batch.description}</p>
+
+              <ul class="batch-features">
+                ${batch.features.map(f => `
+                  <li class="batch-feature-item">
+                    <svg class="batch-feature-icon" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span>${f}</span>
+                  </li>
+                `).join("")}
+              </ul>
+            <div class="batch-extra-discount-hint">
+              <span>🎁 Payment page pe aur discount milega — <strong>Go for it! 🚀</strong></span>
+            </div>
+
+            <div class="batch-footer">
+              <div class="batch-pricing">
+                <span class="batch-cut-price">${formatINR(batch.originalPrice)}</span>
+                <span class="batch-live-price">${formatINR(batch.offerPrice)}</span>
+              </div>
+
+              <a href="payment.html?batch=${encodeURIComponent(batch.id)}" class="btn-enroll">
+                <span>Enroll Now</span>
+                <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          `;
+        }).join("");
+      }
+
+      // Render Coupon Chips (Only show public 20% coupon on home page; secret codes hidden!)
+      function renderCoupons() {
+        const publicCoupons = APP_STATE.coupons.filter(c => c.isPublic !== false);
+        couponChipsList.innerHTML = publicCoupons.map(c => `
+          <button type="button" class="coupon-chip" data-code="${c.code}" title="${c.description}">
+            🏷️ <strong>${c.code}</strong> (-${c.percent}% on > ₹${c.minOrder || 199})
+          </button>
+        `).join("");
+
+        document.querySelectorAll(".coupon-chip").forEach(chip => {
+          chip.addEventListener("click", () => {
+            const code = chip.dataset.code;
+            navigator.clipboard.writeText(code);
+            showToast(`Coupon "${code}" copied! It will auto-apply in checkout.`);
+            localStorage.setItem("applied_coupon", code);
+          });
+        });
+      }
+
+      // Copy Referral Link
+      btnCopyRefLink.addEventListener("click", () => {
+        navigator.clipboard.writeText(refLinkInput.value);
+        showToast("Referral link copied! Share with friends to earn 30% commission.");
+      });
+
+      // Auth Modal Open/Close
+      const authEmail = document.getElementById("authEmail");
+      const userOrdersListBox = document.getElementById("userOrdersListBox");
+      const userOrdersList = document.getElementById("userOrdersList");
+
+      function refreshUserOrdersDisplay() {
+        if (!APP_STATE.currentUser) {
+          userOrdersListBox.style.display = "none";
+          return;
+        }
+        const contact = APP_STATE.currentUser.phone || APP_STATE.currentUser.email;
+        const matches = findOrdersByUserContact(contact);
+        if (matches && matches.length > 0) {
+          userOrdersListBox.style.display = "block";
+          userOrdersList.innerHTML = matches.map(m => `
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <div>
+                <strong style="font-size: 0.82rem; color: #ffffff;">${m.batchName}</strong>
+                <div style="font-size: 0.72rem; font-weight: 600; color: ${m.status === 'approved' ? '#34d399' : '#fbbf24'};">
+                  ${m.status === 'approved' ? '✓ Access Approved' : '⏳ Verifying (10-15 mins approx)'}
+                </div>
+              </div>
+              <a href="success.html?orderId=${encodeURIComponent(m.orderId)}" class="btn-enroll" style="padding: 5px 12px; font-size: 0.72rem; background: ${m.status === 'approved' ? '#10b981' : '#6366f1'}; flex-shrink: 0;">
+                ${m.status === 'approved' ? 'Open Access' : 'View Status'}
+              </a>
+            </div>
+          `).join("");
+        } else {
+          userOrdersListBox.style.display = "none";
+        }
+      }
+
+      // Auth Tab Switching Logic
+      const authTabs = [
+        { btn: document.getElementById("tabBtnLogin"), view: document.getElementById("authViewLogin") },
+        { btn: document.getElementById("tabBtnRegister"), view: document.getElementById("authViewRegister") },
+        { btn: document.getElementById("tabBtnReset"), view: document.getElementById("authViewReset") }
+      ];
+
+      function switchAuthTab(targetViewId) {
+        authTabs.forEach(t => {
+          if (t.view.id === targetViewId) {
+            t.btn.classList.add("active");
+            t.view.classList.add("active");
+          } else {
+            t.btn.classList.remove("active");
+            t.view.classList.remove("active");
+          }
+        });
+      }
+
+      authTabs.forEach(t => {
+        t.btn.addEventListener("click", () => switchAuthTab(t.view.id));
+      });
+
+      document.getElementById("linkToReset")?.addEventListener("click", () => switchAuthTab("authViewReset"));
+      document.getElementById("linkToRegister")?.addEventListener("click", () => switchAuthTab("authViewRegister"));
+      document.getElementById("linkToLoginFromReg")?.addEventListener("click", () => switchAuthTab("authViewLogin"));
+      document.getElementById("linkToLoginFromReset")?.addEventListener("click", () => switchAuthTab("authViewLogin"));
+
+      // Auth Logged In Banner & Logout
+      const authLoggedInBanner = document.getElementById("authLoggedInBanner");
+      const loggedInUserDisplay = document.getElementById("loggedInUserDisplay");
+      const btnLogoutUser = document.getElementById("btnLogoutUser");
+
+      function updateAuthUIState() {
+        if (APP_STATE.currentUser) {
+          navUserLabel.textContent = `👤 ${APP_STATE.currentUser.name ? APP_STATE.currentUser.name.split(" ")[0] : "Student"}`;
+          refLinkInput.value = `${window.location.origin}${window.location.pathname}?ref=${encodeURIComponent(APP_STATE.currentUser.phone || APP_STATE.currentUser.email || "USER")}`;
+          authLoggedInBanner.style.display = "flex";
+          loggedInUserDisplay.textContent = `${APP_STATE.currentUser.name} (${APP_STATE.currentUser.email || APP_STATE.currentUser.phone})`;
+        } else {
+          navUserLabel.textContent = `👤 Student Login`;
+          refLinkInput.value = `${window.location.origin}${window.location.pathname}?ref=PW_PARTNER`;
+          authLoggedInBanner.style.display = "none";
+        }
+        refreshUserOrdersDisplay();
+      }
+
+      btnLogoutUser?.addEventListener("click", () => {
+        localStorage.removeItem("pw_user");
+        APP_STATE.currentUser = null;
+        updateAuthUIState();
+        showToast("Logged out successfully.");
+      });
+
+      btnOpenAuth.addEventListener("click", () => {
+        updateAuthUIState();
+        authModal.classList.add("open");
+      });
+
+      btnCloseAuth.addEventListener("click", () => {
+        authModal.classList.remove("open");
+      });
+
+      // Login Form Submit
+      const formStudentLogin = document.getElementById("formStudentLogin");
+      formStudentLogin?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const contact = document.getElementById("loginContact").value.trim();
+        const pass = document.getElementById("loginPassword").value;
+        const res = verifyUserLogin(contact, pass);
+        if (res.success) {
+          updateAuthUIState();
+          showToast(`Welcome back, ${res.user.name}!`);
+          setTimeout(() => authModal.classList.remove("open"), 1200);
+        } else {
+          showToast(`⚠️ ${res.message}`);
+        }
+      });
+
+      // Register Form Submit
+      const formStudentRegister = document.getElementById("formStudentRegister");
+      formStudentRegister?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const phone = document.getElementById("regPhone").value.trim();
+        const password = document.getElementById("regPassword").value;
+        const exam = document.getElementById("regExam").value;
+
+        const savedUser = saveRegisteredUser(email, {
+          name,
+          email,
+          phone,
+          password,
+          exam,
+          registeredAt: new Date().toISOString()
+        });
+
+        if (savedUser) {
+          setCurrentUser(savedUser);
+          updateAuthUIState();
+          showToast(`Account created! Welcome, ${name}.`);
+          setTimeout(() => authModal.classList.remove("open"), 1200);
+        }
+      });
+
+      // Reset Password Form Submit
+      const formStudentReset = document.getElementById("formStudentReset");
+      formStudentReset?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const contact = document.getElementById("resetContact").value.trim();
+        const newPass = document.getElementById("resetNewPassword").value;
+        const confirmPass = document.getElementById("resetConfirmPassword").value;
+
+        if (newPass !== confirmPass) {
+          showToast("⚠️ Passwords do not match! Please check.");
+          return;
+        }
+
+        const res = resetUserPassword(contact, newPass);
+        if (res.success) {
+          updateAuthUIState();
+          showToast(`✓ ${res.message}`);
+          setTimeout(() => authModal.classList.remove("open"), 1200);
+        } else {
+          showToast(`⚠️ ${res.message}`);
+        }
+      });
+
+      // Countdown Timer
+      function initBannerTimer() {
+        let remain = 6330; // ~1 hr 45 min
+        setInterval(() => {
+          remain = Math.max(0, remain - 1);
+          const h = String(Math.floor(remain / 3600)).padStart(2, "0");
+          const m = String(Math.floor((remain % 3600) / 60)).padStart(2, "0");
+          const s = String(remain % 60).padStart(2, "0");
+          document.getElementById("bannerTimer").textContent = `${h}:${m}:${s}`;
+        }, 1000);
+      }
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(window.toastT);
+        window.toastT = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3200);
+      }
+
+      // How to Buy Inline Video Controller
+      const btnToggleBuyVideo = document.getElementById("btnToggleBuyVideo");
+      const btnCloseBuyVideo = document.getElementById("btnCloseBuyVideo");
+      const buyVideoDrawer = document.getElementById("buyVideoDrawer");
+      const buyVideoIframe = document.getElementById("buyVideoIframe");
+      const btnBuyVideoLabel = document.getElementById("btnBuyVideoLabel");
+
+      function openBuyVideo() {
+        if (!buyVideoDrawer) return;
+        const currentCfg = (window.APP_STATE && window.APP_STATE.config) || window.CONFIG || {};
+        const videoUrl = currentCfg.HOW_TO_BUY_VIDEO || "https://www.youtube.com/embed/dQw4w9WgXcQ";
+        buyVideoIframe.src = videoUrl;
+        buyVideoDrawer.classList.add("open");
+        if (btnBuyVideoLabel) btnBuyVideoLabel.textContent = "Close Video";
+      }
+
+      function closeBuyVideo() {
+        if (!buyVideoDrawer) return;
+        buyVideoDrawer.classList.remove("open");
+        buyVideoIframe.src = "";
+        if (btnBuyVideoLabel) btnBuyVideoLabel.textContent = "Watch 1-Min Video";
+      }
+
+      btnToggleBuyVideo?.addEventListener("click", () => {
+        if (buyVideoDrawer?.classList.contains("open")) {
+          closeBuyVideo();
+        } else {
+          openBuyVideo();
+        }
+      });
+
+      btnCloseBuyVideo?.addEventListener("click", () => {
+        closeBuyVideo();
+      });
+
+      // Slide-Out Corner Menu Drawer
+      const btnHamburgerMenu = document.getElementById("btnHamburgerMenu");
+      const navDrawer = document.getElementById("navDrawer");
+      const navDrawerBackdrop = document.getElementById("navDrawerBackdrop");
+      const btnCloseNavDrawer = document.getElementById("btnCloseNavDrawer");
+      const btnDrawerAuth = document.getElementById("btnDrawerAuth");
+
+      function openNavDrawer() {
+        navDrawer?.classList.add("open");
+        navDrawerBackdrop?.classList.add("open");
+        document.body.style.overflow = "hidden";
+        if (APP_STATE.currentUser) {
+          document.getElementById("drawerUserName").textContent = APP_STATE.currentUser.name;
+          document.getElementById("drawerUserStatus").textContent = `Logged in • ${APP_STATE.currentUser.phone || APP_STATE.currentUser.email}`;
+          btnDrawerAuth.querySelector("span").textContent = "👤 My Profile / Batches";
+        } else {
+          document.getElementById("drawerUserName").textContent = "Guest Student";
+          document.getElementById("drawerUserStatus").textContent = "Click to login or create profile";
+          btnDrawerAuth.querySelector("span").textContent = "👤 Student Login / Register";
+        }
+      }
+
+      function closeNavDrawer() {
+        navDrawer?.classList.remove("open");
+        navDrawerBackdrop?.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      btnHamburgerMenu?.addEventListener("click", openNavDrawer);
+      btnCloseNavDrawer?.addEventListener("click", closeNavDrawer);
+      navDrawerBackdrop?.addEventListener("click", closeNavDrawer);
+
+      btnDrawerAuth?.addEventListener("click", () => {
+        closeNavDrawer();
+        authModal.classList.add("open");
+        updateAuthUIState();
+      });
+
+      document.querySelectorAll(".drawer-nav-link").forEach(link => {
+        link.addEventListener("click", () => {
+          closeNavDrawer();
+        });
+      });
+
+      // Initialize
+      const urlParams = new URLSearchParams(window.location.search);
+      const incomingRef = urlParams.get("ref");
+      if (incomingRef) {
+        localStorage.setItem("incoming_referral", incomingRef);
+      }
+
+      const catParam = urlParams.get("cat");
+      if (catParam) {
+        activeCategory = catParam;
+      }
+
+      updateAuthUIState();
+      renderCategories();
+      renderAllExamsDrawer();
+      renderBatches();
+      renderCoupons();
+      initBannerTimer();
+    });
+  </script>
+
+  <!-- Slide-Out Mobile / Corner Navigation Drawer -->
+  <div class="drawer-backdrop" id="navDrawerBackdrop"></div>
+  <aside class="nav-drawer" id="navDrawer" aria-label="Main Navigation Menu">
+    <div class="nav-drawer-header">
+      <div class="brand-badge" style="font-size: 0.95rem;">
+        <span class="brand-icon">⚡</span>
+        <span>PW Premium Hub</span>
+      </div>
+      <button type="button" class="btn-drawer-close" id="btnCloseNavDrawer" aria-label="Close Menu">✕</button>
+    </div>
+
+    <!-- Student Quick Profile Card in Drawer -->
+    <div class="drawer-profile-card">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); display: flex; align-items: center; justify-content: center; font-size: 1.05rem;">
+          👤
+        </div>
+        <div>
+          <div style="font-weight: 700; color: #ffffff; font-size: 0.86rem;" id="drawerUserName">Guest Student</div>
+          <div style="font-size: 0.72rem; color: #a5b4fc;" id="drawerUserStatus">Click to login or register</div>
+        </div>
+      </div>
+      <button type="button" class="btn-enroll" id="btnDrawerAuth" style="margin-top: 10px; width: 100%; justify-content: center; padding: 7px 12px; font-size: 0.8rem;">
+        <span>👤 Student Login / Register</span>
+      </button>
+    </div>
+
+    <!-- Menu Links List -->
+    <nav class="drawer-nav-menu">
+      <div class="drawer-section-title">QUICK ACCESS & FEATURES</div>
+
+      <a href="#batchesGrid" class="drawer-nav-link" id="linkDrawerBatches">
+        <span class="drawer-nav-icon">📚</span>
+        <div class="drawer-nav-info">
+          <span class="drawer-nav-name">All Exam Batches</span>
+          <span class="drawer-nav-sub">JEE, NEET, UPSC, NDA, SSC & more</span>
+        </div>
+        <span class="drawer-badge success">13 Passes</span>
+      </a>
+
+      <a href="#categoryFilterWrap" class="drawer-nav-link" id="linkDrawerExams">
+        <span class="drawer-nav-icon">🎯</span>
+        <div class="drawer-nav-info">
+          <span class="drawer-nav-name">Explore 12+ Exam Verticals</span>
+          <span class="drawer-nav-sub">Filter batches by your target exam</span>
+        </div>
+      </a>
+
+      <a href="#howToBuyCard" class="drawer-nav-link" id="linkDrawerHowToBuy">
+        <span class="drawer-nav-icon">🎥</span>
+        <div class="drawer-nav-info">
+          <span class="drawer-nav-name">How to Buy (1-Min Video)</span>
+          <span class="drawer-nav-sub">Step-by-step easy purchase guide</span>
+        </div>
+        <span class="drawer-badge" style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc;">Video</span>
+      </a>
+
+      <a href="refer.html" class="drawer-nav-link">
+        <span class="drawer-nav-icon">💰</span>
+        <div class="drawer-nav-info">
+          <span class="drawer-nav-name">Refer & Earn (30%-50%)</span>
+          <span class="drawer-nav-sub">Share with friends & earn direct UPI cash</span>
+        </div>
+        <span class="drawer-badge" style="background: rgba(168, 85, 247, 0.2); color: #d8b4fe;">Cash</span>
+      </a>
+
+      <a href="https://wa.me/917631442934?text=Hello%20PW%20Support" target="_blank" rel="noopener noreferrer" class="drawer-nav-link">
+        <span class="drawer-nav-icon">🟢</span>
+        <div class="drawer-nav-info">
+          <span class="drawer-nav-name">24x7 WhatsApp Help Desk</span>
+          <span class="drawer-nav-sub">Instant chat with support team</span>
+        </div>
+        <span class="drawer-badge" style="background: rgba(34, 197, 94, 0.2); color: #86efac;">Online</span>
+      </a>
+
+      <div class="drawer-section-title" style="margin-top: 14px;">POLICY & INFO</div>
+
+      <a href="terms.html" class="drawer-nav-link">
+        <span class="drawer-nav-icon">📜</span>
+        <div class="drawer-nav-info">
+          <span class="drawer-nav-name">Terms & Refund Policy</span>
+          <span class="drawer-nav-sub">Service description & delivery rules</span>
+        </div>
+      </a>
+
+      <a href="privacy.html" class="drawer-nav-link">
+        <span class="drawer-nav-icon">🔒</span>
+        <div class="drawer-nav-info">
+          <span class="drawer-nav-name">Privacy & Data Security</span>
+          <span class="drawer-nav-sub">100% encrypted & private</span>
+        </div>
+      </a>
+
+      <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center;">
+        <a href="admin-login.html" class="discreet-admin-link" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem;">
+          <span>🔒 Staff / Admin Control Portal</span>
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Floating WhatsApp Concierge Widget -->
+  <aside class="floating-whatsapp-widget" aria-label="WhatsApp Support">
+    <a href="https://wa.me/917631442934?text=Hello%2C%20I%20need%20help%20with%20PW%20Batches" target="_blank" rel="noopener noreferrer" class="floating-whatsapp-btn" title="Chat on WhatsApp">
+      <span class="floating-pulse-ring"></span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+      </svg>
+      <span class="floating-label">Need Help? <strong>Chat 24x7</strong></span>
+    </a>
+  </aside>
+
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Control Panel | PW Premium Hub</title>
+  <meta name="description" content="Manage batches, coupons, verify UTR payments, and customize platform links.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main class="app-container wide">
+    
+    <!-- Top Navigation -->
+    <header class="site-nav">
+      <a href="index.html" class="brand-badge">
+        <span class="brand-icon">⚙️</span>
+        <span>PW Admin Panel</span>
+      </a>
+
+      <div class="nav-actions" style="display: flex; align-items: center; gap: 10px;">
+        <a href="index.html" class="nav-link-btn" title="Open student website" target="_blank" rel="noopener">
+          <span>👁️ View Website</span>
+        </a>
+        <button type="button" id="btnLogoutAdmin" class="nav-link-btn" style="background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.45); color: #fca5a5; font-weight: 700; cursor: pointer;">
+          <span>🚪 Sign Out</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Admin Main Dashboard (Secured: requires session auth) -->
+    <section class="glass-card" id="adminDashboard" style="display: block;">
+      
+      <!-- Admin Header Stats -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+        <div>
+          <h1 class="headline" style="font-size: 1.6rem;">Dashboard & Management</h1>
+          <p class="subheadline" style="margin-bottom: 0;">Full control over orders, UTR verification, batches, and discount coupons.</p>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="button" id="btnExportData" class="nav-link-btn" title="Export all data to JSON">
+            <span>📥 Export Backup</span>
+          </button>
+          <button type="button" id="btnResetDefaults" class="nav-link-btn" style="color: #f87171;" title="Reset to initial default demo data">
+            <span>🔄 Reset Data</span>
+          </button>
+          <button type="button" id="btnLogoutAdminBar" class="nav-link-btn" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; font-weight: 700; cursor: pointer;" title="Sign out of admin session">
+            <span>🚪 Logout</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Tab Switcher -->
+      <div class="admin-tabs">
+        <button type="button" class="admin-tab-btn active" data-tab="orders">
+          📋 UTR Verifications (<span id="countPendingOrders">0</span>)
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="referrals">
+          💰 Referral Payouts (<span id="countReferrals">0</span>)
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="coupons">
+          🎟️ Manage Coupons (<span id="countCoupons">0</span>)
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="batches">
+          📚 Batches & Pricing (<span id="countBatches">0</span>)
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="settings">
+          ⚙️ Settings & Links
+        </button>
+      </div>
+
+      <!-- ================================================================== -->
+      <!-- TAB 1: UTR VERIFICATIONS & ORDERS -->
+      <!-- ================================================================== -->
+      <div class="admin-tab-content" id="tabContent-orders">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <h3 style="font-size: 1rem; font-weight: 700; color: #ffffff;">
+            Student Payment & UTR Requests
+          </h3>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="nav-link-btn active" id="btnFilterAllOrders">All Orders</button>
+            <button type="button" class="nav-link-btn" id="btnFilterPendingOrders">Pending Only</button>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Student</th>
+                <th>Batch</th>
+                <th>Amount</th>
+                <th>Submitted UTR</th>
+                <th>Screenshot Proof</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================================================================== -->
+      <!-- TAB 2: COUPONS MANAGER -->
+      <!-- ================================================================== -->
+      <div class="admin-tab-content" id="tabContent-coupons" style="display: none;">
+        
+        <!-- Create New Coupon Box -->
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 12px;">
+            ➕ Create New Discount Coupon Code
+          </h3>
+          <form id="formCreateCoupon" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: end;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="newCouponCode">Coupon Code</label>
+              <input type="text" id="newCouponCode" class="form-input" placeholder="e.g. FLASH25" required style="text-transform: uppercase;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="newCouponPercent">Discount Percentage (%)</label>
+              <input type="number" id="newCouponPercent" class="form-input" placeholder="e.g. 25" min="1" max="90" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="newCouponMinOrder">Min Batch Price (₹)</label>
+              <input type="number" id="newCouponMinOrder" class="form-input" placeholder="e.g. 199" min="0" value="0">
+            </div>
+
+            <div>
+              <button type="submit" class="btn-enroll" style="height: 42px; width: 100%; justify-content: center;">
+                <span>Add Coupon</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Existing Coupons Table -->
+        <h3 style="font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 10px;">
+          Active Coupons List
+        </h3>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Coupon Code</th>
+                <th>Discount</th>
+                <th>Min Price</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="couponsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ================================================================== -->
+      <!-- TAB 3: BATCHES & PRICING -->
+      <!-- ================================================================== -->
+      <div class="admin-tab-content" id="tabContent-batches" style="display: none;">
+        
+        <!-- Add New Batch Box -->
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 12px;">
+            ➕ Add New Exam Batch / Test Series
+          </h3>
+          <form id="formCreateBatch">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="batchNameInput">Batch Title</label>
+                <input type="text" id="batchNameInput" class="form-input" placeholder="e.g. Prayas JEE Dropper Batch" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="batchCategoryInput">Exam Category</label>
+                <select id="batchCategoryInput" class="form-input">
+                  <option value="jee">IIT-JEE</option>
+                  <option value="neet">NEET UG</option>
+                  <option value="defence">NDA & Defence</option>
+                  <option value="foundation">Class 9 & 10</option>
+                  <option value="board">Board Booster</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="batchOriginalPrice">Crossed Price (₹)</label>
+                <input type="number" id="batchOriginalPrice" class="form-input" placeholder="e.g. 999" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="batchOfferPrice">Offer Price (₹)</label>
+                <input type="number" id="batchOfferPrice" class="form-input" placeholder="e.g. 299" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="batchDescInput">Short Description</label>
+              <input type="text" id="batchDescInput" class="form-input" placeholder="e.g. Complete syllabus with DPPs and mock tests" required>
+            </div>
+
+            <button type="submit" class="btn-enroll" style="padding: 10px 24px;">
+              <span>Add Batch to Website</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Existing Batches Table -->
+        <h3 style="font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 10px;">
+          Current Batches on Website
+        </h3>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Batch Name</th>
+                <th>Exam Category</th>
+                <th>Original Price</th>
+                <th>Offer Price</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="batchesTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ================================================================== -->
+      <!-- TAB: REFERRAL CLAIMS & PAYOUTS -->
+      <!-- ================================================================== -->
+      <div class="admin-tab-content" id="tabContent-referrals" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 2px;">
+              Referral Payout Claims (Upto 30% - 50% Commission)
+            </h3>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0;">
+              Verify that the friend's payment is approved, then transfer payout to the referrer's UPI ID.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="nav-link-btn active" id="btnFilterAllReferrals">All Claims</button>
+            <button type="button" class="nav-link-btn" id="btnFilterPendingReferrals">Pending Payout</button>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Claim ID</th>
+                <th>Referrer</th>
+                <th>Receiving UPI ID</th>
+                <th>Friend & Order</th>
+                <th>Batch</th>
+                <th>Commission</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="referralsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================================================================== -->
+      <!-- TAB 4: SETTINGS & LINKS -->
+      <!-- ================================================================== -->
+      <div class="admin-tab-content" id="tabContent-settings" style="display: none;">
+        
+        <form id="formAdminSettings" style="display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 600px;">
+          
+          <div class="form-group">
+            <label class="form-label" for="settingUpiId">Receiving Merchant UPI ID</label>
+            <input type="text" id="settingUpiId" class="form-input" placeholder="7970870147@fam" required>
+            <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Students scan QR code and pay directly to this Merchant UPI address.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingPaymentName">Payee / Merchant Name</label>
+            <input type="text" id="settingPaymentName" class="form-input" placeholder="e.g. Aditya Kumar Dubey" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingAdminEmail">Admin Email Login</label>
+            <input type="email" id="settingAdminEmail" class="form-input" placeholder="onlyfaltu39@gmail.com" required>
+            <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Primary email used along with password to access this admin panel.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingBuyVideoLink">"How to Buy" Video Guide (Main Page)</label>
+            <input type="text" id="settingBuyVideoLink" class="form-input" placeholder="https://www.youtube.com/embed/YOUR_VIDEO_ID or watch URL" required>
+            <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">1-minute quick guide video explaining how to select batch and pay on the homepage.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingYoutubeLink">Private Batch Walkthrough Video URL (Success Page)</label>
+            <input type="text" id="settingYoutubeLink" class="form-input" placeholder="https://www.youtube.com/embed/YOUR_VIDEO_ID or watch URL" required>
+            <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Private/Unlisted video shown on the success page explaining how to access batches.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingAccessLink">App Portal Link (pwthor.live - Given after payment)</label>
+            <input type="url" id="settingAccessLink" class="form-input" placeholder="https://pwthor.live" required>
+            <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Students get this link on the success page after completing payment.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingSupportWhatsApp">WhatsApp Support URL</label>
+            <input type="text" id="settingSupportWhatsApp" class="form-input" placeholder="https://wa.me/917631442934" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingAdminPin">Change Master Admin Password</label>
+            <input type="password" id="settingAdminPin" class="form-input" placeholder="Default: Vishu@001 (Leave blank to keep unchanged)">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingAdminSecurityCode">Change 4-Digit Master Security Code (PIN)</label>
+            <input type="text" id="settingAdminSecurityCode" class="form-input" maxlength="4" pattern="[0-9]{4}" placeholder="Current: 0000" style="letter-spacing: 0.15em;">
+            <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Used as factor 3 in staff login verification. Default: 0000.</p>
+          </div>
+
+          <div>
+            <button type="submit" class="btn-primary" style="width: auto; padding: 12px 32px;">
+              <span>💾 Save All Settings</span>
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Action completed!</span>
+  </div>
+
+  <!-- Screenshot Preview Modal -->
+  <div class="modal-backdrop" id="screenshotModal">
+    <div class="modal-box" style="max-width: 520px; text-align: center;">
+      <button type="button" class="modal-close" id="btnCloseScreenshot">&times;</button>
+      <h3 id="modalScreenshotTitle" style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 12px; text-align: left;">Payment Screenshot Proof</h3>
+      <div style="background: #000000; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; max-height: 68vh; display: flex; align-items: center; justify-content: center; padding: 4px;">
+        <img id="modalScreenshotImg" src="#" alt="Payment Proof" style="max-width: 100%; max-height: 64vh; object-fit: contain; border-radius: 6px;">
+      </div>
+      <div style="margin-top: 12px; display: flex; justify-content: flex-end;">
+        <button type="button" class="btn-secondary" id="btnCloseScreenshotBtn" style="width: auto; padding: 7px 16px; font-size: 0.8rem;">
+          <span>Close Preview</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Elements
+      const adminLockScreen = document.getElementById("adminLockScreen");
+      const adminDashboard = document.getElementById("adminDashboard");
+      const adminLoginForm = document.getElementById("adminLoginForm");
+      const adminEmailInput = document.getElementById("adminEmailInput");
+      const adminPinInput = document.getElementById("adminPinInput");
+      const btnLogoutAdmin = document.getElementById("btnLogoutAdmin");
+      const btnExportData = document.getElementById("btnExportData");
+      const btnResetDefaults = document.getElementById("btnResetDefaults");
+
+      const countPendingOrders = document.getElementById("countPendingOrders");
+      const countReferrals = document.getElementById("countReferrals");
+      const countCoupons = document.getElementById("countCoupons");
+      const countBatches = document.getElementById("countBatches");
+
+      const ordersTableBody = document.getElementById("ordersTableBody");
+      const referralsTableBody = document.getElementById("referralsTableBody");
+      const couponsTableBody = document.getElementById("couponsTableBody");
+      const batchesTableBody = document.getElementById("batchesTableBody");
+
+      const formCreateCoupon = document.getElementById("formCreateCoupon");
+      const formCreateBatch = document.getElementById("formCreateBatch");
+      const formAdminSettings = document.getElementById("formAdminSettings");
+
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+
+      // Check Session Auth: if not logged in, redirect to dedicated admin-login.html
+      if (sessionStorage.getItem("admin_authenticated") !== "true") {
+        window.location.href = "admin-login.html";
+        return;
+      }
+
+      // Logout Functionality (100% Reliable across all screen sizes)
+      function doAdminLogout() {
+        sessionStorage.removeItem("admin_authenticated");
+        showToast("Logged out successfully! Redirecting...");
+        setTimeout(() => {
+          window.location.href = "admin-login.html";
+        }, 400);
+      }
+
+      btnLogoutAdmin?.addEventListener("click", doAdminLogout);
+      document.getElementById("btnLogoutAdminBar")?.addEventListener("click", doAdminLogout);
+
+      // Render Admin Data immediately
+      renderAllAdminData();
+
+      // Tab Switching
+      const tabBtns = document.querySelectorAll(".admin-tab-btn");
+      const tabContents = document.querySelectorAll(".admin-tab-content");
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          tabBtns.forEach(b => b.classList.remove("active"));
+          tabContents.forEach(c => c.style.display = "none");
+
+          btn.classList.add("active");
+          const tabId = btn.dataset.tab;
+          document.getElementById(`tabContent-${tabId}`).style.display = "block";
+        });
+      });
+
+      function renderAllAdminData() {
+        renderOrders();
+        renderReferrals();
+        renderCoupons();
+        renderBatches();
+        populateSettings();
+      }
+
+      // Render Orders
+      let orderFilter = "all";
+      function renderOrders() {
+        const allOrders = APP_STATE.orders || [];
+        const pendingCount = allOrders.filter(o => o.status === "pending_verification").length;
+        countPendingOrders.textContent = pendingCount;
+
+        const filtered = orderFilter === "pending"
+          ? allOrders.filter(o => o.status === "pending_verification")
+          : allOrders;
+
+        if (filtered.length === 0) {
+          ordersTableBody.innerHTML = `
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                No orders found. Once students submit UTR or screenshot, they will show up here.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        ordersTableBody.innerHTML = filtered.map(o => `
+          <tr>
+            <td><strong style="font-family: monospace; color: #a5b4fc;">${o.orderId}</strong></td>
+            <td>
+              <div style="font-weight: 600; color: #ffffff;">${o.userName || 'Student'}</div>
+              <div style="font-size: 0.72rem; color: #94a3b8;">${o.userEmail || ''}</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">${o.userPhone || '-'}</div>
+            </td>
+            <td>${o.batchName}</td>
+            <td style="font-weight: 700; color: #34d399;">${formatINR(o.amount)}</td>
+            <td>
+              <span style="font-family: monospace; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem;">
+                ${o.utr || 'No UTR'}
+              </span>
+            </td>
+            <td>
+              ${o.screenshot 
+                ? `<img src="${o.screenshot}" alt="Proof" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 1px solid #6366f1;" onclick="viewScreenshotModal('${o.orderId}')" title="Click to view full screenshot">` 
+                : '<span style="color: var(--text-dim); font-size: 0.72rem;">No file</span>'}
+            </td>
+            <td>
+              ${o.status === 'approved' 
+                ? '<span style="color: #34d399; font-weight: 700;">✓ Approved</span>' 
+                : '<span style="color: #fbbf24; font-weight: 700;">⏳ Pending</span>'}
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                ${o.status === 'pending_verification' 
+                  ? `<button type="button" class="btn-enroll" style="padding: 4px 10px; font-size: 0.72rem; background: #10b981;" onclick="approveOrder('${o.orderId}')">Approve</button>`
+                  : `<button type="button" class="nav-link-btn" style="padding: 4px 8px; font-size: 0.72rem;" onclick="unapproveOrder('${o.orderId}')">Revoke</button>`}
+                <button type="button" class="btn-danger" onclick="deleteOrder('${o.orderId}')">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      // Screenshot Modal Viewer
+      window.viewScreenshotModal = function(orderId) {
+        const orders = APP_STATE.orders || [];
+        const ord = orders.find(o => o.orderId === orderId);
+        if (ord && ord.screenshot) {
+          document.getElementById("modalScreenshotImg").src = ord.screenshot;
+          document.getElementById("modalScreenshotTitle").textContent = `Proof: ${ord.orderId} - ${ord.userName} (${formatINR(ord.amount)})`;
+          document.getElementById("screenshotModal").classList.add("open");
+        }
+      };
+
+      document.getElementById("btnCloseScreenshot").addEventListener("click", () => {
+        document.getElementById("screenshotModal").classList.remove("open");
+      });
+      document.getElementById("btnCloseScreenshotBtn").addEventListener("click", () => {
+        document.getElementById("screenshotModal").classList.remove("open");
+      });
+
+      window.approveOrder = function(orderId) {
+        const orders = APP_STATE.orders || [];
+        const target = orders.find(o => o.orderId === orderId);
+        if (target) {
+          target.status = "approved";
+          saveOrders(orders);
+          renderOrders();
+          showToast(`Order ${orderId} approved! Student access unlocked.`);
+        }
+      };
+
+      window.unapproveOrder = function(orderId) {
+        const orders = APP_STATE.orders || [];
+        const target = orders.find(o => o.orderId === orderId);
+        if (target) {
+          target.status = "pending_verification";
+          saveOrders(orders);
+          renderOrders();
+          showToast(`Order ${orderId} reverted to pending.`);
+        }
+      };
+
+      window.deleteOrder = function(orderId) {
+        if (confirm(`Delete order record ${orderId}?`)) {
+          const orders = (APP_STATE.orders || []).filter(o => o.orderId !== orderId);
+          saveOrders(orders);
+          renderOrders();
+          showToast("Order deleted.");
+        }
+      };
+
+      document.getElementById("btnFilterAllOrders").addEventListener("click", () => {
+        orderFilter = "all";
+        renderOrders();
+      });
+      document.getElementById("btnFilterPendingOrders").addEventListener("click", () => {
+        orderFilter = "pending";
+        renderOrders();
+      });
+
+      // ======================================================================
+      // RENDER REFERRALS & PAYOUT CLAIMS
+      // ======================================================================
+      let referralFilter = "all";
+      function renderReferrals() {
+        const claims = APP_STATE.referralClaims || [];
+        const pendingCount = claims.filter(c => c.status === "under_review").length;
+        if (countReferrals) countReferrals.textContent = pendingCount;
+
+        const filtered = referralFilter === "pending"
+          ? claims.filter(c => c.status === "under_review")
+          : claims;
+
+        if (!referralsTableBody) return;
+
+        if (filtered.length === 0) {
+          referralsTableBody.innerHTML = `
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                No referral claims found. When referrers submit claims, they appear here.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        referralsTableBody.innerHTML = filtered.map(c => {
+          const upiPayUrl = `upi://pay?pa=${encodeURIComponent(c.referrerUpi)}&pn=${encodeURIComponent(c.referrerName)}&am=${c.commissionAmount}&cu=INR&tn=${encodeURIComponent('Referral Payout ' + c.claimId)}`;
+          return `
+            <tr>
+              <td><strong style="font-family: monospace; color: #a5b4fc;">${c.claimId}</strong></td>
+              <td>
+                <div style="font-weight: 600; color: #ffffff;">${c.referrerName}</div>
+                <div style="font-size: 0.72rem; color: #94a3b8;">${c.referrerPhone || '-'}</div>
+              </td>
+              <td>
+                <div style="font-family: monospace; font-size: 0.8rem; color: #cbd5e1; margin-bottom: 4px;">
+                  ${c.referrerUpi}
+                </div>
+                <a href="${upiPayUrl}" class="nav-link-btn" style="padding: 2px 8px; font-size: 0.7rem; background: rgba(52, 211, 153, 0.2); border-color: rgba(52, 211, 153, 0.4); color: #6ee7b7; display: inline-flex;">
+                  <span>💸 Pay via UPI</span>
+                </a>
+              </td>
+              <td>
+                <div style="font-weight: 600; color: #ffffff;">${c.friendName}</div>
+                <span style="font-family: monospace; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; color: #a5b4fc;">
+                  ${c.friendOrderId}
+                </span>
+              </td>
+              <td>
+                <div>${c.batchName}</div>
+                <div style="font-size: 0.72rem; color: var(--text-muted);">${formatINR(c.batchPrice)}</div>
+              </td>
+              <td style="font-weight: 800; color: #34d399;">
+                ${formatINR(c.commissionAmount)}
+                <span style="font-size: 0.72rem; font-weight: normal; color: #cbd5e1;">(${c.commissionPercent}%)</span>
+              </td>
+              <td>
+                ${c.status === 'paid'
+                  ? '<span style="color: #34d399; font-weight: 700;">✓ Paid</span>'
+                  : '<span style="color: #fbbf24; font-weight: 700;">⏳ Under Review</span>'}
+              </td>
+              <td>
+                <div style="display: flex; gap: 6px;">
+                  ${c.status === 'under_review'
+                    ? `<button type="button" class="btn-enroll" style="padding: 4px 10px; font-size: 0.72rem; background: #10b981;" onclick="markClaimPaid('${c.claimId}')">Mark Paid</button>`
+                    : `<button type="button" class="nav-link-btn" style="padding: 4px 8px; font-size: 0.72rem;" onclick="revertClaim('${c.claimId}')">Revert</button>`}
+                  <button type="button" class="btn-danger" onclick="deleteClaim('${c.claimId}')">Delete</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      window.markClaimPaid = function(claimId) {
+        const claims = APP_STATE.referralClaims || [];
+        const claim = claims.find(c => c.claimId === claimId);
+        if (claim) {
+          claim.status = "paid";
+          claim.paidAt = new Date().toISOString();
+          saveReferralClaims(claims);
+          renderReferrals();
+          showToast(`Claim ${claimId} marked as Paid!`);
+        }
+      };
+
+      window.revertClaim = function(claimId) {
+        const claims = APP_STATE.referralClaims || [];
+        const claim = claims.find(c => c.claimId === claimId);
+        if (claim) {
+          claim.status = "under_review";
+          saveReferralClaims(claims);
+          renderReferrals();
+          showToast(`Claim ${claimId} reverted to Under Review.`);
+        }
+      };
+
+      window.deleteClaim = function(claimId) {
+        if (confirm(`Delete referral claim ${claimId}?`)) {
+          const claims = (APP_STATE.referralClaims || []).filter(c => c.claimId !== claimId);
+          saveReferralClaims(claims);
+          renderReferrals();
+          showToast("Referral claim deleted.");
+        }
+      };
+
+      document.getElementById("btnFilterAllReferrals").addEventListener("click", () => {
+        referralFilter = "all";
+        renderReferrals();
+      });
+      document.getElementById("btnFilterPendingReferrals").addEventListener("click", () => {
+        referralFilter = "pending";
+        renderReferrals();
+      });
+
+      // Render Coupons
+      function renderCoupons() {
+        countCoupons.textContent = APP_STATE.coupons.length;
+        couponsTableBody.innerHTML = APP_STATE.coupons.map((c, idx) => `
+          <tr>
+            <td><strong style="color: #a5b4fc; font-family: monospace;">${c.code}</strong></td>
+            <td style="color: #34d399; font-weight: 700;">-${c.percent}%</td>
+            <td>${c.minOrder ? formatINR(c.minOrder) : 'No min limit'}</td>
+            <td>${c.description || '-'}</td>
+            <td>
+              <button type="button" class="btn-danger" onclick="deleteCoupon(${idx})">Delete</button>
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      window.deleteCoupon = function(idx) {
+        const coupons = [...APP_STATE.coupons];
+        const removed = coupons.splice(idx, 1);
+        saveCoupons(coupons);
+        renderCoupons();
+        showToast(`Coupon "${removed[0].code}" removed.`);
+      };
+
+      formCreateCoupon.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const code = document.getElementById("newCouponCode").value.trim().toUpperCase();
+        const percent = parseInt(document.getElementById("newCouponPercent").value, 10);
+        const minOrder = parseInt(document.getElementById("newCouponMinOrder").value, 10) || 0;
+
+        const newCoupon = {
+          code: code,
+          percent: percent,
+          minOrder: minOrder,
+          description: `${percent}% off on orders above ${formatINR(minOrder)}`
+        };
+
+        const coupons = [...APP_STATE.coupons, newCoupon];
+        saveCoupons(coupons);
+        renderCoupons();
+        formCreateCoupon.reset();
+        showToast(`Coupon "${code}" successfully added!`);
+      });
+
+      // Render Batches
+      function renderBatches() {
+        countBatches.textContent = APP_STATE.batches.length;
+        batchesTableBody.innerHTML = APP_STATE.batches.map((b, idx) => `
+          <tr>
+            <td><strong>${b.name}</strong></td>
+            <td><span style="text-transform: uppercase; font-size: 0.75rem; color: #a5b4fc;">${b.category}</span></td>
+            <td style="text-decoration: line-through; color: var(--text-muted);">${formatINR(b.originalPrice)}</td>
+            <td style="font-weight: 700; color: #34d399;">${formatINR(b.offerPrice)}</td>
+            <td>
+              <button type="button" class="btn-danger" onclick="deleteBatch(${idx})">Delete</button>
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      window.deleteBatch = function(idx) {
+        if (confirm("Delete this batch from website?")) {
+          const batches = [...APP_STATE.batches];
+          batches.splice(idx, 1);
+          saveBatches(batches);
+          renderBatches();
+          showToast("Batch deleted.");
+        }
+      };
+
+      formCreateBatch.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("batchNameInput").value.trim();
+        const cat = document.getElementById("batchCategoryInput").value;
+        const origPrice = parseInt(document.getElementById("batchOriginalPrice").value, 10);
+        const offPrice = parseInt(document.getElementById("batchOfferPrice").value, 10);
+        const desc = document.getElementById("batchDescInput").value.trim();
+
+        const newBatch = {
+          id: `b-${Date.now()}`,
+          category: cat,
+          name: name,
+          tag: "New Batch",
+          badgeColor: "#6366f1",
+          description: desc,
+          originalPrice: origPrice,
+          offerPrice: offPrice,
+          features: [
+            "Complete HD Video Lectures",
+            "DPPs with Step-by-Step Solutions",
+            "Mock Tests & Question Bank Access",
+            "Direct Mentor Doubt Access"
+          ]
+        };
+
+        const batches = [...APP_STATE.batches, newBatch];
+        saveBatches(batches);
+        renderBatches();
+        formCreateBatch.reset();
+        showToast(`Batch "${name}" added to website!`);
+      });
+
+      // Populate Settings
+      function populateSettings() {
+        const cfg = APP_STATE.config;
+        document.getElementById("settingUpiId").value = cfg.UPI_ID || "";
+        document.getElementById("settingPaymentName").value = cfg.PAYMENT_NAME || "";
+        document.getElementById("settingAdminEmail").value = cfg.ADMIN_EMAIL || "onlyfaltu39@gmail.com";
+        document.getElementById("settingAdminSecurityCode").value = cfg.ADMIN_SECURITY_CODE || "0000";
+        document.getElementById("settingBuyVideoLink").value = cfg.HOW_TO_BUY_VIDEO || "";
+        document.getElementById("settingYoutubeLink").value = cfg.PRIVATE_YOUTUBE_LINK || "";
+        document.getElementById("settingAccessLink").value = cfg.APP_PORTAL_LINK || cfg.ACCESS_PORTAL_LINK || "https://pwthor.live";
+        document.getElementById("settingSupportWhatsApp").value = cfg.SUPPORT_WHATSAPP || "";
+      }
+
+      formAdminSettings.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const cfg = { ...APP_STATE.config };
+        cfg.UPI_ID = document.getElementById("settingUpiId").value.trim();
+        cfg.PAYMENT_NAME = document.getElementById("settingPaymentName").value.trim();
+        cfg.ADMIN_EMAIL = document.getElementById("settingAdminEmail").value.trim() || "onlyfaltu39@gmail.com";
+        cfg.HOW_TO_BUY_VIDEO = normalizeYoutubeUrl(document.getElementById("settingBuyVideoLink").value.trim());
+        cfg.PRIVATE_YOUTUBE_LINK = normalizeYoutubeUrl(document.getElementById("settingYoutubeLink").value.trim());
+        cfg.APP_PORTAL_LINK = document.getElementById("settingAccessLink").value.trim();
+        cfg.ACCESS_PORTAL_LINK = cfg.APP_PORTAL_LINK;
+        cfg.SUPPORT_WHATSAPP = document.getElementById("settingSupportWhatsApp").value.trim();
+
+        const newPin = document.getElementById("settingAdminPin").value.trim();
+        if (newPin) {
+          cfg.ADMIN_PIN = newPin;
+          document.getElementById("settingAdminPin").value = "";
+        }
+
+        const newCode = document.getElementById("settingAdminSecurityCode").value.trim();
+        if (newCode) {
+          if (newCode.length !== 4 || !/^\d{4}$/.test(newCode)) {
+            showToast("⚠️ Security Code must be exactly 4 digits (e.g. 7788)!");
+            return;
+          }
+          cfg.ADMIN_SECURITY_CODE = newCode;
+        }
+
+        saveConfig(cfg);
+        showToast("Settings & Video links saved successfully!");
+      });
+
+      // Export / Backup
+      btnExportData.addEventListener("click", () => {
+        const backup = {
+          config: APP_STATE.config,
+          batches: APP_STATE.batches,
+          coupons: APP_STATE.coupons,
+          orders: APP_STATE.orders,
+          referralClaims: APP_STATE.referralClaims,
+          exportedAt: new Date().toISOString()
+        };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
+        const dlAnchor = document.createElement("a");
+        dlAnchor.setAttribute("href", dataStr);
+        dlAnchor.setAttribute("download", `pw_hub_backup_${Date.now()}.json`);
+        dlAnchor.click();
+      });
+
+      // Reset to defaults
+      btnResetDefaults.addEventListener("click", () => {
+        if (confirm("Reset all batches, coupons, orders, and referral claims to original default demo data?")) {
+          localStorage.removeItem("pw_config");
+          localStorage.removeItem("pw_batches");
+          localStorage.removeItem("pw_coupons");
+          localStorage.removeItem("pw_orders");
+          localStorage.removeItem("pw_referrals");
+          localStorage.removeItem("pw_user");
+          localStorage.removeItem("thor_config");
+          localStorage.removeItem("thor_batches");
+          localStorage.removeItem("thor_coupons");
+          localStorage.removeItem("thor_orders");
+          localStorage.removeItem("thor_referrals");
+          localStorage.removeItem("thor_user");
+          window.location.reload();
+        }
+      });
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(window.toastT);
+        window.toastT = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure UPI Payment Checkout | PW Premium Hub</title>
+  <meta name="description" content="Pay securely using Google Pay, PhonePe, Paytm QR code. Instant verification for PW Exam Infinity Batches.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main class="app-container">
+    
+    <!-- Top Nav Actions -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <a href="index.html" class="back-link" style="margin-bottom: 0;">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        <span>Back to Batches</span>
+      </a>
+
+      <a href="https://wa.me/917631442934?text=Hello%2C%20I%20need%20help%20with%20my%20Payment" target="_blank" rel="noopener noreferrer" class="nav-link-btn" style="background: rgba(37,211,102,0.15); border-color: rgba(37,211,102,0.35); color: #86efac; font-size: 0.8rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+        </svg>
+        <span>💬 Help & Support</span>
+      </a>
+    </div>
+
+    <section class="glass-card" aria-label="UPI Payment Checkout">
+      
+      <!-- Headline -->
+      <h1 class="headline" style="font-size: 1.5rem;">Scan & Pay via UPI</h1>
+      <p class="subheadline" style="margin-bottom: 18px;">
+        Pay securely using any UPI app (GPay / PhonePe / Paytm). UTR ya payment screenshot submit karein.
+      </p>
+
+      <!-- Lucky Discount Wheel Card -->
+      <div class="spinner-card" id="spinnerSection">
+        <div class="spinner-badge">
+          <span>🎰</span>
+          <span>LIMITED OFFER • LUCKY DISCOUNT WHEEL</span>
+        </div>
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">
+          Spin the Wheel for Extra Discount!
+        </h2>
+        <p style="font-size: 0.8rem; color: #cbd5e1; margin-bottom: 14px; max-width: 360px; margin-left: auto; margin-right: auto;">
+          Get an instant discount on your batch! 1-time lucky spin available for this checkout.
+        </p>
+
+        <!-- Wheel Canvas Area -->
+        <div class="wheel-outer-wrapper">
+          <div class="wheel-pointer">
+            <svg viewBox="0 0 24 28" width="24" height="28" fill="none">
+              <polygon points="12,28 3,4 21,4" fill="#fbbf24" stroke="#78350f" stroke-width="2" />
+            </svg>
+          </div>
+          <canvas id="wheelCanvas" class="wheel-canvas" width="520" height="520" style="width: 260px; height: 260px;"></canvas>
+        </div>
+
+        <div>
+          <button type="button" id="btnSpinWheel" class="btn-spin">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+            <span id="btnSpinWheelText">Spin Lucky Wheel</span>
+          </button>
+        </div>
+
+        <div id="spinResultBox" class="spin-result-box"></div>
+      </div>
+
+      <!-- Order Summary Card -->
+      <div class="order-summary">
+        <div class="summary-row">
+          <span>Order ID</span>
+          <strong id="summaryOrderId" style="font-family: monospace; color: #a5b4fc;">PW-XXXX</strong>
+        </div>
+        <div class="summary-row">
+          <span>Selected Batch</span>
+          <strong id="summaryBatchName" style="color: #ffffff; text-align: right; max-width: 60%;">Lakshya JEE Complete Batch</strong>
+        </div>
+        <div class="summary-row">
+          <span>Original Price</span>
+          <span id="summaryOriginalPrice" style="text-decoration: line-through; color: var(--text-muted);">₹4,999</span>
+        </div>
+        <div class="summary-row">
+          <span>Batch Offer Price</span>
+          <span id="summaryBasePrice">₹299</span>
+        </div>
+        <div class="summary-row" id="summaryCouponRow" style="display: none;">
+          <span id="summaryCouponLabel">Coupon Applied</span>
+          <span class="summary-discount" id="summaryCouponSavings">-₹60</span>
+        </div>
+        <div class="summary-row total">
+          <span>Final Payable Amount</span>
+          <span id="summaryPayableAmount" style="color: #34d399; font-size: 1.45rem; font-weight: 800;">₹239</span>
+        </div>
+      </div>
+
+      <!-- Ultra-Premium Coupon Code Section -->
+      <div class="coupon-box-card">
+        <div class="coupon-header-row">
+          <label for="checkoutCouponInput" class="coupon-label">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path>
+              <path d="M13 5v2"></path>
+              <path d="M13 17v2"></path>
+              <path d="M13 11v2"></path>
+            </svg>
+            <span>Have a Coupon Code?</span>
+          </label>
+          <span class="coupon-save-pill">⚡ Instant Discount</span>
+        </div>
+
+        <div class="coupon-input-wrap" id="couponInputWrapper">
+          <span class="coupon-icon-prefix">🎟️</span>
+          <input 
+            type="text" 
+            id="checkoutCouponInput" 
+            class="coupon-input" 
+            placeholder="ENTER CODE (E.G. PREMIUM20)"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="button" id="btnCheckoutApplyCoupon" class="btn-apply">
+            <span>Apply</span>
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Quick Tappable Coupon Chips -->
+        <div class="quick-coupon-row">
+          <span class="quick-coupon-label">Tap to apply:</span>
+          <button type="button" class="btn-quick-chip" id="btnQuickApplyPremium20" data-code="PREMIUM20" title="Click to apply PREMIUM20">
+            <span>🏷️ PREMIUM20</span>
+            <span style="color: #86efac; font-weight: normal;">(Flat 20% OFF)</span>
+          </button>
+        </div>
+
+        <div id="checkoutCouponMsg" class="coupon-message" style="display: none;"></div>
+      </div>
+
+      <!-- Merchant Verification Highlight Card (Aditya Kumar Dubey | 7970870147@fam) -->
+      <div class="merchant-badge-card">
+        <div class="merchant-meta-left">
+          <div class="merchant-shield-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="merchant-name-label">
+              <span>Verified Payee:</span> <strong>Aditya Kumar Dubey</strong>
+            </div>
+            <div style="font-size: 0.74rem; color: #94a3b8; display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+              <span>Merchant UPI:</span>
+              <span class="merchant-upi-tag" id="merchantUpiTag">7970870147@fam</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-copy" id="btnCopyMerchantUpi" title="Copy Merchant UPI ID">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>Copy UPI ID</span>
+        </button>
+      </div>
+
+      <!-- Universal UPI 1-Click Pay Button -->
+      <a href="#" id="btnPayUpiDirect" class="btn-primary" style="margin-bottom: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <line x1="2" y1="10" x2="22" y2="10"></line>
+        </svg>
+        <span id="payUpiButtonText">Pay via Any UPI App</span>
+      </a>
+
+      <!-- Quick App Launchers -->
+      <div class="upi-apps-grid">
+        <a href="#" id="btnGPayApp" class="btn-upi-app" title="Google Pay">
+          <span style="font-weight: 800; color: #60a5fa; font-size: 0.95rem;">GPay</span>
+          <span style="font-size: 0.7rem; color: #94a3b8;">Google Pay</span>
+        </a>
+        <a href="#" id="btnPhonePeApp" class="btn-upi-app" title="PhonePe">
+          <span style="font-weight: 800; color: #c084fc; font-size: 0.95rem;">PhonePe</span>
+          <span style="font-size: 0.7rem; color: #94a3b8;">Instant UPI</span>
+        </a>
+        <a href="#" id="btnPaytmApp" class="btn-upi-app" title="Paytm">
+          <span style="font-weight: 800; color: #38bdf8; font-size: 0.95rem;">Paytm</span>
+          <span style="font-size: 0.7rem; color: #94a3b8;">Paytm / BHIM</span>
+        </a>
+      </div>
+
+      <div class="divider-or">OR SCAN QR CODE TO PAY</div>
+
+      <!-- 3 UPI QR Tabs -->
+      <div class="qr-tabs" role="tablist">
+        <button type="button" class="qr-tab-btn active" data-qr-index="0">Google Pay</button>
+        <button type="button" class="qr-tab-btn" data-qr-index="1">PhonePe</button>
+        <button type="button" class="qr-tab-btn" data-qr-index="2">Paytm • All UPI</button>
+      </div>
+
+      <!-- Real Uploaded QR Code Display -->
+      <div class="qr-card-container">
+        <div class="qr-image-wrapper" style="width: 230px; height: 230px; padding: 6px; background: #000000; border: 2px solid rgba(255,255,255,0.2);">
+          <img id="qrImage" src="payment_qr.jpg" alt="UPI Payment QR Code" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 12px; margin-top: 8px;">
+          <a href="payment_qr.jpg" download="pw_payment_qr.jpg" class="nav-link-btn" style="font-size: 0.75rem; background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.4);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download QR Code</span>
+          </a>
+        </div>
+
+        <!-- Verified Payee Name (Compact & Clean) -->
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 4px 14px; border-radius: 9999px; margin-bottom: 10px; font-size: 0.78rem; color: #ffffff;">
+          <span style="color: #34d399;">✓ Payee Name:</span>
+          <strong id="payeeNameDisplay" style="color: #ffffff;">Aditya Kumar Dubey</strong>
+        </div>
+
+        <p class="qr-meta-text" id="qrInstruction" style="margin-bottom: 8px;">Scan with Google Pay, PhonePe, Paytm or any UPI app</p>
+
+        <!-- UPI ID copy field -->
+        <div class="upi-id-box">
+          <span class="upi-id-text" id="upiIdDisplay">7970870147@fam</span>
+          <button type="button" class="btn-copy" id="btnCopyUpi" title="Copy UPI ID">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy</span>
+          </button>
+        </div>
+
+        <!-- WhatsApp Help direct link -->
+        <div style="margin-top: 14px; text-align: center;">
+          <a href="https://wa.me/917631442934?text=Hello%2C%20I%20need%20help%20with%20my%20Batch%20Payment" target="_blank" rel="noopener noreferrer" class="nav-link-btn" style="background: rgba(37,211,102,0.15); border-color: rgba(37,211,102,0.35); color: #86efac; font-size: 0.78rem; display: inline-flex; gap: 6px; padding: 6px 14px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+            </svg>
+            <span>💬 Need Help? Contact WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Portal Clarification Notice -->
+      <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); padding: 12px 14px; margin-top: 14px; margin-bottom: 16px; font-size: 0.8rem; color: #cbd5e1; line-height: 1.45;">
+        💡 <strong>Notice:</strong> Batch access hamari high-speed study website portal par diya jayega (PW app par nahi). Saste price me poora premium material mil raha hai, isliye dedicated sincere efforts dikhayein! 100% lectures & notes guarantee.
+      </div>
+
+      <!-- Mandatory Verification Form: UTR & / or Screenshot -->
+      <form id="utrSubmissionForm" style="margin-top: 18px;">
+        
+        <div class="form-group">
+          <label class="form-label" for="userNameInput">Student Name <span style="color: #f87171;">*</span></label>
+          <input 
+            type="text" 
+            id="userNameInput" 
+            class="form-input" 
+            placeholder="e.g. Rahul Kumar" 
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="userEmailInput">Student Email ID <span style="color: #f87171;">*</span></label>
+          <input 
+            type="email" 
+            id="userEmailInput" 
+            class="form-input" 
+            placeholder="e.g. rahul@gmail.com (Email se access dubara check kar sakte hain)" 
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="userPhoneInput">WhatsApp / Mobile Number <span style="color: #f87171;">*</span></label>
+          <input 
+            type="tel" 
+            id="userPhoneInput" 
+            class="form-input" 
+            placeholder="e.g. 9876543210" 
+            required
+          >
+        </div>
+
+        <!-- 12-Digit UTR -->
+        <div class="form-group">
+          <label class="form-label" for="utrInput">
+            <span>12-Digit UPI UTR / Transaction Reference</span>
+            <span style="color: #a5b4fc; font-weight: normal;">(GPay/PhonePe me milta hai)</span>
+          </label>
+          <input 
+            type="text" 
+            id="utrInput" 
+            class="form-input" 
+            style="font-family: monospace; letter-spacing: 0.08em; font-size: 0.95rem;" 
+            placeholder="e.g. 430198765432" 
+            maxlength="16" 
+          >
+        </div>
+
+        <!-- Payment Screenshot Upload -->
+        <div class="form-group">
+          <label class="form-label" for="screenshotInput">
+            <span>📸 Payment Screenshot Upload</span>
+            <span style="color: #34d399; font-weight: normal;">(Optional / Recommended)</span>
+          </label>
+          <input 
+            type="file" 
+            id="screenshotInput" 
+            accept="image/*" 
+            class="form-input" 
+            style="padding: 7px 10px; font-size: 0.8rem; background: rgba(0,0,0,0.3);"
+          >
+          <div id="screenshotPreviewBox" style="display: none; margin-top: 10px; text-align: center;">
+            <img id="screenshotPreview" src="#" alt="Screenshot preview" style="max-height: 140px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+            <div style="font-size: 0.72rem; color: #34d399; margin-top: 4px;">✓ Screenshot attached!</div>
+          </div>
+        </div>
+
+        <!-- Notice Box -->
+        <div class="notice-box">
+          <svg class="notice-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <div>
+            <strong>10-15 Min Verification:</strong> UTR ya Screenshot submit karne ke baad lagbhag 10-15 minute me access approve ho jayega. 
+            Aap baad me apna <strong>Email / Mobile</strong> daal kar login karke direct link dekh sakte hain.
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="btnSubmitPayment" class="btn-primary btn-success">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Submit Payment & Get Access</span>
+        </button>
+      </form>
+
+    </section>
+
+    <!-- Rich Categorized Footer with Discreet Staff Portal Link -->
+    <footer class="site-footer-rich">
+      <div class="footer-main-grid">
+        
+        <!-- Col 1: About & Trust -->
+        <div>
+          <div class="footer-col-title">
+            <span style="font-size: 1.1rem;">⚡</span>
+            <span>PW Premium Hub</span>
+          </div>
+          <p class="footer-desc-text">
+            Affordable, high-yield preparation passes for India's top competitive exams. Instant automated UPI verification & access delivery.
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+            <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px;">✓ 100% Encrypted UPI</span>
+            <span style="font-size: 0.72rem; background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); padding: 3px 8px; border-radius: 4px;">⚡ 10-15m Verification</span>
+            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 4px;">⭐ 50K+ Students</span>
+          </div>
+        </div>
+
+        <!-- Col 2: All 12 Exam Categories Directory -->
+        <div>
+          <div class="footer-col-title">
+            <span>📚</span>
+            <span>All Exam Categories & Batches</span>
+          </div>
+          <div class="footer-exam-pills-wrap">
+            <a href="index.html?cat=jee" class="footer-exam-pill">🎯 IIT-JEE</a>
+            <a href="index.html?cat=neet" class="footer-exam-pill">🩺 NEET UG</a>
+            <a href="index.html?cat=class9_10" class="footer-exam-pill">📖 Class 9th & 10th</a>
+            <a href="index.html?cat=class6_8" class="footer-exam-pill">🌱 Class 6th - 8th</a>
+            <a href="index.html?cat=nda" class="footer-exam-pill">🎖️ NDA & Defence</a>
+            <a href="index.html?cat=upsc" class="footer-exam-pill">🏛️ UPSC Civil Services</a>
+            <a href="index.html?cat=ssc" class="footer-exam-pill">💼 SSC (CGL / CHSL)</a>
+            <a href="index.html?cat=banking" class="footer-exam-pill">🏦 Banking & Insurance</a>
+            <a href="index.html?cat=gate" class="footer-exam-pill">⚙️ GATE & PSU</a>
+            <a href="index.html?cat=cuet" class="footer-exam-pill">🎓 CUET (UG & PG)</a>
+            <a href="index.html?cat=teaching" class="footer-exam-pill">👩‍🏫 Teaching (TET)</a>
+            <a href="index.html?cat=commerce" class="footer-exam-pill">📊 Commerce & CA</a>
+            <a href="index.html" class="footer-exam-pill" style="background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.35); color: #f472b6;">👑 Super VIP All-Pass</a>
+          </div>
+        </div>
+
+        <!-- Col 3: Quick Links & Support -->
+        <div>
+          <div class="footer-col-title">
+            <span>🔗</span>
+            <span>Student Help & Links</span>
+          </div>
+          <ul class="footer-quick-links-list">
+            <li class="footer-quick-link-item"><a href="index.html"><span>📚</span> All Batch Passes</a></li>
+            <li class="footer-quick-link-item"><a href="refer.html"><span>💰</span> Refer & Earn (Upto 50%)</a></li>
+            <li class="footer-quick-link-item"><a href="contact.html"><span>💬</span> Help & Contact Support</a></li>
+            <li class="footer-quick-link-item"><a href="privacy.html"><span>🔒</span> Privacy Policy</a></li>
+            <li class="footer-quick-link-item"><a href="terms.html"><span>📜</span> Terms & Refund Policy</a></li>
+            <li class="footer-quick-link-item"><a href="https://wa.me/917631442934?text=Hello%20Support" target="_blank" rel="noopener noreferrer" style="color: #4ade80;"><span>🟢</span> WhatsApp: 7631442934</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Bar with Discreet Admin Access -->
+      <div class="footer-bottom-bar">
+        <div>
+          © 2025-2026 PW Premium Hub. All Rights Reserved. Trusted by 50,000+ Indian Aspirants.
+        </div>
+        <div>
+          <!-- Discreet Admin Portal Link at bottom -->
+          <a href="admin-login.html" class="discreet-admin-link" title="Authorized Staff Access">
+            <span>🔒 Staff / Admin Portal</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Notification message</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const batchId = urlParams.get("batch");
+      const currentBatch = getBatchById(batchId);
+
+      // Elements
+      const summaryOrderId = document.getElementById("summaryOrderId");
+      const summaryBatchName = document.getElementById("summaryBatchName");
+      const summaryOriginalPrice = document.getElementById("summaryOriginalPrice");
+      const summaryBasePrice = document.getElementById("summaryBasePrice");
+      const summaryCouponRow = document.getElementById("summaryCouponRow");
+      const summaryCouponLabel = document.getElementById("summaryCouponLabel");
+      const summaryCouponSavings = document.getElementById("summaryCouponSavings");
+      const summaryPayableAmount = document.getElementById("summaryPayableAmount");
+
+      const checkoutCouponInput = document.getElementById("checkoutCouponInput");
+      const btnCheckoutApplyCoupon = document.getElementById("btnCheckoutApplyCoupon");
+      const checkoutCouponMsg = document.getElementById("checkoutCouponMsg");
+
+      const btnPayUpiDirect = document.getElementById("btnPayUpiDirect");
+      const payUpiButtonText = document.getElementById("payUpiButtonText");
+      const btnGPayApp = document.getElementById("btnGPayApp");
+      const btnPhonePeApp = document.getElementById("btnPhonePeApp");
+      const btnPaytmApp = document.getElementById("btnPaytmApp");
+
+      const qrImage = document.getElementById("qrImage");
+      const qrInstruction = document.getElementById("qrInstruction");
+      const upiIdDisplay = document.getElementById("upiIdDisplay");
+      const btnCopyUpi = document.getElementById("btnCopyUpi");
+      const qrTabs = document.querySelectorAll(".qr-tab-btn");
+
+      const userNameInput = document.getElementById("userNameInput");
+      const userEmailInput = document.getElementById("userEmailInput");
+      const userPhoneInput = document.getElementById("userPhoneInput");
+      const utrInput = document.getElementById("utrInput");
+      const screenshotInput = document.getElementById("screenshotInput");
+      const screenshotPreviewBox = document.getElementById("screenshotPreviewBox");
+      const screenshotPreview = document.getElementById("screenshotPreview");
+      const utrSubmissionForm = document.getElementById("utrSubmissionForm");
+
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+
+      // Pre-fill user data if logged in
+      if (APP_STATE.currentUser) {
+        if (APP_STATE.currentUser.name) userNameInput.value = APP_STATE.currentUser.name;
+        if (APP_STATE.currentUser.phone) userPhoneInput.value = APP_STATE.currentUser.phone;
+        if (APP_STATE.currentUser.email) userEmailInput.value = APP_STATE.currentUser.email;
+      }
+
+      // Order ID
+      const orderId = createNewOrderId();
+      summaryOrderId.textContent = orderId;
+
+      // Base Price Calculations
+      let activePrice = currentBatch.offerPrice;
+      let appliedCoupon = null;
+      let appliedSpinnerDiscount = null;
+      let hasSpun = false;
+
+      // ======================================================================
+      // LUCKY DISCOUNT WHEEL IMPLEMENTATION
+      // ======================================================================
+      const wheelCanvas = document.getElementById("wheelCanvas");
+      const btnSpinWheel = document.getElementById("btnSpinWheel");
+      const btnSpinWheelText = document.getElementById("btnSpinWheelText");
+      const spinResultBox = document.getElementById("spinResultBox");
+
+      // 6 Distinct Wheel Segments
+      const WHEEL_SLICES = [
+        { label: "15% OFF", percent: 15, bg: "#4f46e5", textColor: "#ffffff" },
+        { label: "30% OFF", percent: 30, bg: "#c026d3", textColor: "#ffffff" },
+        { label: "20% OFF", percent: 20, bg: "#059669", textColor: "#ffffff" },
+        { label: "35% OFF", percent: 35, bg: "#7c3aed", textColor: "#ffffff" },
+        { label: "10% OFF", percent: 10, bg: "#2563eb", textColor: "#ffffff" },
+        { label: "25% OFF", percent: 25, bg: "#ea580c", textColor: "#ffffff" }
+      ];
+
+      function renderWheelCanvas() {
+        if (!wheelCanvas) return;
+        const ctx = wheelCanvas.getContext("2d");
+        const w = wheelCanvas.width;
+        const h = wheelCanvas.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const r = cx - 12;
+        const num = WHEEL_SLICES.length;
+        const arc = (2 * Math.PI) / num;
+
+        ctx.clearRect(0, 0, w, h);
+
+        WHEEL_SLICES.forEach((slice, i) => {
+          const startAngle = i * arc;
+          const endAngle = startAngle + arc;
+
+          // Draw Segment Wedge
+          ctx.beginPath();
+          ctx.fillStyle = slice.bg;
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, r, startAngle, endAngle);
+          ctx.lineTo(cx, cy);
+          ctx.fill();
+
+          // Segment Border
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+
+          // Text Label
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(startAngle + arc / 2);
+          ctx.textAlign = "right";
+          ctx.fillStyle = slice.textColor;
+          ctx.font = "bold 24px Inter, system-ui, sans-serif";
+          ctx.shadowColor = "rgba(0,0,0,0.85)";
+          ctx.shadowBlur = 6;
+          ctx.fillText(slice.label, r - 30, 8);
+          ctx.restore();
+        });
+
+        // Center Pin Hub
+        ctx.beginPath();
+        ctx.arc(cx, cy, 48, 0, 2 * Math.PI);
+        ctx.fillStyle = "#0f172a";
+        ctx.fill();
+        ctx.strokeStyle = "#fbbf24";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        // Center Star
+        ctx.fillStyle = "#fbbf24";
+        ctx.font = "bold 26px Inter, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("★", cx, cy);
+      }
+
+      renderWheelCanvas();
+
+      // Spin Button Handler
+      btnSpinWheel.addEventListener("click", () => {
+        if (hasSpun) return;
+
+        // Mutual Exclusion: If coupon already applied, prompt before replacing
+        if (appliedCoupon) {
+          const confirmReplace = confirm("A coupon is already applied. Spinning the wheel will replace your coupon with the wheel discount. Proceed?");
+          if (!confirmReplace) return;
+
+          // Clear previous coupon
+          appliedCoupon = null;
+          checkoutCouponInput.value = "";
+          checkoutCouponInput.disabled = false;
+          btnCheckoutApplyCoupon.style.display = "block";
+          checkoutCouponMsg.style.display = "none";
+          summaryCouponRow.style.display = "none";
+          localStorage.removeItem("applied_coupon");
+        }
+
+        hasSpun = true;
+        btnSpinWheel.disabled = true;
+        btnSpinWheelText.textContent = "Spinning Wheel...";
+
+        // Target slice selection based on batch offer price:
+        // Price between ₹190 and ₹249: lands strictly on 15% (index 0) or 20% (index 2)
+        // Price ₹299 or above: lands strictly on 30% (index 1) or 35% (index 3)
+        // Price < ₹190: lands on 10% (index 4)
+        // Other (250-298): lands on 15% (index 0) or 20% (index 2)
+        let targetIndex = 0;
+        const p = currentBatch.offerPrice;
+        if (p >= 190 && p <= 249) {
+          targetIndex = Math.random() < 0.5 ? 0 : 2; // 15% or 20%
+        } else if (p >= 299) {
+          targetIndex = Math.random() < 0.5 ? 1 : 3; // 30% or 35%
+        } else if (p < 190) {
+          targetIndex = 4; // 10%
+        } else {
+          targetIndex = Math.random() < 0.5 ? 0 : 2; // 15% or 20%
+        }
+
+        const targetSlice = WHEEL_SLICES[targetIndex];
+
+        // Exact rotation angle to align top pointer (270 deg) with targetSlice center:
+        const sliceCenterDeg = (targetIndex + 0.5) * (360 / WHEEL_SLICES.length);
+        let extraDeg = (270 - sliceCenterDeg) % 360;
+        if (extraDeg < 0) extraDeg += 360;
+
+        // 6 complete spins (2160 deg) plus exact landing offset
+        const totalRotationDeg = 360 * 6 + extraDeg;
+
+        wheelCanvas.style.transition = "transform 4.5s cubic-bezier(0.12, 0.9, 0.18, 1)";
+        wheelCanvas.style.transform = `rotate(${totalRotationDeg}deg)`;
+
+        setTimeout(() => {
+          appliedSpinnerDiscount = targetSlice.percent;
+          const discountVal = Math.round((currentBatch.offerPrice * appliedSpinnerDiscount) / 100);
+          activePrice = Math.max(0, currentBatch.offerPrice - discountVal);
+
+          btnSpinWheelText.textContent = `✓ Won ${appliedSpinnerDiscount}% OFF`;
+
+          spinResultBox.style.display = "block";
+          spinResultBox.innerHTML = `🎉 Congratulations! You unlocked <strong>${appliedSpinnerDiscount}% Instant Discount</strong> (${formatINR(discountVal)} saved)!`;
+
+          // Disable coupon input to enforce mutual exclusion
+          checkoutCouponInput.value = "";
+          checkoutCouponInput.placeholder = `🎁 Lucky Wheel Discount (-${appliedSpinnerDiscount}%) Active`;
+          checkoutCouponInput.disabled = true;
+          btnCheckoutApplyCoupon.style.display = "none";
+          checkoutCouponMsg.className = "coupon-message success";
+          checkoutCouponMsg.style.display = "flex";
+          checkoutCouponMsg.innerHTML = `
+            <span>🎁 Wheel discount applied (-${appliedSpinnerDiscount}%). Coupon code is locked.</span>
+            <button type="button" class="btn-remove-coupon" id="btnRemoveSpinnerDiscount">Use Coupon Instead</button>
+          `;
+
+          document.getElementById("btnRemoveSpinnerDiscount").addEventListener("click", () => {
+            appliedSpinnerDiscount = null;
+            activePrice = currentBatch.offerPrice;
+            checkoutCouponInput.disabled = false;
+            checkoutCouponInput.placeholder = "ENTER CODE (E.G. PREMIUM20)";
+            btnCheckoutApplyCoupon.style.display = "inline-flex";
+            checkoutCouponMsg.style.display = "none";
+            summaryCouponRow.style.display = "none";
+            spinResultBox.style.display = "none";
+            btnSpinWheel.disabled = false;
+            hasSpun = false;
+            wheelCanvas.style.transition = "none";
+            wheelCanvas.style.transform = "rotate(0deg)";
+            btnSpinWheelText.textContent = "Spin Lucky Wheel";
+            updatePaymentAmounts();
+          });
+
+          // Update Summary Row
+          summaryCouponRow.style.display = "flex";
+          summaryCouponLabel.textContent = `Lucky Wheel (${appliedSpinnerDiscount}% OFF)`;
+          summaryCouponSavings.textContent = `-${formatINR(discountVal)}`;
+
+          updatePaymentAmounts();
+          showToast(`🎉 ${appliedSpinnerDiscount}% discount applied to your order!`);
+        }, 4600);
+      });
+
+      summaryBatchName.textContent = currentBatch.name;
+      summaryOriginalPrice.textContent = formatINR(currentBatch.originalPrice);
+      summaryBasePrice.textContent = formatINR(currentBatch.offerPrice);
+
+      const preCoupon = localStorage.getItem("applied_coupon");
+      if (preCoupon) {
+        applyCouponCode(preCoupon);
+      } else {
+        updatePaymentAmounts();
+      }
+
+      btnCheckoutApplyCoupon.addEventListener("click", () => {
+        applyCouponCode(checkoutCouponInput.value.trim());
+      });
+
+      checkoutCouponInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          applyCouponCode(checkoutCouponInput.value.trim());
+        }
+      });
+
+      const btnQuickApplyPremium20 = document.getElementById("btnQuickApplyPremium20");
+      if (btnQuickApplyPremium20) {
+        btnQuickApplyPremium20.addEventListener("click", () => {
+          checkoutCouponInput.value = "PREMIUM20";
+          applyCouponCode("PREMIUM20");
+        });
+      }
+
+      function applyCouponCode(rawCode) {
+        const code = (rawCode || "").toUpperCase();
+        if (!code) return;
+
+        // Mutual exclusion: Block if wheel discount active
+        if (appliedSpinnerDiscount) {
+          showCouponError("Wheel discount is active. Remove wheel discount first to use a coupon code.");
+          return;
+        }
+
+        const found = APP_STATE.coupons.find(c => c.code.toUpperCase() === code);
+        if (!found) {
+          showCouponError("Invalid coupon code. Try code PREMIUM20");
+          return;
+        }
+
+        if (found.minOrder && currentBatch.offerPrice < found.minOrder) {
+          showCouponError(`Coupon ${code} requires minimum batch price of ${formatINR(found.minOrder)}`);
+          return;
+        }
+
+        appliedCoupon = found;
+        let discountVal = 0;
+        if (found.specialPrice !== undefined && found.specialPrice !== null) {
+          // Special VIP direct fixed price (e.g. VANDANA1 -> ₹1, VIVAN01/KISHAN01/AJAD01 -> ₹5)
+          activePrice = found.specialPrice;
+          discountVal = Math.max(0, currentBatch.offerPrice - found.specialPrice);
+          summaryCouponLabel.textContent = `Secret VIP Access (${code})`;
+          summaryCouponSavings.textContent = `Pay only ${formatINR(found.specialPrice)}`;
+        } else {
+          discountVal = Math.round((currentBatch.offerPrice * found.percent) / 100);
+          activePrice = Math.max(0, currentBatch.offerPrice - discountVal);
+          summaryCouponLabel.textContent = `Coupon (${code}) -${found.percent}%`;
+          summaryCouponSavings.textContent = `-${formatINR(discountVal)}`;
+        }
+
+        checkoutCouponInput.value = code;
+        checkoutCouponInput.disabled = true;
+        btnCheckoutApplyCoupon.style.display = "none";
+
+        checkoutCouponMsg.className = "coupon-message success";
+        checkoutCouponMsg.style.display = "flex";
+        if (found.specialPrice !== undefined && found.specialPrice !== null) {
+          checkoutCouponMsg.innerHTML = `
+            <span>🎉 Secret VIP Pass <strong>${code}</strong> Activated! Pay only <strong>${formatINR(found.specialPrice)}</strong></span>
+            <button type="button" class="btn-remove-coupon" id="btnRemoveCoupon">Remove</button>
+          `;
+        } else {
+          checkoutCouponMsg.innerHTML = `
+            <span>✓ Code <strong>${code}</strong> applied! (-${found.percent}%)</span>
+            <button type="button" class="btn-remove-coupon" id="btnRemoveCoupon">Remove</button>
+          `;
+        }
+
+        summaryCouponRow.style.display = "flex";
+
+        document.getElementById("btnRemoveCoupon").addEventListener("click", () => {
+          appliedCoupon = null;
+          activePrice = currentBatch.offerPrice;
+          checkoutCouponInput.disabled = false;
+          checkoutCouponInput.value = "";
+          checkoutCouponInput.placeholder = "ENTER CODE (E.G. PREMIUM20)";
+          btnCheckoutApplyCoupon.style.display = "inline-flex";
+          checkoutCouponMsg.style.display = "none";
+          summaryCouponRow.style.display = "none";
+          localStorage.removeItem("applied_coupon");
+          updatePaymentAmounts();
+        });
+
+        updatePaymentAmounts();
+      }
+
+      function showCouponError(msg) {
+        checkoutCouponMsg.className = "coupon-message error";
+        checkoutCouponMsg.style.display = "flex";
+        checkoutCouponMsg.textContent = msg;
+      }
+
+      function updatePaymentAmounts() {
+        summaryPayableAmount.textContent = formatINR(activePrice);
+        payUpiButtonText.textContent = `Pay ${formatINR(activePrice)} via Any UPI App`;
+
+        const appUrls = getAppSpecificUpiUrls(activePrice, `${currentBatch.name} - ${orderId}`);
+        btnPayUpiDirect.href = appUrls.generic;
+        btnGPayApp.href = appUrls.gpay;
+        btnPhonePeApp.href = appUrls.phonepe;
+        btnPaytmApp.href = appUrls.paytm;
+      }
+
+      upiIdDisplay.textContent = CONFIG.UPI_ID;
+      const merchantUpiTag = document.getElementById("merchantUpiTag");
+      if (merchantUpiTag) {
+        merchantUpiTag.textContent = CONFIG.UPI_ID;
+      }
+      const payeeNameDisplay = document.getElementById("payeeNameDisplay");
+      if (payeeNameDisplay) {
+        payeeNameDisplay.textContent = CONFIG.PAYMENT_NAME || "Aditya Kumar Dubey";
+      }
+
+      // QR Switcher Tabs (All show your real QR payment image with clear label)
+      qrTabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          qrTabs.forEach(t => t.classList.remove("active"));
+          tab.classList.add("active");
+          const idx = parseInt(tab.dataset.qrIndex, 10) || 0;
+          const labels = [
+            "Scan with Google Pay or any UPI app",
+            "Scan with PhonePe or any UPI app",
+            "Scan with Paytm, BHIM or any banking app"
+          ];
+          qrInstruction.textContent = labels[idx] || labels[0];
+        });
+      });
+
+      const copyUpiHandler = async () => {
+        try {
+          await navigator.clipboard.writeText(CONFIG.UPI_ID);
+          showToast(`✓ Copied Merchant UPI ID: "${CONFIG.UPI_ID}"`);
+        } catch (e) {
+          showToast(`Merchant UPI: ${CONFIG.UPI_ID}`);
+        }
+      };
+
+      btnCopyUpi.addEventListener("click", copyUpiHandler);
+      const btnCopyMerchantUpi = document.getElementById("btnCopyMerchantUpi");
+      if (btnCopyMerchantUpi) {
+        btnCopyMerchantUpi.addEventListener("click", copyUpiHandler);
+      }
+
+      // Handle Screenshot File Preview and Base64 conversion
+      let screenshotBase64 = null;
+      screenshotInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Size check (max 3MB to avoid storage overflow)
+        if (file.size > 3 * 1024 * 1024) {
+          showToast("Image is too large. Please upload an image under 3MB.");
+          screenshotInput.value = "";
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          screenshotBase64 = event.target.result;
+          screenshotPreview.src = screenshotBase64;
+          screenshotPreviewBox.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Submit Form
+      utrSubmissionForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const utr = utrInput.value.trim();
+        const name = userNameInput.value.trim();
+        const email = userEmailInput.value.trim();
+        const phone = userPhoneInput.value.trim();
+
+        if (!utr && !screenshotBase64) {
+          showToast("Kripya 12-digit UTR number ya Payment Screenshot upload karein.");
+          return;
+        }
+
+        // Save student profile to localStorage
+        const userObj = {
+          name: name,
+          email: email,
+          phone: phone,
+          lastActive: new Date().toISOString()
+        };
+        setCurrentUser(userObj);
+
+        const newOrder = {
+          orderId: orderId,
+          batchId: currentBatch.id,
+          batchName: currentBatch.name,
+          amount: activePrice,
+          utr: utr || "Screenshot Uploaded",
+          screenshot: screenshotBase64, // Saved for admin review!
+          userName: name,
+          userEmail: email,
+          userPhone: phone,
+          couponUsed: appliedSpinnerDiscount ? `SPINNER_${appliedSpinnerDiscount}%` : (appliedCoupon ? appliedCoupon.code : null),
+          status: "pending_verification",
+          createdAt: new Date().toISOString()
+        };
+
+        const existingOrders = APP_STATE.orders || [];
+        existingOrders.unshift(newOrder);
+        saveOrders(existingOrders);
+
+        sessionStorage.setItem("active_order", JSON.stringify(newOrder));
+        window.location.href = `success.html?orderId=${encodeURIComponent(orderId)}`;
+      });
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(window.toastT);
+        window.toastT = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3200);
+      }
+    });
+  </script>
+
+  <!-- Floating WhatsApp Concierge Widget -->
+  <aside class="floating-whatsapp-widget" aria-label="WhatsApp Support">
+    <a href="https://wa.me/917631442934?text=Hello%2C%20I%20need%20help%20with%20my%20Payment" target="_blank" rel="noopener noreferrer" class="floating-whatsapp-btn" title="Chat on WhatsApp">
+      <span class="floating-pulse-ring"></span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+      </svg>
+      <span class="floating-label">Need Help? <strong>Chat 24x7</strong></span>
+    </a>
+  </aside>
+
+</body>
+</html>

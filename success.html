@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Received | Batch Activation Guide - PW Premium Hub</title>
+  <meta name="description" content="Your payment has been received. Watch the walkthrough video guide and access your batch on pwthor.live.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <main class="app-container">
+    
+    <!-- Top Nav Actions -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <a href="index.html" class="back-link" style="margin-bottom: 0;">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        <span>Back to Batches</span>
+      </a>
+
+      <a href="https://wa.me/917631442934?text=Hello%2C%20I%20have%20completed%20payment%20for%20my%20Batch" target="_blank" rel="noopener noreferrer" class="nav-link-btn" style="background: rgba(37,211,102,0.15); border-color: rgba(37,211,102,0.35); color: #86efac; font-size: 0.8rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+        </svg>
+        <span>💬 Help & Support</span>
+      </a>
+    </div>
+
+    <!-- Top Celebration Banner (Shows when approved) -->
+    <div id="congratsBanner" class="congrats-hero-banner" style="display: none;">
+      <div class="congrats-badge-text">✨ ALL-BATCH ACCESS UNLOCKED ✨</div>
+      <div class="congrats-title">🎉 Congratulations! You are now eligible to study all batches of PW!</div>
+    </div>
+
+    <section class="glass-card success-container" aria-label="Order Status">
+      
+      <!-- Status Checkmark -->
+      <div class="checkmark-circle-wrapper" id="statusIconWrap">
+        <svg class="checkmark-svg" viewBox="0 0 80 80">
+          <circle class="checkmark-circle" cx="40" cy="40" r="36" fill="none" />
+          <polyline class="checkmark-check" points="24,41 35,52 56,29" fill="none" />
+        </svg>
+      </div>
+
+      <!-- Badge Status -->
+      <div class="badge-pill" id="orderStatusBadge" style="margin-bottom: 12px; background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">
+        <span class="dot" style="background-color: #f59e0b; box-shadow: 0 0 8px #f59e0b;"></span>
+        <span id="orderStatusText">Payment Under Verification (10-15 Mins)</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="headline" id="successHeading" style="font-size: 1.7rem;">Payment Received!</h1>
+      
+      <p class="subheadline" id="successSubheading" style="margin-bottom: 16px;">
+        Aapka payment proof receive ho gaya hai. Team verify kar rahi hai (lagbhag <strong>10-15 minute</strong> lagte hain). 
+        Niche video me poora process samjhaya gaya hai ki batch kaise chalana hai aur link kaise use karna hai.
+      </p>
+
+      <!-- Heartfelt / Motivational Dedication Letter (Shows when approved) -->
+      <div id="commitmentNoteCard" class="commitment-letter-card" style="display: none;">
+        <div class="commitment-header">
+          <span style="font-size: 1.25rem;">💌</span>
+          <span class="commitment-header-title">Ek Zaroori Sandesh Aapke Liye (From PW Premium Hub Team):</span>
+        </div>
+        <div class="commitment-body">
+          "Ye platform pehle bilkul free tha, lekin aksar dekha gaya hai ki log free cheez ki kadar nahi karte aur padhai me dedicated hokar mehnat nahi kar paate. Isliye ye ek chhota sa commitment fee rakha gaya hai taaki aap seriousness aur lagan ke saath padhein. Ab aap poori mehnat se padhai karein, apne aur maa-baap ke sapne poore karein. Best of luck for your studies, top ranks & bright future! Thanks for joining PW Premium Hub family ❤️"
+        </div>
+        <div class="commitment-signature">
+          <span>— Alakh Pandey Sir & Dedicated Mentors Team</span>
+        </div>
+      </div>
+
+      <!-- Refresh Status Button -->
+      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px;">
+        <button type="button" id="btnRefreshStatus" class="btn-secondary" style="display: inline-flex; width: auto; padding: 8px 18px; font-size: 0.82rem; border-color: rgba(99,102,241,0.4); color: #a5b4fc;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          <span>Refresh Status</span>
+        </button>
+      </div>
+
+      <!-- Student Login & Access Lookup Box -->
+      <div style="background: rgba(0,0,0,0.35); border: 1px dashed rgba(99,102,241,0.3); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 22px; text-align: left;">
+        <div style="font-size: 0.82rem; font-weight: 700; color: #a5b4fc; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <span>🔑 Student Login & Access Lookup:</span>
+          <button type="button" class="auth-link-hint" id="btnToggleResetBox" style="margin-top:0;">Forgot / Reset Password?</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px;" id="lookupMainRow">
+          <input type="text" id="lookupInput" class="form-input" placeholder="Registered Email or WhatsApp" style="font-size: 0.82rem; padding: 8px 12px;">
+          <input type="password" id="lookupPassword" class="form-input" placeholder="Password (or leave blank if none)" style="font-size: 0.82rem; padding: 8px 12px;">
+          <button type="button" id="btnLookupOrder" class="btn-enroll" style="padding: 8px 16px; font-size: 0.8rem; flex-shrink: 0; background: #6366f1;">
+            <span>Check Access</span>
+          </button>
+        </div>
+
+        <!-- Inline Reset Password Form (Collapsible) -->
+        <div id="inlineResetBox" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08);">
+          <div style="font-size: 0.76rem; color: #cbd5e1; margin-bottom: 8px;">Reset your password with registered Email / Mobile:</div>
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr auto; gap: 6px;">
+            <input type="text" id="inlineResetContact" class="form-input" placeholder="Email or Mobile" style="font-size: 0.78rem; padding: 6px 10px;">
+            <input type="password" id="inlineResetPass" class="form-input" placeholder="New Password" style="font-size: 0.78rem; padding: 6px 10px;">
+            <input type="password" id="inlineResetConfirm" class="form-input" placeholder="Confirm Password" style="font-size: 0.78rem; padding: 6px 10px;">
+            <button type="button" id="btnInlineResetSubmit" class="btn-enroll" style="padding: 6px 12px; font-size: 0.76rem; background: #ec4899;">
+              <span>Reset & Login</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Receipt Card -->
+      <div class="receipt-card">
+        <div class="receipt-header">
+          <span class="receipt-title">Order Summary</span>
+          <span class="receipt-badge" id="receiptStatusBadge">Pending Check</span>
+        </div>
+        <div class="receipt-grid">
+          <span class="receipt-label">Order ID:</span>
+          <span class="receipt-value" id="receiptOrderId">PW-XXXX</span>
+
+          <span class="receipt-label">Selected Batch:</span>
+          <span class="receipt-value" id="receiptBatchName" style="color: #ffffff; white-space: normal;">-</span>
+
+          <span class="receipt-label">Amount Paid:</span>
+          <span class="receipt-value" id="receiptAmount" style="color: #34d399;">₹299</span>
+
+          <span class="receipt-label">Payment Ref:</span>
+          <span class="receipt-value" id="receiptUtr">Screenshot Uploaded</span>
+
+          <span class="receipt-label">Date & Time:</span>
+          <span class="receipt-value" id="receiptDate">Today</span>
+        </div>
+      </div>
+
+      <!-- Video Walkthrough Guide (Explained in video, link given below) -->
+      <div style="margin-top: 24px; text-align: left; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 18px;">
+        <h4 style="font-size: 1.02rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+          <span>📺 Step 1: Watch Walkthrough Video (Check video for free me padhne ke liye)</span>
+          <span style="font-size: 0.72rem; background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Private Video</span>
+        </h4>
+        <p style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 12px;">
+          Iss video guide me poora process dikhaya gaya hai ki batch kaise chalana hai aur pwthor.live portal me lectures, DPPs aur notes kaise access karna hai. 
+          <strong>Video dekhne ke baad niche diye gaye green button se portal open karein!</strong>
+        </p>
+
+        <!-- Embedded Private Video Player -->
+        <div class="video-wrapper">
+          <iframe 
+            id="privateYoutubeIframe"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+            title="Batch Walkthrough Video" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- Step 2: Open Portal & Support Actions -->
+      <div class="action-buttons-stack" style="margin-top: 20px;">
+        
+        <!-- Primary Action: Open pwthor.live App Portal -->
+        <a href="https://pwthor.live" id="btnAccessLink" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); font-size: 1.02rem; padding: 14px 24px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span>👉 Step 2: Open PW App Portal (pwthor.live)</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: auto;">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+
+        <!-- Bonus Perks Unlocked Card -->
+        <div id="bonusPerksCard" style="display: none; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); padding: 14px 18px; text-align: left;">
+          <div style="font-size: 0.88rem; font-weight: 700; color: #a5b4fc; margin-bottom: 4px;">
+            🎁 Bonus Study Material & Question Bank Unlocked!
+          </div>
+          <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.5;">
+            Aapke batch ke sath PW Khazana lectures, 50,000+ DPP practice questions, all-India mock tests aur revision notes activate ho chuke hain. Padhai ke liye upar diye gaye <strong>pwthor.live</strong> button par click karein.
+          </div>
+        </div>
+
+        <!-- Notes & Test Series Benefit Card (Even if not attending live class) -->
+        <div id="notesBenefitsCard" style="display: none; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 95, 70, 0.15) 100%); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 14px 18px; text-align: left; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.12); margin-top: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span style="font-size: 1.25rem;">📝</span>
+            <strong style="font-size: 0.92rem; color: #a7f3d0;">Important Study Tip: Class Nahi Karni Toh Bhi No Problem!</strong>
+          </div>
+          <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.55; margin-bottom: 8px;">
+            Agar aap kisi wajah se roz lambi lectures attend nahi kar pa rahe hain, toh tension mat lijiye! <strong>At least chapter-wise Handwritten Notes download karke revision karein aur All-India Mock Tests zaroor lagayein</strong> — ye aapke exam score aur top ranks boost karne me 100% kaam aayenge!
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(16, 185, 129, 0.2); color: #86efac; font-size: 0.74rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.4);">
+              📥 Downloadable PDF Notes (100% Kaam Aayenge)
+            </span>
+            <span style="background: rgba(99, 102, 241, 0.2); color: #c7d2fe; font-size: 0.74rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; border: 1px solid rgba(99, 102, 241, 0.4);">
+              📊 All-India Mock Tests & Real Exam Practice
+            </span>
+          </div>
+        </div>
+
+        <!-- High Reward 50% Refer & Earn Incentive Card (Shown post-payment only) -->
+        <div id="postPaymentReferCard" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(217, 119, 6, 0.18) 100%); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: var(--radius-md); padding: 16px 18px; text-align: left; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12); margin-top: 10px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.4rem;">💰</span>
+              <strong style="font-size: 0.98rem; color: #fde047; letter-spacing: 0.2px;">Sirf 1 Dost Ko Bulao Aur Seedha 50% Cash Kamao!</strong>
+            </div>
+            <span style="background: rgba(245, 158, 11, 0.25); color: #fef08a; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(245, 158, 11, 0.4);">
+              🔥 SPECIAL CASHBACK OFFER
+            </span>
+          </div>
+          <p style="font-size: 0.84rem; color: #f1f5f9; line-height: 1.55; margin-bottom: 12px;">
+            Aapka batch toh confirm ho gaya, ab paisa vasool karne ka sabse asaan tareeka! <strong>Apne kisi bhi 1 dost ko apna referral link share karein</strong>. Jaise hi wo batch enroll karega, aapko <strong>flat 50% commission instant aapke UPI</strong> me transfer hoga! 2 doston ke aate hi aapka batch 100% FREE aur upar se sidha munafa. Aaj hi doston ko jodein aur daily ₹500 - ₹2,000 kamayein!
+          </p>
+          <a href="refer.html" class="btn-primary" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #1e1b4b; font-weight: 800; font-size: 0.88rem; padding: 11px 16px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; width: 100%; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);">
+            <span>🚀 Dost Ko Invite Karein & 50% Commission Paayein</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <!-- WhatsApp Support Direct Link -->
+        <a href="https://wa.me/917631442934?text=Hello%2C%20I%20have%20completed%20payment%20for%20my%20Batch" id="btnSupportLink" target="_blank" rel="noopener noreferrer" class="btn-secondary btn-whatsapp" style="padding: 12px 20px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+          </svg>
+          <span>💬 Need Help? Contact WhatsApp Support</span>
+        </a>
+
+      </div>
+
+    </section>
+
+    <!-- Rich Categorized Footer with Discreet Staff Portal Link -->
+    <footer class="site-footer-rich">
+      <div class="footer-main-grid">
+        
+        <!-- Col 1: About & Trust -->
+        <div>
+          <div class="footer-col-title">
+            <span style="font-size: 1.1rem;">⚡</span>
+            <span>PW Premium Hub</span>
+          </div>
+          <p class="footer-desc-text">
+            Affordable, high-yield preparation passes for India's top competitive exams. Instant automated UPI verification & access delivery.
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+            <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px;">✓ 100% Encrypted UPI</span>
+            <span style="font-size: 0.72rem; background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); padding: 3px 8px; border-radius: 4px;">⚡ 10-15m Verification</span>
+            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 4px;">⭐ 50K+ Students</span>
+          </div>
+        </div>
+
+        <!-- Col 2: All 12 Exam Categories Directory -->
+        <div>
+          <div class="footer-col-title">
+            <span>📚</span>
+            <span>All Exam Categories & Batches</span>
+          </div>
+          <div class="footer-exam-pills-wrap">
+            <a href="index.html?cat=jee" class="footer-exam-pill">🎯 IIT-JEE</a>
+            <a href="index.html?cat=neet" class="footer-exam-pill">🩺 NEET UG</a>
+            <a href="index.html?cat=class9_10" class="footer-exam-pill">📖 Class 9th & 10th</a>
+            <a href="index.html?cat=class6_8" class="footer-exam-pill">🌱 Class 6th - 8th</a>
+            <a href="index.html?cat=nda" class="footer-exam-pill">🎖️ NDA & Defence</a>
+            <a href="index.html?cat=upsc" class="footer-exam-pill">🏛️ UPSC Civil Services</a>
+            <a href="index.html?cat=ssc" class="footer-exam-pill">💼 SSC (CGL / CHSL)</a>
+            <a href="index.html?cat=banking" class="footer-exam-pill">🏦 Banking & Insurance</a>
+            <a href="index.html?cat=gate" class="footer-exam-pill">⚙️ GATE & PSU</a>
+            <a href="index.html?cat=cuet" class="footer-exam-pill">🎓 CUET (UG & PG)</a>
+            <a href="index.html?cat=teaching" class="footer-exam-pill">👩‍🏫 Teaching (TET)</a>
+            <a href="index.html?cat=commerce" class="footer-exam-pill">📊 Commerce & CA</a>
+            <a href="index.html" class="footer-exam-pill" style="background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.35); color: #f472b6;">👑 Super VIP All-Pass</a>
+          </div>
+        </div>
+
+        <!-- Col 3: Quick Links & Support -->
+        <div>
+          <div class="footer-col-title">
+            <span>🔗</span>
+            <span>Student Help & Links</span>
+          </div>
+          <ul class="footer-quick-links-list">
+            <li class="footer-quick-link-item"><a href="index.html"><span>📚</span> All Batch Passes</a></li>
+            <li class="footer-quick-link-item"><a href="refer.html"><span>💰</span> Refer & Earn (Upto 50%)</a></li>
+            <li class="footer-quick-link-item"><a href="contact.html"><span>💬</span> Help & Contact Support</a></li>
+            <li class="footer-quick-link-item"><a href="privacy.html"><span>🔒</span> Privacy Policy</a></li>
+            <li class="footer-quick-link-item"><a href="terms.html"><span>📜</span> Terms & Refund Policy</a></li>
+            <li class="footer-quick-link-item"><a href="https://wa.me/917631442934?text=Hello%20Support" target="_blank" rel="noopener noreferrer" style="color: #4ade80;"><span>🟢</span> WhatsApp: 7631442934</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Bar with Discreet Admin Access -->
+      <div class="footer-bottom-bar">
+        <div>
+          © 2025-2026 PW Premium Hub. All Rights Reserved. Trusted by 50,000+ Indian Aspirants.
+        </div>
+        <div>
+          <!-- Discreet Admin Portal Link at bottom -->
+          <a href="admin-login.html" class="discreet-admin-link" title="Authorized Staff Access">
+            <span>🔒 Staff / Admin Portal</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Status refreshed!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderIdParam = urlParams.get("orderId");
+
+      // Elements
+      const congratsBanner = document.getElementById("congratsBanner");
+      const commitmentNoteCard = document.getElementById("commitmentNoteCard");
+      const bonusPerksCard = document.getElementById("bonusPerksCard");
+      const notesBenefitsCard = document.getElementById("notesBenefitsCard");
+
+      const privateYoutubeIframe = document.getElementById("privateYoutubeIframe");
+      const btnAccessLink = document.getElementById("btnAccessLink");
+      const btnSupportLink = document.getElementById("btnSupportLink");
+      const btnRefreshStatus = document.getElementById("btnRefreshStatus");
+
+      const orderStatusBadge = document.getElementById("orderStatusBadge");
+      const orderStatusText = document.getElementById("orderStatusText");
+      const successHeading = document.getElementById("successHeading");
+      const successSubheading = document.getElementById("successSubheading");
+
+      const receiptStatusBadge = document.getElementById("receiptStatusBadge");
+      const receiptOrderId = document.getElementById("receiptOrderId");
+      const receiptBatchName = document.getElementById("receiptBatchName");
+      const receiptAmount = document.getElementById("receiptAmount");
+      const receiptUtr = document.getElementById("receiptUtr");
+      const receiptDate = document.getElementById("receiptDate");
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+
+      // Auth lookup elements
+      const lookupInput = document.getElementById("lookupInput");
+      const lookupPassword = document.getElementById("lookupPassword");
+      const btnLookupOrder = document.getElementById("btnLookupOrder");
+      const btnToggleResetBox = document.getElementById("btnToggleResetBox");
+      const inlineResetBox = document.getElementById("inlineResetBox");
+      const inlineResetContact = document.getElementById("inlineResetContact");
+      const inlineResetPass = document.getElementById("inlineResetPass");
+      const inlineResetConfirm = document.getElementById("inlineResetConfirm");
+      const btnInlineResetSubmit = document.getElementById("btnInlineResetSubmit");
+
+      // Configure external links
+      if (CONFIG.APP_PORTAL_LINK) {
+        btnAccessLink.href = CONFIG.APP_PORTAL_LINK;
+      }
+
+      if (CONFIG.PRIVATE_YOUTUBE_LINK) {
+        privateYoutubeIframe.src = CONFIG.PRIVATE_YOUTUBE_LINK;
+      }
+
+      if (CONFIG.SUPPORT_WHATSAPP) {
+        btnSupportLink.href = CONFIG.SUPPORT_WHATSAPP;
+      }
+
+      // Pre-fill lookup if currentUser exists
+      if (APP_STATE.currentUser) {
+        lookupInput.value = APP_STATE.currentUser.email || APP_STATE.currentUser.phone || "";
+        inlineResetContact.value = lookupInput.value;
+      }
+
+      // Find Order Data
+      let currentOrder = null;
+      if (orderIdParam) {
+        currentOrder = (APP_STATE.orders || []).find(o => o.orderId === orderIdParam);
+      }
+      if (!currentOrder) {
+        try {
+          currentOrder = JSON.parse(sessionStorage.getItem("active_order"));
+        } catch (e) {}
+      }
+
+      // Toggle inline reset box
+      btnToggleResetBox?.addEventListener("click", () => {
+        const isHidden = inlineResetBox.style.display === "none";
+        inlineResetBox.style.display = isHidden ? "block" : "none";
+      });
+
+      // Submit inline password reset
+      btnInlineResetSubmit?.addEventListener("click", () => {
+        const contact = inlineResetContact.value.trim();
+        const p1 = inlineResetPass.value;
+        const p2 = inlineResetConfirm.value;
+
+        if (!contact) {
+          showToast("Please enter your registered Email or Mobile.");
+          return;
+        }
+        if (p1 !== p2) {
+          showToast("⚠️ Passwords do not match!");
+          return;
+        }
+
+        const res = resetUserPassword(contact, p1);
+        if (res.success) {
+          showToast(`✓ ${res.message}`);
+          inlineResetBox.style.display = "none";
+          lookupInput.value = contact;
+          lookupPassword.value = p1;
+          const found = findOrdersByUserContact(contact);
+          if (found.length > 0) {
+            currentOrder = found[0];
+            updateOrderStatusView();
+          }
+        } else {
+          showToast(`⚠️ ${res.message}`);
+        }
+      });
+
+      // Confetti Cannon
+      function triggerConfetti() {
+        const canvas = document.getElementById("confettiCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const colors = ["#10b981", "#6366f1", "#ec4899", "#f59e0b", "#3b82f6", "#ffffff"];
+        for (let i = 0; i < 90; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * -canvas.height,
+            size: Math.random() * 8 + 4,
+            speed: Math.random() * 4 + 2,
+            angle: Math.random() * 360,
+            color: colors[Math.floor(Math.random() * colors.length)]
+          });
+        }
+
+        let timer = 0;
+        function render() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach(p => {
+            p.y += p.speed;
+            p.angle += 3;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.angle * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+          });
+          timer++;
+          if (timer < 140) {
+            requestAnimationFrame(render);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        }
+        render();
+      }
+
+      function updateOrderStatusView() {
+        const freshOrders = JSON.parse(localStorage.getItem("pw_orders") || localStorage.getItem("thor_orders") || "[]");
+        if (currentOrder) {
+          const matched = freshOrders.find(o => o.orderId === currentOrder.orderId);
+          if (matched) currentOrder = matched;
+        }
+
+        if (currentOrder) {
+          receiptOrderId.textContent = currentOrder.orderId;
+          receiptBatchName.textContent = currentOrder.batchName;
+          receiptAmount.textContent = formatINR(currentOrder.amount);
+          receiptUtr.textContent = currentOrder.utr || "Screenshot Uploaded";
+          receiptDate.textContent = currentOrder.createdAt 
+            ? new Date(currentOrder.createdAt).toLocaleDateString("en-IN", {
+                day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
+              })
+            : "Today";
+
+          // Update WhatsApp help link with Order ID
+          btnSupportLink.href = `https://wa.me/917631442934?text=${encodeURIComponent(`Hello Support, my Order ID is ${currentOrder.orderId}. Please check my batch verification.`)}`;
+
+          if (currentOrder.status === "approved") {
+            congratsBanner.style.display = "block";
+            commitmentNoteCard.style.display = "block";
+            bonusPerksCard.style.display = "block";
+            if (notesBenefitsCard) notesBenefitsCard.style.display = "block";
+
+            orderStatusBadge.className = "badge-pill success";
+            orderStatusBadge.style.background = "rgba(16, 185, 129, 0.15)";
+            orderStatusBadge.style.color = "#34d399";
+            orderStatusBadge.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            orderStatusText.textContent = "✓ Verified & Eligible For All Batches!";
+            
+            receiptStatusBadge.className = "receipt-badge success";
+            receiptStatusBadge.textContent = "Approved & Active";
+            
+            successHeading.textContent = "Batch Access Unlocked! 🎉";
+            successSubheading.innerHTML = `
+              Aapka batch successfully activate ho chuka hai! Niche Step 1 walkthrough video dekhein aur Step 2 green button se <strong>pwthor.live</strong> portal open karein.
+            `;
+            triggerConfetti();
+          } else {
+            congratsBanner.style.display = "none";
+            commitmentNoteCard.style.display = "none";
+            bonusPerksCard.style.display = "none";
+            if (notesBenefitsCard) notesBenefitsCard.style.display = "none";
+
+            orderStatusBadge.className = "badge-pill warning";
+            orderStatusBadge.style.background = "rgba(245, 158, 11, 0.15)";
+            orderStatusBadge.style.color = "#fbbf24";
+            orderStatusBadge.style.borderColor = "rgba(245, 158, 11, 0.3)";
+            orderStatusText.textContent = "Verification Under Review (10-15 Mins)";
+            
+            receiptStatusBadge.className = "receipt-badge";
+            receiptStatusBadge.textContent = "Under Review";
+
+            successHeading.textContent = "Payment Received!";
+            successSubheading.innerHTML = `
+              Aapka payment proof receive ho gaya hai. Team verify kar rahi hai (lagbhag <strong>10-15 minute</strong> lagte hain). Niche video me poora process samjhaya gaya hai ki batch kaise chalana hai aur link kaise use karna hai.
+            `;
+          }
+        }
+      }
+
+      updateOrderStatusView();
+
+      btnRefreshStatus.addEventListener("click", () => {
+        updateOrderStatusView();
+        showToast("Order status refreshed!");
+      });
+
+      // Quick Lookup by Email / Phone + Optional Password check
+      btnLookupOrder.addEventListener("click", () => {
+        const contact = lookupInput.value.trim();
+        const pass = lookupPassword.value.trim();
+
+        if (!contact) {
+          showToast("Please enter your registered Email or WhatsApp number.");
+          return;
+        }
+
+        if (pass) {
+          const authRes = verifyUserLogin(contact, pass);
+          if (!authRes.success) {
+            showToast(`⚠️ ${authRes.message}`);
+            return;
+          }
+        }
+
+        const found = findOrdersByUserContact(contact);
+        if (found.length > 0) {
+          currentOrder = found[0];
+          updateOrderStatusView();
+          showToast(`Found order ${currentOrder.orderId} for ${currentOrder.userName}!`);
+        } else {
+          showToast("No order found with this contact. Please verify spelling.");
+        }
+      });
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(window.toastT);
+        window.toastT = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff & Admin Authentication | PW Premium Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-dark">
+
+  <!-- Ambient Glow -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <!-- Main Container -->
+  <div class="container" style="max-width: 520px; padding-top: 24px; padding-bottom: 40px;">
+    
+    <!-- Top Nav Header -->
+    <header class="site-header" style="justify-content: space-between; margin-bottom: 24px;">
+      <a href="index.html" class="brand-logo" title="PW Premium Hub Home">
+        <span class="logo-shield">⚡</span>
+        <div class="logo-text-group">
+          <span class="logo-brand">PW Premium Hub</span>
+          <span class="logo-tagline">Staff Control Portal</span>
+        </div>
+      </a>
+
+      <a href="index.html" class="nav-link-btn">
+        <span>← View Website</span>
+      </a>
+    </header>
+
+    <!-- Dedicated Admin Login Glass Card -->
+    <section class="glass-card" style="padding: 26px 24px; border-radius: 20px; box-shadow: 0 16px 40px rgba(0,0,0,0.5);">
+      
+      <!-- Buyer Warning Banner -->
+      <div style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 22px; text-align: center;">
+        <div style="font-weight: 800; font-size: 0.88rem; color: #f87171; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <span>⛔</span>
+          <span>RESTRICTED STAFF AREA • NOT FOR BUYERS</span>
+        </div>
+        <p style="font-size: 0.78rem; color: #cbd5e1; margin-bottom: 12px; line-height: 1.45;">
+          This area is strictly restricted to platform administrators. Students and buyers cannot purchase or activate batches here.
+        </p>
+        <a href="index.html" class="btn-enroll" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; font-size: 0.8rem; background: #334155; text-decoration: none;">
+          <span>← This is not for buyer, Go Back to Batches</span>
+        </a>
+      </div>
+
+      <!-- Icon & Title -->
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="width: 54px; height: 54px; margin: 0 auto 10px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.7rem;">
+          🛡️
+        </div>
+        <h1 class="headline" style="font-size: 1.45rem; margin-bottom: 6px;">Master Staff Authentication</h1>
+        <p class="subheadline" style="margin-bottom: 0; font-size: 0.82rem;">Enter 3-factor verified staff credentials to open the administrative control panel.</p>
+      </div>
+
+      <!-- 3-Tier Login Form -->
+      <form id="adminDedicatedLoginForm" style="display: flex; flex-direction: column; gap: 14px;">
+        
+        <!-- Factor 1: Email -->
+        <div class="form-group" style="text-align: left; margin-bottom: 0;">
+          <label class="form-label" for="loginEmail" style="font-size: 0.82rem; font-weight: 700;">
+            1. Enter Admin Email <span style="color: #f87171;">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="loginEmail" 
+            class="form-input" 
+            placeholder="Enter admin email (Hint: Only faltu...)" 
+            required 
+            autocomplete="username"
+            style="font-size: 0.88rem;"
+          >
+        </div>
+
+        <!-- Factor 2: Master Password (Masked) -->
+        <div class="form-group" style="text-align: left; margin-bottom: 0;">
+          <label class="form-label" for="loginPassword" style="font-size: 0.82rem; font-weight: 700;">
+            2. Master Admin Password <span style="color: #f87171;">*</span>
+          </label>
+          <input 
+            type="password" 
+            id="loginPassword" 
+            class="form-input" 
+            placeholder="•••••••••••• (Hint: both@001)" 
+            required 
+            autocomplete="current-password"
+            style="font-size: 0.95rem; letter-spacing: 0.08em;"
+          >
+        </div>
+
+        <!-- Factor 3: 4-Digit Security PIN (Masked, 4 dots) -->
+        <div class="form-group" style="text-align: left; margin-bottom: 0;">
+          <label class="form-label" for="loginSecurityCode" style="font-size: 0.82rem; font-weight: 700;">
+            3. 4-Digit Master PIN Code <span style="color: #f87171;">*</span>
+          </label>
+          <input 
+            type="password" 
+            id="loginSecurityCode" 
+            class="form-input" 
+            placeholder="••••" 
+            maxlength="4" 
+            pattern="[0-9]{4}" 
+            inputmode="numeric" 
+            required 
+            style="font-size: 1.1rem; letter-spacing: 0.3em; text-align: center;"
+          >
+          <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; margin-bottom: 0;">
+            4-digit numeric staff authorization code.
+          </p>
+        </div>
+
+        <button type="submit" class="btn-primary" style="margin-top: 8px; padding: 13px; font-size: 0.94rem;">
+          <span>🔓 Verify 3-Factor Credentials & Enter</span>
+        </button>
+
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 10px 12px; margin-top: 4px; text-align: center;">
+          <p style="font-size: 0.74rem; color: var(--text-dim); margin-bottom: 0;">
+            🔒 Protected by Anti-Brute-Force Rate Limiting (5 Attempts Max • 5-min Lockout).
+          </p>
+        </div>
+
+      </form>
+
+    </section>
+
+    <!-- Discreet Back link -->
+    <div style="text-align: center; margin-top: 18px;">
+      <a href="index.html" class="auth-link-hint">← Return to PW Premium Hub Student Catalog</a>
+    </div>
+
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Action completed!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("adminDedicatedLoginForm");
+      const emailInput = document.getElementById("loginEmail");
+      const passInput = document.getElementById("loginPassword");
+      const codeInput = document.getElementById("loginSecurityCode");
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(window.toastT);
+        window.toastT = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3200);
+      }
+
+      // If already authenticated, redirect straight to admin dashboard
+      if (sessionStorage.getItem("admin_authenticated") === "true") {
+        window.location.href = "admin.html";
+        return;
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Check if locked out
+        const lockUntil = parseInt(localStorage.getItem("admin_lock_until") || "0", 10);
+        const now = Date.now();
+        if (now < lockUntil) {
+          const waitMins = Math.ceil((lockUntil - now) / 60000);
+          showToast(`⚠️ Security Lockout Active! Please wait ${waitMins} minute(s).`);
+          return;
+        }
+
+        const email = emailInput.value.trim().toLowerCase();
+        const pass = passInput.value;
+        const code = codeInput.value.trim();
+
+        const cfg = (window.APP_STATE && window.APP_STATE.config) || window.CONFIG || {};
+        const correctEmail = (cfg.ADMIN_EMAIL || "onlyfaltu39@gmail.com").trim().toLowerCase();
+        const correctPass = cfg.ADMIN_PIN || "Vishu@001";
+        const correctCode = String(cfg.ADMIN_SECURITY_CODE || "0000").trim();
+
+        const emailMatch = (email === correctEmail);
+        const passMatch = (pass === correctPass);
+        const codeMatch = (code === correctCode);
+
+        if (emailMatch && passMatch && codeMatch) {
+          // Success: reset fails and lockout
+          localStorage.removeItem("admin_failed_attempts");
+          localStorage.removeItem("admin_lock_until");
+          sessionStorage.setItem("admin_authenticated", "true");
+          showToast("✓ 3-Factor verification passed! Opening dashboard...");
+          setTimeout(() => {
+            window.location.href = "admin.html";
+          }, 600);
+        } else {
+          // Failure
+          let fails = parseInt(localStorage.getItem("admin_failed_attempts") || "0", 10) + 1;
+          localStorage.setItem("admin_failed_attempts", fails);
+
+          if (fails >= 5) {
+            localStorage.setItem("admin_lock_until", now + 5 * 60 * 1000); // 5 min lockout
+            showToast("⚠️ 5 incorrect attempts! Portal locked for 5 minutes.");
+          } else {
+            const remaining = 5 - fails;
+            let hint = "Invalid credentials.";
+            if (!emailMatch) hint = "Admin email is incorrect.";
+            else if (!passMatch) hint = "Master password is incorrect.";
+            else if (!codeMatch) hint = "4-digit security code is incorrect.";
+            showToast(`⚠️ ${hint} (${remaining} attempt(s) remaining)`);
+          }
+
+          passInput.value = "";
+          codeInput.value = "";
+          passInput.focus();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

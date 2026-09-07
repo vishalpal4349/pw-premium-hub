@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refer & Earn Upto 50% Commission | PW Premium Hub</title>
+  <meta name="description" content="Refer friends and classmates to PW Premium Hub batches and earn upto 30% to 50% direct UPI commission payouts.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main class="app-container wide">
+    
+    <!-- Top Navigation -->
+    <header class="site-nav">
+      <a href="index.html" class="brand-badge">
+        <span class="brand-icon">⚡</span>
+        <span>PW Premium Hub</span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-link-btn">
+          <span>← Back to Batches</span>
+        </a>
+
+        <!-- WhatsApp Help Link (Number hidden from text) -->
+        <a href="https://wa.me/917631442934?text=Hello%2C%20I%20have%20a%20query%20regarding%20Refer%20and%20Earn%20Payout" target="_blank" rel="noopener noreferrer" class="nav-link-btn" style="background: rgba(37,211,102,0.15); border-color: rgba(37,211,102,0.35); color: #86efac;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+          </svg>
+          <span>💬 Help & Support</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Refer Card -->
+    <section class="glass-card" style="margin-top: 12px;">
+      
+      <!-- Hero Headline -->
+      <div style="text-align: center; max-width: 680px; margin: 0 auto 24px auto;">
+        <span class="spinner-badge" style="background: rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.4); color: #d8b4fe;">
+          💰 UPTO 30% - 50% DIRECT UPI COMMISSION
+        </span>
+        <h1 class="headline" style="font-size: 1.85rem; margin-top: 8px;">
+          Refer Friends & Earn Direct Cash Payouts
+        </h1>
+        <p class="subheadline" style="font-size: 0.95rem; margin-bottom: 0;">
+          Apne doston aur study groups me PW batches share karein. Har successful purchase par direct apne <strong>UPI ID</strong> me instant bank payout payein!
+        </p>
+      </div>
+
+      <!-- Commission Tiers Grid -->
+      <div class="commission-tier-grid">
+        <div class="commission-tier-card">
+          <div class="commission-pct">30%</div>
+          <strong style="color: #ffffff; font-size: 0.88rem; display: block; margin: 4px 0;">Standard Batches</strong>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 0;">Batches up to ₹199 (Earn ₹30 - ₹60 per student)</p>
+        </div>
+
+        <div class="commission-tier-card" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.08);">
+          <div class="commission-pct" style="color: #34d399;">40%</div>
+          <strong style="color: #ffffff; font-size: 0.88rem; display: block; margin: 4px 0;">Premium Batches</strong>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 0;">Batches ₹249 - ₹299 (Earn ₹100 - ₹120 per student)</p>
+        </div>
+
+        <div class="commission-tier-card" style="border-color: rgba(236, 72, 153, 0.4); background: rgba(236, 72, 153, 0.08);">
+          <div class="commission-pct" style="color: #f472b6;">50%</div>
+          <strong style="color: #ffffff; font-size: 0.88rem; display: block; margin: 4px 0;">VIP Mega Pass</strong>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 0;">All-Access Pass ₹499 (Earn ₹250 instant per student)</p>
+        </div>
+      </div>
+
+      <!-- Section 1: Referral Link Generator -->
+      <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 20px; margin-bottom: 28px;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 6px;">
+          🔗 Generate Your Unique Referral Link
+        </h3>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 14px;">
+          Apna naam ya username likhein aur link generate karein. Friend ko yeh link send karein.
+        </p>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+          <input 
+            type="text" 
+            id="referrerNameInput" 
+            class="form-input" 
+            placeholder="Enter your name (e.g. Rahul Kumar)" 
+            style="flex: 1; min-width: 200px;"
+          >
+          <button type="button" id="btnGenerateLink" class="btn-enroll" style="background: #a855f7; padding: 10px 20px;">
+            <span>Generate Link</span>
+          </button>
+        </div>
+
+        <div id="generatedLinkWrapper" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.15);">
+          <label class="form-label" style="margin-bottom: 6px;">Your Shareable Link:</label>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+            <input 
+              type="text" 
+              id="myRefLinkOutput" 
+              readonly 
+              class="form-input" 
+              style="flex: 1; min-width: 240px; font-family: monospace; font-size: 0.82rem; background: rgba(0,0,0,0.5); color: #a5b4fc;"
+            >
+            <button type="button" id="btnCopyGeneratedLink" class="nav-link-btn" style="background: rgba(99,102,241,0.3); border-color: rgba(99,102,241,0.5);">
+              <span>📋 Copy</span>
+            </button>
+            <a href="#" id="btnShareWhatsApp" target="_blank" rel="noopener noreferrer" class="nav-link-btn" style="background: rgba(37,211,102,0.25); border-color: rgba(37,211,102,0.5); color: #86efac;">
+              <span>💬 WhatsApp</span>
+            </a>
+          </div>
+          <span style="font-size: 0.74rem; color: #34d399;">✓ Share this link with your friends on WhatsApp, Telegram & YouTube!</span>
+        </div>
+      </div>
+
+      <!-- Section 2: Claim Referral Payout Form -->
+      <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 20px; margin-bottom: 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: #ffffff;">
+            💸 Claim Your Commission Payout
+          </h3>
+          <span style="font-size: 0.75rem; color: #fbbf24; background: rgba(251,191,36,0.1); padding: 3px 10px; border-radius: 9999px; border: 1px solid rgba(251,191,36,0.2);">
+            Payouts sent directly to your UPI ID
+          </span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Jab aapka friend batch kharid le, toh uska <strong>Order ID</strong> aur apna <strong>UPI ID</strong> yahan submit karein. Admin verify karke 10-15 min me aapko commission bhej dega!
+        </p>
+
+        <form id="referralClaimForm">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 14px;">
+            
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="claimReferrerName">Your Full Name <span style="color: #f87171;">*</span></label>
+              <input type="text" id="claimReferrerName" class="form-input" placeholder="e.g. Rahul Sharma" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="claimReferrerPhone">Your WhatsApp / Phone <span style="color: #f87171;">*</span></label>
+              <input type="tel" id="claimReferrerPhone" class="form-input" placeholder="e.g. 9876543210" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="claimReferrerUpi">Your Receiving UPI ID <span style="color: #34d399;">* (For Cash Payout)</span></label>
+              <input type="text" id="claimReferrerUpi" class="form-input" placeholder="e.g. rahul@okaxis ya 9876543210@paytm" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="claimFriendName">Referred Friend's Name <span style="color: #f87171;">*</span></label>
+              <input type="text" id="claimFriendName" class="form-input" placeholder="e.g. Rohit Kumar" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="claimFriendOrderId">Friend's Order ID <span style="color: #f87171;">*</span></label>
+              <input type="text" id="claimFriendOrderId" class="form-input" placeholder="e.g. THOR-8J2K" required style="font-family: monospace; text-transform: uppercase;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="claimBatchSelect">Batch Purchased <span style="color: #f87171;">*</span></label>
+              <select id="claimBatchSelect" class="form-input" required>
+                <!-- Injected via JS -->
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Estimated Commission Display Box -->
+          <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <span style="font-size: 0.78rem; color: #a7f3d0;">Estimated Commission for this batch:</span>
+              <div style="font-size: 1.15rem; font-weight: 800; color: #34d399;" id="estimatedCommissionDisplay">₹120 (40% Payout)</div>
+            </div>
+            <div style="font-size: 0.74rem; color: var(--text-muted); text-align: right;">
+              Direct Transfer to: <span id="targetUpiPreview" style="color: #ffffff; font-family: monospace;">Your UPI</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary btn-success" style="width: auto; padding: 12px 32px;">
+            <span>Submit Payout Claim</span>
+          </button>
+        </form>
+
+        <div id="claimSuccessBox" style="display: none; margin-top: 16px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); border-radius: 8px; padding: 14px; text-align: center;">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">🎉</div>
+          <strong style="color: #34d399; font-size: 1rem; display: block;">Claim Submitted Successfully!</strong>
+          <p style="font-size: 0.8rem; color: #cbd5e1; margin-top: 4px; margin-bottom: 0;" id="claimSuccessMsgText">
+            Your claim has been recorded. Admin will verify and transfer payout to your UPI ID shortly.
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 3: My Submitted Referral Claims List -->
+      <div>
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 12px;">
+          📋 Your Recent Referral Claims
+        </h3>
+        
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Claim ID</th>
+                <th>Friend Name</th>
+                <th>Order ID</th>
+                <th>Batch</th>
+                <th>Commission</th>
+                <th>Payout UPI ID</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="myClaimsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Support Help Footer -->
+    <div style="text-align: center; margin-top: 16px; margin-bottom: 16px;">
+      <a href="https://wa.me/917631442934?text=Hello%2C%20I%20have%20a%20query%20about%20Referral%20Commission" target="_blank" rel="noopener noreferrer" class="nav-link-btn" style="background: rgba(37,211,102,0.15); border-color: rgba(37,211,102,0.35); color: #86efac; font-size: 0.8rem; display: inline-flex; gap: 6px; padding: 8px 18px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+        </svg>
+        <span>💬 Need Referral Help? Contact WhatsApp</span>
+      </a>
+    </div>
+
+    <!-- Rich Categorized Footer with Discreet Staff Portal Link -->
+    <footer class="site-footer-rich">
+      <div class="footer-main-grid">
+        
+        <!-- Col 1: About & Trust -->
+        <div>
+          <div class="footer-col-title">
+            <span style="font-size: 1.1rem;">⚡</span>
+            <span>PW Premium Hub</span>
+          </div>
+          <p class="footer-desc-text">
+            Affordable, high-yield preparation passes for India's top competitive exams. Instant automated UPI verification & access delivery.
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+            <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px;">✓ 100% Encrypted UPI</span>
+            <span style="font-size: 0.72rem; background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); padding: 3px 8px; border-radius: 4px;">⚡ 10-15m Verification</span>
+            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 4px;">⭐ 50K+ Students</span>
+          </div>
+        </div>
+
+        <!-- Col 2: All 12 Exam Categories Directory -->
+        <div>
+          <div class="footer-col-title">
+            <span>📚</span>
+            <span>All Exam Categories & Batches</span>
+          </div>
+          <div class="footer-exam-pills-wrap">
+            <a href="index.html?cat=jee" class="footer-exam-pill">🎯 IIT-JEE</a>
+            <a href="index.html?cat=neet" class="footer-exam-pill">🩺 NEET UG</a>
+            <a href="index.html?cat=class9_10" class="footer-exam-pill">📖 Class 9th & 10th</a>
+            <a href="index.html?cat=class6_8" class="footer-exam-pill">🌱 Class 6th - 8th</a>
+            <a href="index.html?cat=nda" class="footer-exam-pill">🎖️ NDA & Defence</a>
+            <a href="index.html?cat=upsc" class="footer-exam-pill">🏛️ UPSC Civil Services</a>
+            <a href="index.html?cat=ssc" class="footer-exam-pill">💼 SSC (CGL / CHSL)</a>
+            <a href="index.html?cat=banking" class="footer-exam-pill">🏦 Banking & Insurance</a>
+            <a href="index.html?cat=gate" class="footer-exam-pill">⚙️ GATE & PSU</a>
+            <a href="index.html?cat=cuet" class="footer-exam-pill">🎓 CUET (UG & PG)</a>
+            <a href="index.html?cat=teaching" class="footer-exam-pill">👩‍🏫 Teaching (TET)</a>
+            <a href="index.html?cat=commerce" class="footer-exam-pill">📊 Commerce & CA</a>
+            <a href="index.html" class="footer-exam-pill" style="background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.35); color: #f472b6;">👑 Super VIP All-Pass</a>
+          </div>
+        </div>
+
+        <!-- Col 3: Quick Links & Support -->
+        <div>
+          <div class="footer-col-title">
+            <span>🔗</span>
+            <span>Student Help & Links</span>
+          </div>
+          <ul class="footer-quick-links-list">
+            <li class="footer-quick-link-item"><a href="index.html"><span>📚</span> All Batch Passes</a></li>
+            <li class="footer-quick-link-item"><a href="refer.html"><span>💰</span> Refer & Earn (Upto 50%)</a></li>
+            <li class="footer-quick-link-item"><a href="contact.html"><span>💬</span> Help & Contact Support</a></li>
+            <li class="footer-quick-link-item"><a href="privacy.html"><span>🔒</span> Privacy Policy</a></li>
+            <li class="footer-quick-link-item"><a href="terms.html"><span>📜</span> Terms & Refund Policy</a></li>
+            <li class="footer-quick-link-item"><a href="https://wa.me/917631442934?text=Hello%20Support" target="_blank" rel="noopener noreferrer" style="color: #4ade80;"><span>🟢</span> WhatsApp: 7631442934</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Bar with Discreet Admin Access -->
+      <div class="footer-bottom-bar">
+        <div>
+          © 2025-2026 PW Premium Hub. All Rights Reserved. Trusted by 50,000+ Indian Aspirants.
+        </div>
+        <div>
+          <!-- Discreet Admin Portal Link at bottom -->
+          <a href="admin-login.html" class="discreet-admin-link" title="Authorized Staff Access">
+            <span>🔒 Staff / Admin Portal</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Action completed!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const referrerNameInput = document.getElementById("referrerNameInput");
+      const btnGenerateLink = document.getElementById("btnGenerateLink");
+      const generatedLinkWrapper = document.getElementById("generatedLinkWrapper");
+      const myRefLinkOutput = document.getElementById("myRefLinkOutput");
+      const btnCopyGeneratedLink = document.getElementById("btnCopyGeneratedLink");
+      const btnShareWhatsApp = document.getElementById("btnShareWhatsApp");
+
+      const claimReferrerName = document.getElementById("claimReferrerName");
+      const claimReferrerPhone = document.getElementById("claimReferrerPhone");
+      const claimReferrerUpi = document.getElementById("claimReferrerUpi");
+      const claimFriendName = document.getElementById("claimFriendName");
+      const claimFriendOrderId = document.getElementById("claimFriendOrderId");
+      const claimBatchSelect = document.getElementById("claimBatchSelect");
+      const estimatedCommissionDisplay = document.getElementById("estimatedCommissionDisplay");
+      const targetUpiPreview = document.getElementById("targetUpiPreview");
+      const referralClaimForm = document.getElementById("referralClaimForm");
+      const claimSuccessBox = document.getElementById("claimSuccessBox");
+      const claimSuccessMsgText = document.getElementById("claimSuccessMsgText");
+      const myClaimsTableBody = document.getElementById("myClaimsTableBody");
+
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+
+      // Auto pre-fill if user logged in
+      if (APP_STATE.currentUser) {
+        if (APP_STATE.currentUser.name) {
+          referrerNameInput.value = APP_STATE.currentUser.name;
+          claimReferrerName.value = APP_STATE.currentUser.name;
+        }
+        if (APP_STATE.currentUser.phone) {
+          claimReferrerPhone.value = APP_STATE.currentUser.phone;
+        }
+      }
+
+      // Populate Batches Select
+      const batches = APP_STATE.batches || [];
+      claimBatchSelect.innerHTML = batches.map(b => `
+        <option value="${b.id}" data-price="${b.offerPrice}">
+          ${b.name} (${formatINR(b.offerPrice)})
+        </option>
+      `).join("");
+
+      // Commission calculation helper:
+      // Price < 200: 30%
+      // Price 200 - 350: 40%
+      // Price > 350: 50%
+      function getTierCommission(price) {
+        let pct = 30;
+        if (price >= 350) pct = 50;
+        else if (price >= 200) pct = 40;
+        const amount = Math.round((price * pct) / 100);
+        return { pct, amount };
+      }
+
+      function updateCommissionPreview() {
+        const selectedOpt = claimBatchSelect.selectedOptions[0];
+        if (!selectedOpt) return;
+        const price = parseInt(selectedOpt.dataset.price, 10) || 299;
+        const tier = getTierCommission(price);
+        estimatedCommissionDisplay.textContent = `${formatINR(tier.amount)} (${tier.pct}% Direct Payout)`;
+        
+        const upi = claimReferrerUpi.value.trim();
+        targetUpiPreview.textContent = upi || "Your UPI ID";
+      }
+
+      claimBatchSelect.addEventListener("change", updateCommissionPreview);
+      claimReferrerUpi.addEventListener("input", updateCommissionPreview);
+      updateCommissionPreview();
+
+      // Generate Link
+      btnGenerateLink.addEventListener("click", () => {
+        const name = referrerNameInput.value.trim() || "PWPartner";
+        const cleanCode = encodeURIComponent(name.replace(/\s+/g, "_"));
+        const baseUrl = window.location.origin + window.location.pathname.replace("refer.html", "index.html");
+        const fullLink = `${baseUrl}?ref=${cleanCode}`;
+
+        myRefLinkOutput.value = fullLink;
+        generatedLinkWrapper.style.display = "block";
+
+        const shareMsg = encodeURIComponent(
+          `Hey! Check out all PW competition exam batches (JEE, NEET, NDA, Foundation) on PW Premium Hub with huge discounts! Use my link: ${fullLink}`
+        );
+        btnShareWhatsApp.href = `https://api.whatsapp.com/send?text=${shareMsg}`;
+        showToast("Referral link generated! Copy and share.");
+      });
+
+      // Copy Link
+      btnCopyGeneratedLink.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(myRefLinkOutput.value);
+          showToast("✓ Referral link copied to clipboard!");
+        } catch (e) {
+          myRefLinkOutput.select();
+          document.execCommand("copy");
+          showToast("✓ Referral link copied!");
+        }
+      });
+
+      // Submit Claim
+      referralClaimForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const rName = claimReferrerName.value.trim();
+        const rPhone = claimReferrerPhone.value.trim();
+        const rUpi = claimReferrerUpi.value.trim();
+        const fName = claimFriendName.value.trim();
+        const fOrder = claimFriendOrderId.value.trim().toUpperCase();
+        const batchId = claimBatchSelect.value;
+        const targetBatch = getBatchById(batchId);
+
+        const tier = getTierCommission(targetBatch.offerPrice);
+        const claimId = `REF-${Math.floor(1000 + Math.random() * 9000)}`;
+
+        const newClaim = {
+          claimId: claimId,
+          referrerName: rName,
+          referrerPhone: rPhone,
+          referrerUpi: rUpi,
+          friendName: fName,
+          friendOrderId: fOrder,
+          batchId: targetBatch.id,
+          batchName: targetBatch.name,
+          batchPrice: targetBatch.offerPrice,
+          commissionPercent: tier.pct,
+          commissionAmount: tier.amount,
+          status: "under_review",
+          createdAt: new Date().toISOString()
+        };
+
+        const claims = APP_STATE.referralClaims || [];
+        claims.unshift(newClaim);
+        saveReferralClaims(claims);
+
+        claimSuccessBox.style.display = "block";
+        claimSuccessMsgText.innerHTML = `
+          Claim ID: <strong>${claimId}</strong> | Amount: <strong>${formatINR(tier.amount)}</strong><br>
+          Verification under review. Payout will be credited to <strong>${rUpi}</strong> within 10-15 minutes!
+        `;
+
+        renderMyClaims();
+        referralClaimForm.reset();
+        updateCommissionPreview();
+        showToast(`✓ Payout Claim ${claimId} submitted successfully!`);
+      });
+
+      // Render My Claims
+      function renderMyClaims() {
+        const claims = APP_STATE.referralClaims || [];
+        if (claims.length === 0) {
+          myClaimsTableBody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 18px;">
+                No referral claims submitted yet. Refer friends and claim your cash payouts here!
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        myClaimsTableBody.innerHTML = claims.map(c => `
+          <tr>
+            <td><strong style="font-family: monospace; color: #a5b4fc;">${c.claimId}</strong></td>
+            <td style="color: #ffffff; font-weight: 600;">${c.friendName}</td>
+            <td><span style="font-family: monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">${c.friendOrderId}</span></td>
+            <td>${c.batchName}</td>
+            <td style="font-weight: 700; color: #34d399;">${formatINR(c.commissionAmount)} (${c.commissionPercent}%)</td>
+            <td><span style="font-family: monospace; color: #cbd5e1;">${c.referrerUpi}</span></td>
+            <td>
+              ${c.status === 'paid' 
+                ? '<span style="color: #34d399; font-weight: 700;">✓ Paid / Transferred</span>' 
+                : '<span style="color: #fbbf24; font-weight: 700;">⏳ Under Review</span>'}
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      renderMyClaims();
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(window.toastT);
+        window.toastT = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+    });
+  </script>
+
+  <!-- Floating WhatsApp Concierge Widget -->
+  <aside class="floating-whatsapp-widget" aria-label="WhatsApp Support">
+    <a href="https://wa.me/917631442934?text=Hello%2C%20I%20have%20a%20query%20regarding%20Refer%20and%20Earn%20Payout" target="_blank" rel="noopener noreferrer" class="floating-whatsapp-btn" title="Chat on WhatsApp">
+      <span class="floating-pulse-ring"></span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+      </svg>
+      <span class="floating-label">Need Help? <strong>Chat 24x7</strong></span>
+    </a>
+  </aside>
+
+</body>
+</html>
