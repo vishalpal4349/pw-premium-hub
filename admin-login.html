@@ -70,7 +70,7 @@
             type="email" 
             id="loginEmail" 
             class="form-input" 
-            placeholder="Enter admin email (Hint: Only faltu...)" 
+            placeholder="admin@example.com" 
             required 
             autocomplete="username"
             style="font-size: 0.88rem;"
@@ -86,7 +86,7 @@
             type="password" 
             id="loginPassword" 
             class="form-input" 
-            placeholder="•••••••••••• (Hint: visuzero1)" 
+            placeholder="••••••••••••" 
             required 
             autocomplete="current-password"
             style="font-size: 0.95rem; letter-spacing: 0.08em;"
@@ -117,6 +117,32 @@
         <button type="submit" class="btn-primary" style="margin-top: 8px; padding: 13px; font-size: 0.94rem;">
           <span>🔓 Verify 3-Factor Credentials & Enter</span>
         </button>
+
+        <!-- Hidden Hint Trigger (Appears ONLY after 3 failed attempts) -->
+        <div id="hintTriggerContainer" style="display: none; margin-top: 10px; text-align: center;">
+          <button type="button" id="btnRevealHint" style="background: rgba(245, 158, 11, 0.15); border: 1.5px solid rgba(245, 158, 11, 0.4); color: #fbbf24; padding: 7px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease;">
+            <span>💡</span>
+            <span>Need a Hint? (3 Failed Attempts Detected - Click to View)</span>
+          </button>
+
+          <div id="revealedHintBox" style="display: none; background: rgba(15, 23, 42, 0.92); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 12px; padding: 14px 16px; margin-top: 10px; text-align: left; font-size: 0.82rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+            <div style="font-weight: 800; color: #fbbf24; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span>💡</span>
+                <span>Staff Credentials Hints:</span>
+              </div>
+              <button type="button" id="btnCloseHintBox" style="background: none; border: none; color: #94a3b8; font-size: 0.9rem; cursor: pointer;">✕</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px; color: #e2e8f0; line-height: 1.5;">
+              <div>• <strong>Factor 1 (Email):</strong> <code style="color: #93c5fd; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">onlyfaltu39@gmail.com</code></div>
+              <div>• <strong>Factor 2 (Password):</strong> <code style="color: #86efac; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">visuzero1</code></div>
+              <div>• <strong>Factor 3 (PIN):</strong> <code style="color: #fca5a5; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">0000</code></div>
+            </div>
+            <button type="button" id="btnAutoFillCredentials" style="width: 100%; margin-top: 10px; background: #4f46e5; border: none; color: #ffffff; padding: 7px 12px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+              ⚡ Auto-Fill Credentials
+            </button>
+          </div>
+        </div>
 
         <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 10px 12px; margin-top: 4px; text-align: center;">
           <p style="font-size: 0.74rem; color: var(--text-dim); margin-bottom: 0;">
@@ -150,6 +176,41 @@
       const codeInput = document.getElementById("loginSecurityCode");
       const toast = document.getElementById("toast");
       const toastMsg = document.getElementById("toastMsg");
+
+      const hintTriggerContainer = document.getElementById("hintTriggerContainer");
+      const btnRevealHint = document.getElementById("btnRevealHint");
+      const revealedHintBox = document.getElementById("revealedHintBox");
+      const btnCloseHintBox = document.getElementById("btnCloseHintBox");
+      const btnAutoFillCredentials = document.getElementById("btnAutoFillCredentials");
+
+      function updateHintVisibility() {
+        const fails = parseInt(localStorage.getItem("admin_failed_attempts") || "0", 10);
+        if (fails >= 3) {
+          hintTriggerContainer.style.display = "block";
+        } else {
+          hintTriggerContainer.style.display = "none";
+          revealedHintBox.style.display = "none";
+        }
+      }
+
+      btnRevealHint?.addEventListener("click", () => {
+        const isHidden = (revealedHintBox.style.display === "none");
+        revealedHintBox.style.display = isHidden ? "block" : "none";
+      });
+
+      btnCloseHintBox?.addEventListener("click", () => {
+        revealedHintBox.style.display = "none";
+      });
+
+      btnAutoFillCredentials?.addEventListener("click", () => {
+        const cfg = (window.APP_STATE && window.APP_STATE.config) || window.CONFIG || {};
+        emailInput.value = cfg.ADMIN_EMAIL || "onlyfaltu39@gmail.com";
+        passInput.value = cfg.ADMIN_PIN || "visuzero1";
+        codeInput.value = cfg.ADMIN_SECURITY_CODE || "0000";
+        showToast("✓ Credentials auto-filled! Click Verify to enter.");
+      });
+
+      updateHintVisibility();
 
       function showToast(msg) {
         toastMsg.textContent = msg;
@@ -204,10 +265,14 @@
           // Failure
           let fails = parseInt(localStorage.getItem("admin_failed_attempts") || "0", 10) + 1;
           localStorage.setItem("admin_failed_attempts", fails);
+          updateHintVisibility();
 
           if (fails >= 5) {
             localStorage.setItem("admin_lock_until", now + 5 * 60 * 1000); // 5 min lockout
             showToast("⚠️ 5 incorrect attempts! Portal locked for 5 minutes.");
+          } else if (fails >= 3) {
+            const remaining = 5 - fails;
+            showToast(`⚠️ Incorrect credentials (${remaining} left). 💡 Click the hint button below!`);
           } else {
             const remaining = 5 - fails;
             let hint = "Invalid credentials.";
