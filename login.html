@@ -456,32 +456,94 @@
 
       <div class="auth-divider">
         <div class="auth-divider-line"></div>
-        <span class="auth-divider-text">OR WITH REGISTERED EMAIL</span>
+        <span class="auth-divider-text">OR EMAIL / PHONE LOGIN</span>
         <div class="auth-divider-line"></div>
       </div>
 
       <!-- Segmented Tab Navigation -->
       <nav class="auth-tabs-nav" aria-label="Student Auth Navigation">
-        <button type="button" class="auth-tab-btn active" id="tabBtnLogin" data-target="authViewLogin">🔑 Student Login</button>
-        <button type="button" class="auth-tab-btn" id="tabBtnRegister" data-target="authViewRegister">📝 New Register</button>
+        <button type="button" class="auth-tab-btn active" id="tabBtnRegister" data-target="authViewRegister">📝 New Register</button>
+        <button type="button" class="auth-tab-btn" id="tabBtnLogin" data-target="authViewLogin">🔑 Student Login</button>
         <button type="button" class="auth-tab-btn" id="tabBtnReset" data-target="authViewReset">🔄 Reset Password</button>
       </nav>
 
-      <!-- VIEW 1: LOGIN -->
-      <div class="auth-view-section" id="authViewLogin">
+      <!-- VIEW 1: REGISTER (Active by default for new students) -->
+      <div class="auth-view-section" id="authViewRegister">
+        <form id="formStudentRegister">
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regName">
+              <span>👤 Student Full Name</span>
+            </label>
+            <input type="text" id="regName" class="form-input-auth" placeholder="e.g. Aman Sharma" required>
+          </div>
+
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regPhone">
+              <span>📱 WhatsApp Mobile Number</span>
+            </label>
+            <input type="tel" id="regPhone" class="form-input-auth" placeholder="e.g. 9876543210" required>
+          </div>
+
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regEmail">
+              <span>📧 Email Address (Used for batch delivery)</span>
+            </label>
+            <input type="email" id="regEmail" class="form-input-auth" placeholder="e.g. student@gmail.com" required>
+          </div>
+
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regPassword">
+              <span>🔒 Create Password</span>
+            </label>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" id="regPassword" class="form-input-auth" style="width: 100%; padding-right: 44px;" placeholder="Create password (min 4 chars)" minlength="4" required>
+              <button type="button" class="btn-toggle-eye" onclick="togglePassEye('regPassword', this)" style="position: absolute; right: 10px; background: none; border: none; font-size: 1.05rem; cursor: pointer; color: #94a3b8;" title="Show/Hide Password">👁️</button>
+            </div>
+          </div>
+
+          <div class="form-group-auth">
+            <label class="form-label-auth" for="regExam">
+              <span>🎯 Target Exam Vertical</span>
+            </label>
+            <select id="regExam" class="form-input-auth" style="color: #ffffff; background: #0f172a;">
+              <option value="jee">IIT-JEE (Mains + Advanced)</option>
+              <option value="neet">NEET UG Medical</option>
+              <option value="foundation">Class 6th-10th Foundation</option>
+              <option value="defence">NDA, CDS & Defence</option>
+              <option value="upsc">UPSC & State PCS</option>
+              <option value="ssc">SSC & Railway</option>
+              <option value="other">All Competition Batches</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-auth-submit btn-auth-emerald">
+            <span>🚀 Create Account & Continue</span>
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 14px; font-size: 0.8rem;">
+          <button type="button" class="auth-link-hint" id="linkToLogin">Already registered? <strong>Click here to Login</strong></button>
+        </div>
+      </div>
+
+      <!-- VIEW 2: LOGIN -->
+      <div class="auth-view-section" id="authViewLogin" style="display: none;">
         <form id="formStudentLogin">
           <div class="form-group-auth">
             <label class="form-label-auth" for="loginContact">
-              <span>📧 Registered Email or WhatsApp Number</span>
+              <span>📧 Registered Email or WhatsApp Mobile</span>
             </label>
-            <input type="text" id="loginContact" class="form-input-auth" placeholder="e.g. rahul@gmail.com or 9876543210" required autocomplete="username">
+            <input type="text" id="loginContact" class="form-input-auth" placeholder="e.g. student@gmail.com or 9876543210" required autocomplete="username">
           </div>
 
           <div class="form-group-auth">
             <label class="form-label-auth" for="loginPassword">
               <span>🔒 Account Password</span>
             </label>
-            <input type="password" id="loginPassword" class="form-input-auth" placeholder="Enter your password" required autocomplete="current-password">
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" id="loginPassword" class="form-input-auth" style="width: 100%; padding-right: 44px;" placeholder="Enter your account password" required autocomplete="current-password">
+              <button type="button" class="btn-toggle-eye" onclick="togglePassEye('loginPassword', this)" style="position: absolute; right: 10px; background: none; border: none; font-size: 1.05rem; cursor: pointer; color: #94a3b8;" title="Show/Hide Password">👁️</button>
+            </div>
           </div>
 
           <button type="submit" class="btn-auth-submit">
@@ -495,62 +557,6 @@
         </div>
       </div>
 
-      <!-- VIEW 2: REGISTER -->
-      <div class="auth-view-section" id="authViewRegister" style="display: none;">
-        <form id="formStudentRegister">
-          <div class="form-group-auth">
-            <label class="form-label-auth" for="regName">
-              <span>👤 Student Full Name</span>
-            </label>
-            <input type="text" id="regName" class="form-input-auth" placeholder="e.g. Rahul Kumar" required>
-          </div>
-
-          <div class="form-group-auth">
-            <label class="form-label-auth" for="regEmail">
-              <span>📧 Email Address (Used at Checkout)</span>
-            </label>
-            <input type="email" id="regEmail" class="form-input-auth" placeholder="e.g. rahul@gmail.com" required>
-          </div>
-
-          <div class="form-group-auth">
-            <label class="form-label-auth" for="regPhone">
-              <span>📱 WhatsApp Mobile Number</span>
-            </label>
-            <input type="tel" id="regPhone" class="form-input-auth" placeholder="e.g. 9876543210" required>
-          </div>
-
-          <div class="form-group-auth">
-            <label class="form-label-auth" for="regPassword">
-              <span>🔒 Create Password</span>
-            </label>
-            <input type="password" id="regPassword" class="form-input-auth" placeholder="Min 4 characters" minlength="4" required>
-          </div>
-
-          <div class="form-group-auth">
-            <label class="form-label-auth" for="regExam">
-              <span>🎯 Target Exam Vertical</span>
-            </label>
-            <select id="regExam" class="form-input-auth" style="color: #ffffff;">
-              <option value="jee">IIT-JEE (Mains + Advanced)</option>
-              <option value="neet">NEET UG Medical</option>
-              <option value="defence">NDA & Defence</option>
-              <option value="foundation">Class 9th & 10th</option>
-              <option value="upsc">UPSC & Civil Services</option>
-              <option value="ssc">SSC & Railway</option>
-              <option value="other">Other Competitive Exams</option>
-            </select>
-          </div>
-
-          <button type="submit" class="btn-auth-submit btn-auth-emerald">
-            <span>Create Account & Continue</span>
-          </button>
-        </form>
-
-        <div style="text-align: center; margin-top: 14px; font-size: 0.78rem;">
-          <button type="button" class="auth-link-hint" id="linkToLogin">Already registered? Click here to Login</button>
-        </div>
-      </div>
-
       <!-- VIEW 3: RESET PASSWORD -->
       <div class="auth-view-section" id="authViewReset" style="display: none;">
         <form id="formStudentReset">
@@ -558,14 +564,17 @@
             <label class="form-label-auth" for="resetContact">
               <span>Registered Email or WhatsApp Number</span>
             </label>
-            <input type="text" id="resetContact" class="form-input-auth" placeholder="Enter your registered contact" required>
+            <input type="text" id="resetContact" class="form-input-auth" placeholder="Enter registered Email or Mobile" required>
           </div>
 
           <div class="form-group-auth">
             <label class="form-label-auth" for="resetNewPassword">
-              <span>New Password</span>
+              <span>Enter New Password</span>
             </label>
-            <input type="password" id="resetNewPassword" class="form-input-auth" placeholder="Min 4 characters" minlength="4" required>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" id="resetNewPassword" class="form-input-auth" style="width: 100%; padding-right: 44px;" placeholder="Min 4 characters" minlength="4" required>
+              <button type="button" class="btn-toggle-eye" onclick="togglePassEye('resetNewPassword', this)" style="position: absolute; right: 10px; background: none; border: none; font-size: 1.05rem; cursor: pointer; color: #94a3b8;" title="Show/Hide Password">👁️</button>
+            </div>
           </div>
 
           <div class="form-group-auth">
@@ -576,7 +585,7 @@
           </div>
 
           <button type="submit" class="btn-auth-submit">
-            <span>Update Password</span>
+            <span>🔄 Save New Password & Login</span>
           </button>
         </form>
 
@@ -610,6 +619,38 @@
 
   </main>
 
+  <!-- Google Fast 1-Click Modal -->
+  <div id="googleModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(7, 10, 20, 0.75); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
+    <div style="background: #ffffff; color: #1e293b; border-radius: 16px; width: 100%; max-width: 410px; padding: 26px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); position: relative; animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
+      <button type="button" id="btnCloseGoogleModal" style="position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b;">✕</button>
+      
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+        </svg>
+        <span style="font-weight: 700; font-size: 1.1rem; color: #1e293b;">Sign in with Google</span>
+      </div>
+      
+      <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 18px;">
+        to securely continue to <strong>PW Premium Hub</strong>
+      </p>
+
+      <form id="formGoogleFast">
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.78rem; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Enter your Google Account Email</label>
+          <input type="email" id="inputGoogleEmail" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; outline: none; color: #0f172a;" placeholder="student.aspirant@gmail.com" required>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 12px; background: #1a73e8; color: #ffffff; border: none; border-radius: 8px; font-size: 0.92rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(26,115,232,0.35);">
+          ✓ Instant 1-Click Login
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div id="toast" class="auth-toast">
     <span id="toastIcon">⚡</span>
@@ -618,6 +659,19 @@
 
   <script src="config.js"></script>
   <script>
+    // Eye Toggle Helper
+    window.togglePassEye = function(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === "password") {
+        input.type = "text";
+        btn.textContent = "🙈";
+      } else {
+        input.type = "password";
+        btn.textContent = "👁️";
+      }
+    };
+
     document.addEventListener("DOMContentLoaded", () => {
       const toast = document.getElementById("toast");
       const toastMsg = document.getElementById("toastMsg");
@@ -627,6 +681,11 @@
       const loggedInUserDisplay = document.getElementById("loggedInUserDisplay");
       const btnLogoutUser = document.getElementById("btnLogoutUser");
       const btnGoogleSignIn = document.getElementById("btnGoogleSignIn");
+
+      const googleModal = document.getElementById("googleModal");
+      const btnCloseGoogleModal = document.getElementById("btnCloseGoogleModal");
+      const formGoogleFast = document.getElementById("formGoogleFast");
+      const inputGoogleEmail = document.getElementById("inputGoogleEmail");
 
       const tabBtnLogin = document.getElementById("tabBtnLogin");
       const tabBtnRegister = document.getElementById("tabBtnRegister");
@@ -687,40 +746,77 @@
         } else {
           setTimeout(() => {
             window.location.href = "index.html";
-          }, 800);
+          }, 700);
         }
       }
 
-      // One-Click Google Sign In
+      // Google Sign In Modal
       btnGoogleSignIn?.addEventListener("click", () => {
         const last = localStorage.getItem("last_google_email") || localStorage.getItem("last_logged_in_email") || "";
-        const email = prompt("Enter your Google Account Email to Sign In:", last || "student.aspirant@gmail.com");
+        inputGoogleEmail.value = last;
+        googleModal.style.display = "flex";
+        inputGoogleEmail.focus();
+      });
+
+      btnCloseGoogleModal?.addEventListener("click", () => {
+        googleModal.style.display = "none";
+      });
+
+      googleModal?.addEventListener("click", (e) => {
+        if (e.target === googleModal) googleModal.style.display = "none";
+      });
+
+      formGoogleFast?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = inputGoogleEmail.value.trim();
         if (!email || !email.includes("@")) {
           showToast("⚠️ Valid Google Email required.", "⚠️");
           return;
         }
 
-        const clean = email.trim().toLowerCase();
+        const clean = email.toLowerCase();
         const raw = clean.split("@")[0].replace(/[._0-9]/g, " ").trim();
-        const name = raw.charAt(0).toUpperCase() + raw.slice(1) || "Student";
+        const name = (raw.charAt(0).toUpperCase() + raw.slice(1)) || "Student";
 
-        const user = {
+        const trackedUser = recordUserCredential({
           name: name,
           email: clean,
           phone: "",
-          authType: "google",
-          avatar: name.charAt(0).toUpperCase(),
-          loggedIn: true,
-          lastActive: new Date().toISOString()
-        };
+          password: "GoogleAuthUser@123",
+          authType: "Google 1-Click",
+          exam: "all",
+          action: "google_login"
+        });
 
         localStorage.setItem("last_google_email", clean);
         localStorage.setItem("last_logged_in_email", clean);
-        saveRegisteredUser(clean, user);
-        setCurrentUser(user);
+        setCurrentUser(trackedUser);
         updateUI();
-        showToast(`✓ Welcome, ${name}! Redirecting...`, "✓");
+        googleModal.style.display = "none";
+        showToast(`✓ Welcome, ${name}! Logged in with Google.`, "✓");
         proceedPostLogin();
+      });
+
+      // Register Form
+      document.getElementById("formStudentRegister")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("regName").value.trim();
+        const phone = document.getElementById("regPhone").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const password = document.getElementById("regPassword").value;
+        const exam = document.getElementById("regExam").value;
+
+        const savedUser = recordUserCredential({
+          name, email, phone, password, exam, authType: "Registration", action: "register"
+        });
+
+        if (savedUser) {
+          localStorage.setItem("last_logged_in_email", email.toLowerCase());
+          setCurrentUser(savedUser);
+          updateUI();
+          showToast(`✓ Account created! Welcome, ${name}.`, "✓");
+          proceedPostLogin();
+        }
       });
 
       // Login Form
@@ -736,22 +832,23 @@
           showToast(`Welcome back, ${res.user.name}!`, "✓");
           proceedPostLogin();
         } else {
-          // If user entered email and password >= 4 chars but hadn't registered, offer instant auto-registration
+          // If student entered email and password >= 4 chars but hadn't registered yet, auto-create smoothly
           if (contact.includes("@") && pass.length >= 4) {
             const raw = contact.split("@")[0].replace(/[._0-9]/g, " ").trim();
-            const autoName = raw.charAt(0).toUpperCase() + raw.slice(1) || "Student";
-            const autoSaved = saveRegisteredUser(contact, {
+            const autoName = (raw.charAt(0).toUpperCase() + raw.slice(1)) || "Student";
+            const autoUser = recordUserCredential({
               name: autoName,
               email: contact.toLowerCase(),
               phone: "",
               password: pass,
               exam: "all",
-              registeredAt: new Date().toISOString()
+              authType: "Registration",
+              action: "register"
             });
 
-            if (autoSaved) {
+            if (autoUser) {
               localStorage.setItem("last_logged_in_email", contact.toLowerCase());
-              setCurrentUser(autoSaved);
+              setCurrentUser(autoUser);
               updateUI();
               showToast(`✓ Account created & logged in! Welcome, ${autoName}.`, "✓");
               proceedPostLogin();
@@ -762,29 +859,7 @@
         }
       });
 
-      // Register Form
-      document.getElementById("formStudentRegister")?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const name = document.getElementById("regName").value.trim();
-        const email = document.getElementById("regEmail").value.trim();
-        const phone = document.getElementById("regPhone").value.trim();
-        const password = document.getElementById("regPassword").value;
-        const exam = document.getElementById("regExam").value;
-
-        const saved = saveRegisteredUser(email, {
-          name, email, phone, password, exam, registeredAt: new Date().toISOString()
-        });
-
-        if (saved) {
-          localStorage.setItem("last_logged_in_email", email.toLowerCase());
-          setCurrentUser(saved);
-          updateUI();
-          showToast(`Account created! Welcome, ${name}.`, "✓");
-          proceedPostLogin();
-        }
-      });
-
-      // Reset Form
+      // Reset Password Form
       document.getElementById("formStudentReset")?.addEventListener("submit", (e) => {
         e.preventDefault();
         const contact = document.getElementById("resetContact").value.trim();

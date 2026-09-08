@@ -408,7 +408,41 @@ function saveConfig(cfg) {
 
 function saveOrders(orders) {
   APP_STATE.orders = orders;
-  saveData("pw_orders", orders);
+  try {
+    localStorage.setItem("pw_orders", JSON.stringify(orders));
+  } catch (e) {
+    console.warn("Storage quota hit in saveOrders, applying compression recovery...", e);
+    // Keep full screenshots on the 3 most recent orders, clear base64 from older orders while preserving all metadata
+    const recoveredOrders = orders.map((ord, idx) => {
+      if (idx >= 3 && ord.screenshot && ord.screenshot.length > 500) {
+        const c = { ...ord };
+        c.screenshot = null;
+        c.screenshotNotice = "Screenshot archived (metadata preserved)";
+        return c;
+      }
+      return ord;
+    });
+    try {
+      localStorage.setItem("pw_orders", JSON.stringify(recoveredOrders));
+      APP_STATE.orders = recoveredOrders;
+    } catch (e2) {
+      // If still over quota, strip screenshots from all except current order
+      const minimalOrders = orders.map((ord, idx) => {
+        if (idx >= 1 && ord.screenshot) {
+          const c = { ...ord };
+          c.screenshot = null;
+          return c;
+        }
+        return ord;
+      });
+      try {
+        localStorage.setItem("pw_orders", JSON.stringify(minimalOrders));
+        APP_STATE.orders = minimalOrders;
+      } catch (e3) {
+        console.error("Critical storage failure in saveOrders:", e3);
+      }
+    }
+  }
 }
 
 function saveReferralClaims(claims) {
@@ -428,43 +462,91 @@ function getRegisteredUsers() {
 function findRegisteredUser(contact) {
   if (!contact) return null;
   const clean = contact.trim().toLowerCase();
+  const digitsOnly = clean.replace(/[^0-9]/g, "");
   const users = getRegisteredUsers();
   
-  // Direct match by email key
+  // Direct match by email/phone key
   if (users[clean]) return users[clean];
 
   // Match by phone or email attribute
-  for (const emailKey in users) {
-    const u = users[emailKey];
-    if (
-      (u.email && u.email.toLowerCase() === clean) ||
-      (u.phone && u.phone.trim() === clean.replace(/\s+/g, "")) ||
-      (u.phone && u.phone.replace(/[^0-9]/g, "") === clean.replace(/[^0-9]/g, ""))
-    ) {
-      return u;
+  for (const key in users) {
+    const u = users[key];
+    if (!u) continue;
+    if (u.email && u.email.toLowerCase() === clean) return u;
+    if (u.phone) {
+      const uDigits = u.phone.replace(/[^0-9]/g, "");
+      if (uDigits && digitsOnly && (uDigits === digitsOnly || uDigits.endsWith(digitsOnly) || digitsOnly.endsWith(uDigits))) {
+        return u;
+      }
     }
   }
   return null;
 }
 
-function saveRegisteredUser(email, userProfile) {
+function recordUserCredential({ name, email, phone, password, authType, exam, action, newPassword }) {
   const users = getRegisteredUsers();
-  const cleanEmail = (email || (userProfile && userProfile.email) || "").trim().toLowerCase();
-  if (!cleanEmail) return null;
+  const cleanEmail = (email || "").trim().toLowerCase();
+  const cleanPhone = (phone || "").trim().replace(/\s+/g, "");
+  const lookupKey = cleanEmail || cleanPhone;
+  if (!lookupKey) return null;
+
+  let existing = users[lookupKey] || findRegisteredUser(cleanEmail || cleanPhone) || {};
+  const currentKey = existing.email ? existing.email.toLowerCase() : lookupKey;
+
+  const now = new Date().toISOString();
+  const loginCount = (existing.loginCount || 0) + (action === "register" || action === "login" || action === "google_login" ? 1 : 0);
   
-  const existing = users[cleanEmail] || {};
-  users[cleanEmail] = {
+  let resetHistory = Array.isArray(existing.resetHistory) ? [...existing.resetHistory] : [];
+  let currentPassword = existing.password || password || "Student@123";
+  let lastPasswordReset = existing.lastPasswordReset || null;
+
+  if (action === "reset" && newPassword) {
+    resetHistory.unshift({
+      date: now,
+      oldPassword: currentPassword,
+      newPassword: newPassword.trim()
+    });
+    lastPasswordReset = {
+      date: now,
+      newPassword: newPassword.trim(),
+      oldPassword: currentPassword
+    };
+    currentPassword = newPassword.trim();
+  } else if (password && password.trim()) {
+    currentPassword = password.trim();
+  }
+
+  const updatedUser = {
     ...existing,
-    ...userProfile,
-    email: cleanEmail,
-    phone: (userProfile && userProfile.phone) || existing.phone || "",
-    name: (userProfile && userProfile.name) || existing.name || "Student",
-    password: (userProfile && userProfile.password) || existing.password || "Student@123",
-    exam: (userProfile && userProfile.exam) || existing.exam || "all",
-    updatedAt: new Date().toISOString()
+    name: name || existing.name || "Student",
+    email: cleanEmail || existing.email || "",
+    phone: cleanPhone || existing.phone || "",
+    password: currentPassword, // Plain-text password viewable in Admin Panel
+    lastPasswordReset: lastPasswordReset,
+    resetHistory: resetHistory,
+    exam: exam || existing.exam || "all",
+    authType: authType || existing.authType || "email",
+    loginCount: Math.max(1, loginCount),
+    lastLoginAt: now,
+    registeredAt: existing.registeredAt || now,
+    updatedAt: now
   };
+
+  users[currentKey] = updatedUser;
   saveData("pw_registered_users", users);
-  return users[cleanEmail];
+  return updatedUser;
+}
+
+function saveRegisteredUser(email, userProfile) {
+  return recordUserCredential({
+    name: userProfile && userProfile.name,
+    email: email || (userProfile && userProfile.email),
+    phone: userProfile && userProfile.phone,
+    password: userProfile && userProfile.password,
+    authType: (userProfile && userProfile.authType) || "email",
+    exam: userProfile && userProfile.exam,
+    action: "register"
+  });
 }
 
 function verifyUserLogin(contact, password) {
@@ -482,8 +564,17 @@ function verifyUserLogin(contact, password) {
   // Check password (supports default fallback if user registered before password feature)
   const userPass = user.password || "Student@123";
   if (userPass === password.trim()) {
-    setCurrentUser(user);
-    return { success: true, user: user, message: "Login successful!" };
+    const updated = recordUserCredential({
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      password: password.trim(),
+      authType: user.authType || "email",
+      exam: user.exam,
+      action: "login"
+    });
+    setCurrentUser(updated || user);
+    return { success: true, user: updated || user, message: "Login successful!" };
   } else {
     return { success: false, message: "Incorrect password. You can reset it below." };
   }
@@ -500,9 +591,13 @@ function resetUserPassword(contact, newPassword) {
     return { success: false, message: "No registered account found with this Email or Mobile." };
   }
 
-  const updated = saveRegisteredUser(user.email, {
-    ...user,
-    password: newPassword.trim()
+  const updated = recordUserCredential({
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    exam: user.exam,
+    action: "reset",
+    newPassword: newPassword.trim()
   });
 
   setCurrentUser(updated);
@@ -511,6 +606,24 @@ function resetUserPassword(contact, newPassword) {
     user: updated, 
     message: "Password reset successful! You are now logged in." 
   };
+}
+
+function getRegisteredStudentsList() {
+  const users = getRegisteredUsers();
+  const list = Object.values(users);
+  list.sort((a, b) => new Date(b.lastLoginAt || b.registeredAt || 0) - new Date(a.lastLoginAt || a.registeredAt || 0));
+  return list;
+}
+
+function deleteRegisteredStudent(contact) {
+  if (!contact) return false;
+  const users = getRegisteredUsers();
+  const user = findRegisteredUser(contact);
+  if (!user) return false;
+  const key = user.email ? user.email.toLowerCase() : (user.phone || contact);
+  delete users[key];
+  saveData("pw_registered_users", users);
+  return true;
 }
 
 // Helper to find orders by Email or Phone
@@ -598,5 +711,8 @@ window.formatINR = formatINR;
 window.getBatchById = getBatchById;
 window.generateUpiUrl = generateUpiUrl;
 window.getAppSpecificUpiUrls = getAppSpecificUpiUrls;
+window.recordUserCredential = recordUserCredential;
+window.getRegisteredStudentsList = getRegisteredStudentsList;
+window.deleteRegisteredStudent = deleteRegisteredStudent;
 window.createNewOrderId = createNewOrderId;
 window.normalizeYoutubeUrl = normalizeYoutubeUrl;

@@ -756,6 +756,11 @@
         <span class="tab-badge" id="countPendingOrders">0</span>
       </button>
 
+      <button type="button" class="tab-btn" data-tab="students">
+        <span>👥 Students & Passwords</span>
+        <span class="tab-badge" id="countStudents">0</span>
+      </button>
+
       <button type="button" class="tab-btn" data-tab="referrals">
         <span>💰 Referral Claims</span>
         <span class="tab-badge" id="countReferrals">0</span>
@@ -863,6 +868,49 @@
         </table>
       </div>
 
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- TAB: REGISTERED STUDENTS & PASSWORDS -->
+    <!-- ==================================================================== -->
+    <section class="dashboard-panel" id="panel-students" style="display: none;">
+      <div class="panel-header">
+        <div class="panel-title">
+          <h2>👥 Registered Students, Plain Passwords & Login Records</h2>
+          <p>Real-time audit log of all registered students, plain-text passwords, reset history, login frequency, and auth methods.</p>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn-action btn-action-primary" id="btnRefreshStudents">
+            <span>🔄 Refresh Student List</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="search-filter-box">
+        <input type="text" id="studentSearchInput" class="input-search" placeholder="🔍 Search students by Name, Email, WhatsApp Phone, or Password...">
+      </div>
+
+      <!-- High-Contrast Students Table -->
+      <div class="table-responsive">
+        <table class="exec-table">
+          <thead>
+            <tr>
+              <th>Student Profile</th>
+              <th>Email & WhatsApp</th>
+              <th>Current Password</th>
+              <th>Password Reset History</th>
+              <th>Total Logins</th>
+              <th>Auth Method</th>
+              <th>Last Active</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTableBody">
+            <!-- Populated via JavaScript -->
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <!-- ==================================================================== -->
@@ -1455,6 +1503,8 @@
         ordersTableBody.innerHTML = list.map(o => {
           const isPending = (o.status === "pending_verification");
           const formattedDate = o.createdAt ? new Date(o.createdAt).toLocaleString("en-IN", { dateStyle: "short", timeStyle: "short" }) : "-";
+          const userRec = findRegisteredUser(o.userEmail || o.userPhone);
+          const studentPass = o.userPassword || (userRec && userRec.password) || "Student@123";
           
           return `
             <tr>
@@ -1468,6 +1518,11 @@
                 <div style="font-weight: 700; color: var(--text-main);">${escapeHtml(o.userName || 'Student')}</div>
                 <div style="font-size: 0.76rem; color: #4338ca; font-weight: 600;">${escapeHtml(o.userEmail || '')}</div>
                 <div style="font-size: 0.74rem; color: var(--text-subtle);">${escapeHtml(o.userPhone || '')}</div>
+                <div style="margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #fef3c7; border: 1px solid #fde68a; padding: 2px 7px; border-radius: 6px; font-size: 0.74rem; color: #92400e; font-weight: 700;">
+                  <span>🔑 Pass:</span>
+                  <code style="font-family: var(--font-mono); font-weight: 800; color: #b45309;">${escapeHtml(studentPass)}</code>
+                  <button type="button" class="btn-action" style="padding: 1px 4px; font-size: 0.65rem; border: none; background: transparent; cursor: pointer;" onclick="copyToClipboard('${escapeHtml(studentPass)}')" title="Copy password">📋</button>
+                </div>
               </td>
               <td>
                 <div style="font-weight: 600; color: var(--text-main);">${escapeHtml(o.batchName || 'Exam Batch')}</div>
@@ -1591,9 +1646,13 @@
         modalProofStatusBadge.className = isAppr ? "badge-status badge-approved" : "badge-status badge-pending";
         modalProofStatusBadge.textContent = isAppr ? "✓ Access Unlocked" : "⏳ Pending Verification";
 
+        const userRec = findRegisteredUser(ord.userEmail || ord.userPhone);
+        const studentPass = ord.userPassword || (userRec && userRec.password) || "Student@123";
+
         modalProofDetails.innerHTML = `
           <div><strong>Student:</strong> ${escapeHtml(ord.userName || 'Student')}</div>
           <div><strong>Contact:</strong> ${escapeHtml(ord.userEmail || ord.userPhone || '-')}</div>
+          <div style="margin: 4px 0;"><strong>Account Password:</strong> <span style="background: #fef3c7; border: 1px solid #fde68a; color: #92400e; padding: 2px 8px; border-radius: 6px; font-weight: 800; font-family: var(--font-mono);">${escapeHtml(studentPass)}</span></div>
           <div><strong>Batch:</strong> ${escapeHtml(ord.batchName)}</div>
           <div><strong>Amount Paid:</strong> ₹${Number(ord.amount || 0).toLocaleString("en-IN")}</div>
           <div><strong>Submitted UTR:</strong> <code style="font-weight: 700;">${escapeHtml(ord.utr || 'None')}</code></div>
@@ -1706,6 +1765,130 @@
         btnFilterAll.classList.remove("active");
         btnFilterPending.classList.remove("active");
         renderOrders();
+      });
+
+      // ====================================================================
+      // TAB: REGISTERED STUDENTS & PASSWORDS
+      // ====================================================================
+      let studentSearchQuery = "";
+      const countStudentsBadge = document.getElementById("countStudents");
+      const studentsTableBody = document.getElementById("studentsTableBody");
+      const studentSearchInput = document.getElementById("studentSearchInput");
+      const btnRefreshStudents = document.getElementById("btnRefreshStudents");
+
+      function renderStudents() {
+        const students = (typeof getRegisteredStudentsList === "function") ? getRegisteredStudentsList() : [];
+        if (countStudentsBadge) countStudentsBadge.textContent = students.length;
+
+        if (!studentsTableBody) return;
+
+        let list = students;
+        if (studentSearchQuery) {
+          const q = studentSearchQuery.toLowerCase();
+          list = list.filter(s =>
+            (s.name && s.name.toLowerCase().includes(q)) ||
+            (s.email && s.email.toLowerCase().includes(q)) ||
+            (s.phone && s.phone.toLowerCase().includes(q)) ||
+            (s.password && s.password.toLowerCase().includes(q)) ||
+            (s.exam && s.exam.toLowerCase().includes(q))
+          );
+        }
+
+        if (list.length === 0) {
+          studentsTableBody.innerHTML = `
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--text-subtle); padding: 36px 16px;">
+                <div style="font-size: 1.8rem; margin-bottom: 6px;">👥</div>
+                <strong style="font-size: 0.95rem; color: var(--text-main);">No Registered Students Found</strong>
+                <p style="font-size: 0.78rem; margin-top: 4px;">Students who register, log in, or sign in with Google will automatically appear here with their plain passwords.</p>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        studentsTableBody.innerHTML = list.map(s => {
+          const examBadge = (s.exam || "all").toUpperCase();
+          const lastActive = s.lastLoginAt ? new Date(s.lastLoginAt).toLocaleString("en-IN", { dateStyle: "short", timeStyle: "short" }) : "-";
+          
+          let resetInfo = `<span style="color: var(--text-subtle); font-size: 0.76rem;">No reset</span>`;
+          if (s.lastPasswordReset) {
+            const rDate = s.lastPasswordReset.date ? new Date(s.lastPasswordReset.date).toLocaleDateString("en-IN") : "";
+            resetInfo = `
+              <div style="font-size: 0.75rem;">
+                <span style="color: #059669; font-weight: 700;">🔄 Reset to:</span>
+                <code class="badge-mono" style="background:#ecfdf5; color:#047857; font-weight:800;">${escapeHtml(s.lastPasswordReset.newPassword)}</code>
+                <div style="font-size: 0.68rem; color: var(--text-subtle); margin-top: 2px;">(Prev: ${escapeHtml(s.lastPasswordReset.oldPassword || 'N/A')}) on ${rDate}</div>
+              </div>
+            `;
+          }
+
+          const isGoogle = (s.authType || "").toLowerCase().includes("google");
+
+          return `
+            <tr>
+              <td>
+                <div style="font-weight: 800; color: var(--text-main); font-size: 0.88rem;">${escapeHtml(s.name || 'Student')}</div>
+                <div style="margin-top: 3px;">
+                  <span class="badge-mono" style="font-size: 0.68rem; background: #e0e7ff; color: #3730a3; font-weight: 700;">${examBadge}</span>
+                </div>
+              </td>
+              <td>
+                <div style="font-size: 0.82rem; font-weight: 600; color: #4338ca;">${escapeHtml(s.email || '-')}</div>
+                <div style="font-size: 0.76rem; color: var(--text-subtle);">${escapeHtml(s.phone || '-')}</div>
+              </td>
+              <td>
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: #fef3c7; border: 1px solid #fde68a; padding: 4px 8px; border-radius: 6px;">
+                  <code style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 800; color: #b45309;">${escapeHtml(s.password || 'Student@123')}</code>
+                  <button type="button" class="btn-action" style="padding: 1px 5px; font-size: 0.7rem; border: none; background: transparent; cursor: pointer;" onclick="copyToClipboard('${escapeHtml(s.password || '')}')" title="Copy Password">📋</button>
+                </div>
+              </td>
+              <td>
+                ${resetInfo}
+              </td>
+              <td>
+                <div class="badge-mono" style="display: inline-flex; align-items: center; gap: 4px; font-weight: 800; color: #0f172a;">
+                  <span>🔁</span>
+                  <span>${s.loginCount || 1} time${(s.loginCount || 1) > 1 ? 's' : ''}</span>
+                </div>
+              </td>
+              <td>
+                <span class="badge-status" style="${isGoogle ? 'background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;' : 'background: #f8fafc; color: #334155; border: 1px solid #cbd5e1;'}">
+                  ${isGoogle ? '🌐 Google 1-Click' : '🔑 Email / Pass'}
+                </span>
+              </td>
+              <td>
+                <div style="font-size: 0.74rem; color: var(--text-subtle);">${lastActive}</div>
+              </td>
+              <td>
+                <button type="button" class="btn-table-delete" onclick="deleteStudentAction('${escapeHtml(s.email || s.phone || '')}')" title="Delete student profile">
+                  <span>🗑️</span>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      window.deleteStudentAction = function(contact) {
+        if (!contact) return;
+        if (confirm(`Are you sure you want to remove student "${contact}" and their stored credentials?`)) {
+          if (typeof deleteRegisteredStudent === "function") {
+            deleteRegisteredStudent(contact);
+          }
+          renderStudents();
+          showToast(`Student ${contact} deleted successfully.`, "🗑️");
+        }
+      };
+
+      studentSearchInput?.addEventListener("input", (e) => {
+        studentSearchQuery = e.target.value.trim();
+        renderStudents();
+      });
+
+      btnRefreshStudents?.addEventListener("click", () => {
+        renderStudents();
+        showToast("✓ Students list refreshed!");
       });
 
       // ====================================================================
@@ -2071,10 +2254,17 @@
 
       // Initial Render
       renderOrders();
+      renderStudents();
       renderReferrals();
       renderCoupons();
       renderBatches();
       populateSettings();
+
+      // Live Auto-Refresh (every 5 seconds keep orders and student records live without manual refresh)
+      setInterval(() => {
+        renderOrders();
+        renderStudents();
+      }, 5000);
     });
   </script>
 </body>
