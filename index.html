@@ -39,6 +39,9 @@
       </div>
     </header>
 
+    <!-- Logged-in Student Order Status Notification Banner / Modal -->
+    <div id="studentOrderStatusBanner" style="display: none; margin-bottom: 16px;"></div>
+
     <!-- Urgency Flash Banner -->
     <div class="banner-alert">
       <div>
@@ -218,7 +221,7 @@
             id="refLinkInput" 
             readonly 
             class="form-input" 
-            style="flex: 1; min-width: 200px; font-family: monospace; font-size: 0.78rem; background: rgba(0,0,0,0.4); padding: 8px 12px;"
+            style="flex: 1; min-width: 0; font-family: monospace; font-size: 0.78rem; background: rgba(0,0,0,0.4); padding: 8px 12px;"
             value="https://example.com/?ref=PW_PARTNER"
           >
           <button type="button" id="btnCopyRefLink" class="btn-enroll" style="background: #a855f7; padding: 8px 16px; font-size: 0.8rem;">
@@ -840,32 +843,92 @@
       const userOrdersListBox = document.getElementById("userOrdersListBox");
       const userOrdersList = document.getElementById("userOrdersList");
 
+      const studentOrderStatusBanner = document.getElementById("studentOrderStatusBanner");
+
       function refreshUserOrdersDisplay() {
         if (!APP_STATE.currentUser) {
-          userOrdersListBox.style.display = "none";
+          if (userOrdersListBox) userOrdersListBox.style.display = "none";
+          if (studentOrderStatusBanner) studentOrderStatusBanner.style.display = "none";
           return;
         }
         const contact = APP_STATE.currentUser.phone || APP_STATE.currentUser.email;
         const matches = findOrdersByUserContact(contact);
         if (matches && matches.length > 0) {
-          userOrdersListBox.style.display = "block";
-          userOrdersList.innerHTML = matches.map(m => `
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-              <div>
-                <strong style="font-size: 0.82rem; color: #ffffff;">${m.batchName}</strong>
-                <div style="font-size: 0.72rem; font-weight: 600; color: ${m.status === 'approved' ? '#34d399' : '#fbbf24'};">
-                  ${m.status === 'approved' ? '✓ Access Approved' : '⏳ Verifying (10-15 mins approx)'}
+          if (userOrdersListBox) {
+            userOrdersListBox.style.display = "block";
+            userOrdersList.innerHTML = matches.map(m => `
+              <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                <div>
+                  <strong style="font-size: 0.82rem; color: #ffffff;">${m.batchName}</strong>
+                  <div style="font-size: 0.72rem; font-weight: 600; color: ${m.status === 'approved' ? '#34d399' : '#fbbf24'};">
+                    ${m.status === 'approved' ? '✓ Access Approved' : '⏳ Verifying (10-15 mins approx)'}
+                  </div>
                 </div>
+                <a href="success.html?orderId=${encodeURIComponent(m.orderId)}" class="btn-enroll" style="padding: 5px 12px; font-size: 0.72rem; background: ${m.status === 'approved' ? '#10b981' : '#6366f1'}; flex-shrink: 0;">
+                  ${m.status === 'approved' ? 'Open Access' : 'View Status'}
+                </a>
               </div>
-              <a href="success.html?orderId=${encodeURIComponent(m.orderId)}" class="btn-enroll" style="padding: 5px 12px; font-size: 0.72rem; background: ${m.status === 'approved' ? '#10b981' : '#6366f1'}; flex-shrink: 0;">
-                ${m.status === 'approved' ? 'Open Access' : 'View Status'}
-              </a>
-            </div>
-          `).join("");
+            `).join("");
+          }
+
+          // Top Screen Alert / Banner for Logged-In Student
+          if (studentOrderStatusBanner) {
+            const latest = matches[0];
+            const isApproved = (latest.status === "approved");
+            studentOrderStatusBanner.style.display = "block";
+
+            if (isApproved) {
+              studentOrderStatusBanner.innerHTML = `
+                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.3) 100%); border: 1.5px solid rgba(16, 185, 129, 0.55); border-radius: var(--radius-md); padding: 16px 18px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.22); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 2.2rem; line-height: 1;">🎉</span>
+                    <div>
+                      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
+                        <strong style="color: #ffffff; font-size: 1.02rem;">Badhai Ho! Batch Payment Approved Ho Gaya Hai!</strong>
+                        <span style="background: #10b981; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">✓ CLASSES UNLOCKED</span>
+                      </div>
+                      <p style="font-size: 0.83rem; color: #a7f3d0; margin: 0; line-height: 1.45;">
+                        Aapke <strong>${escapeHtml(latest.batchName)}</strong> ka payment verify ho chuka hai! Abhi button par click karein aur apni classes, notes & videos access karein.
+                      </p>
+                    </div>
+                  </div>
+                  <a href="success.html?orderId=${encodeURIComponent(latest.orderId)}" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); font-weight: 800; padding: 12px 22px; font-size: 0.92rem; text-decoration: none; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                    <span>🚀 Go and Start Learning Classes ↗</span>
+                  </a>
+                </div>
+              `;
+            } else {
+              studentOrderStatusBanner.innerHTML = `
+                <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.24) 100%); border: 1.5px solid rgba(245, 158, 11, 0.45); border-radius: var(--radius-md); padding: 16px 18px; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 2.2rem; line-height: 1;">⏳</span>
+                    <div>
+                      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
+                        <strong style="color: #ffffff; font-size: 1.02rem;">Payment Received — Verification Under Process</strong>
+                        <span style="background: #f59e0b; color: #1e1b4b; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">10-15 MIN APPROVAL</span>
+                      </div>
+                      <p style="font-size: 0.83rem; color: #fde68a; margin: 0; line-height: 1.45;">
+                        Aapne payment submit kiya hai (Order ID: <code>${escapeHtml(latest.orderId)}</code>). Verification team cross-check kar rahi hai, <strong>10-15 minute</strong> me approval hote hi access mil jayega!
+                      </p>
+                    </div>
+                  </div>
+                  <a href="success.html?orderId=${encodeURIComponent(latest.orderId)}" class="btn-primary" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #1e1b4b; font-weight: 800; padding: 11px 20px; font-size: 0.88rem; text-decoration: none; border-radius: 10px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                    <span>🔍 Check Live Status</span>
+                  </a>
+                </div>
+              `;
+            }
+          }
         } else {
-          userOrdersListBox.style.display = "none";
+          if (userOrdersListBox) userOrdersListBox.style.display = "none";
+          if (studentOrderStatusBanner) studentOrderStatusBanner.style.display = "none";
         }
       }
+
+      // Auto-poll orders every 4 seconds
+      setInterval(() => {
+        refreshUserOrdersDisplay();
+      }, 4000);
 
       // Auth Tab Switching Logic
       const authTabs = [

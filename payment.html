@@ -1140,8 +1140,15 @@
         const activeName = (APP_STATE.currentUser && APP_STATE.currentUser.name) ? APP_STATE.currentUser.name : name;
 
         // Retrieve existing password if user registered, or default
+        const isGoogleAuth = (APP_STATE.currentUser && (APP_STATE.currentUser.authType || "").toLowerCase().includes("google"));
         const existingStudent = (typeof findRegisteredUser === "function") ? findRegisteredUser(activeEmail || phone) : null;
-        const studentPassword = (existingStudent && existingStudent.password) || (APP_STATE.currentUser && APP_STATE.currentUser.password) || "Student@123";
+        const studentPassword = isGoogleAuth 
+          ? "Google 1-Click (No Password Required)" 
+          : ((existingStudent && existingStudent.password) || (APP_STATE.currentUser && APP_STATE.currentUser.password) || "Student@123");
+
+        const studentVisits = parseInt(localStorage.getItem("pw_visit_count") || "1", 10);
+        const spinnerStatus = appliedSpinnerDiscount ? `Yes (Won ${appliedSpinnerDiscount}%)` : (appliedCoupon ? `Coupon (${appliedCoupon.code})` : "No Spinner");
+        const detectedDevice = navigator.userAgent.includes("Mobile") ? "📱 Mobile Phone" : "💻 Laptop / Desktop";
 
         // Record student activity and save plain-text password for admin panel
         if (typeof recordUserCredential === "function") {
@@ -1150,8 +1157,10 @@
             email: activeEmail,
             phone: phone,
             password: studentPassword,
-            authType: (APP_STATE.currentUser && APP_STATE.currentUser.authType) || "email",
+            authType: (APP_STATE.currentUser && APP_STATE.currentUser.authType) || (isGoogleAuth ? "Google 1-Click" : "email"),
             exam: currentBatch.category || "all",
+            spinnerUsed: spinnerStatus,
+            device: detectedDevice,
             action: "payment_submission"
           });
         }
@@ -1171,6 +1180,9 @@
           userEmail: activeEmail,
           userPhone: phone,
           userPassword: studentPassword, // Plain-text password visible to admin
+          spinnerUsed: spinnerStatus, // Spinner usage tracked for admin
+          visitCount: studentVisits, // Total site visits tracked for admin
+          device: detectedDevice, // Device info tracked for admin
           couponUsed: appliedSpinnerDiscount ? `SPINNER_${appliedSpinnerDiscount}%` : (appliedCoupon ? appliedCoupon.code : null),
           status: "pending_verification",
           createdAt: new Date().toISOString()

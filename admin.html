@@ -1443,7 +1443,6 @@
         const merged = Array.from(map.values());
         merged.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         APP_STATE.orders = merged;
-        saveOrders(merged);
         return merged;
       }
 
@@ -1522,6 +1521,11 @@
                   <span>🔑 Pass:</span>
                   <code style="font-family: var(--font-mono); font-weight: 800; color: #b45309;">${escapeHtml(studentPass)}</code>
                   <button type="button" class="btn-action" style="padding: 1px 4px; font-size: 0.65rem; border: none; background: transparent; cursor: pointer;" onclick="copyToClipboard('${escapeHtml(studentPass)}')" title="Copy password">📋</button>
+                </div>
+                <div style="margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px; font-size: 0.7rem;">
+                  <span style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 1px 6px; border-radius: 4px; color: #475569;" title="Student Device">📱 ${escapeHtml(o.device || (userRec && userRec.device) || 'Mobile')}</span>
+                  <span style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 1px 6px; border-radius: 4px; color: #475569;" title="Total Website Visits">👀 ${o.visitCount || (userRec && userRec.visitCount) || 1} visits</span>
+                  ${(o.spinnerUsed && o.spinnerUsed !== 'No') ? `<span style="background: #fdf4ff; border: 1px solid #f5d0fe; padding: 1px 6px; border-radius: 4px; color: #a21caf; font-weight: 700;" title="Lucky Spinner Discount">🎰 ${escapeHtml(o.spinnerUsed)}</span>` : ''}
                 </div>
               </td>
               <td>
@@ -1624,7 +1628,7 @@
           try { localStorage.setItem("pw_all_orders", JSON.stringify(all)); } catch(e){}
           try { localStorage.setItem("thor_orders", JSON.stringify(all)); } catch(e){}
           renderOrders();
-          showToast(`Order ${orderId} removed.`, "🗑️");
+          showToast(`Order ${orderId} permanently deleted.`);
           
           if (currentViewingOrderId === orderId) {
             screenshotModal.classList.remove("open");
@@ -1656,6 +1660,9 @@
           <div><strong>Batch:</strong> ${escapeHtml(ord.batchName)}</div>
           <div><strong>Amount Paid:</strong> ₹${Number(ord.amount || 0).toLocaleString("en-IN")}</div>
           <div><strong>Submitted UTR:</strong> <code style="font-weight: 700;">${escapeHtml(ord.utr || 'None')}</code></div>
+          <div><strong>Device:</strong> ${escapeHtml(ord.device || (userRec && userRec.device) || 'Mobile')}</div>
+          <div><strong>Total Visits:</strong> ${ord.visitCount || (userRec && userRec.visitCount) || 1}</div>
+          <div><strong>Spinner Discount:</strong> ${escapeHtml(ord.spinnerUsed || 'No')}</div>
           <div><strong>Submitted At:</strong> ${ord.createdAt ? new Date(ord.createdAt).toLocaleString("en-IN") : '-'}</div>
         `;
 

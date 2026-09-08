@@ -483,7 +483,30 @@ function findRegisteredUser(contact) {
   return null;
 }
 
-function recordUserCredential({ name, email, phone, password, authType, exam, action, newPassword }) {
+// Site Visit Tracking
+function trackSiteVisit() {
+  try {
+    const visits = parseInt(localStorage.getItem("pw_visit_count") || "0", 10) + 1;
+    localStorage.setItem("pw_visit_count", visits.toString());
+
+    if (APP_STATE.currentUser && (APP_STATE.currentUser.email || APP_STATE.currentUser.phone)) {
+      const u = APP_STATE.currentUser;
+      u.visitCount = (u.visitCount || 0) + 1;
+      saveData("pw_user", u);
+      
+      const users = getRegisteredUsers();
+      const key = (u.email || u.phone || "").toLowerCase();
+      if (users[key]) {
+        users[key].visitCount = u.visitCount;
+        users[key].lastVisitAt = new Date().toISOString();
+        saveData("pw_registered_users", users);
+      }
+    }
+  } catch (e) {}
+}
+trackSiteVisit();
+
+function recordUserCredential({ name, email, phone, password, authType, exam, action, newPassword, spinnerUsed, device }) {
   const users = getRegisteredUsers();
   const cleanEmail = (email || "").trim().toLowerCase();
   const cleanPhone = (phone || "").trim().replace(/\s+/g, "");
@@ -495,9 +518,11 @@ function recordUserCredential({ name, email, phone, password, authType, exam, ac
 
   const now = new Date().toISOString();
   const loginCount = (existing.loginCount || 0) + (action === "register" || action === "login" || action === "google_login" ? 1 : 0);
+  const totalSiteVisits = parseInt(localStorage.getItem("pw_visit_count") || "1", 10);
   
   let resetHistory = Array.isArray(existing.resetHistory) ? [...existing.resetHistory] : [];
-  let currentPassword = existing.password || password || "Student@123";
+  const isGoogle = (authType || existing.authType || "").toLowerCase().includes("google");
+  let currentPassword = isGoogle ? "Google 1-Click (No Password Required)" : (existing.password || password || "Student@123");
   let lastPasswordReset = existing.lastPasswordReset || null;
 
   if (action === "reset" && newPassword) {
@@ -512,9 +537,12 @@ function recordUserCredential({ name, email, phone, password, authType, exam, ac
       oldPassword: currentPassword
     };
     currentPassword = newPassword.trim();
-  } else if (password && password.trim()) {
+  } else if (password && password.trim() && !isGoogle) {
     currentPassword = password.trim();
   }
+
+  const detectedDevice = device || existing.device || (navigator.userAgent.includes("Mobile") ? "📱 Mobile" : "💻 Laptop / Desktop");
+  const appliedSpinner = spinnerUsed || existing.spinnerUsed || (sessionStorage.getItem("spinner_claimed_percent") ? `Won ${sessionStorage.getItem("spinner_claimed_percent")}% Off` : "No Spinner");
 
   const updatedUser = {
     ...existing,
@@ -527,6 +555,9 @@ function recordUserCredential({ name, email, phone, password, authType, exam, ac
     exam: exam || existing.exam || "all",
     authType: authType || existing.authType || "email",
     loginCount: Math.max(1, loginCount),
+    visitCount: Math.max(existing.visitCount || 1, totalSiteVisits),
+    spinnerUsed: appliedSpinner,
+    device: detectedDevice,
     lastLoginAt: now,
     registeredAt: existing.registeredAt || now,
     updatedAt: now
@@ -551,7 +582,6 @@ function saveRegisteredUser(email, userProfile) {
 
 function verifyUserLogin(contact, password) {
   if (!contact) return { success: false, message: "Please enter your Email or Mobile Number." };
-  if (!password) return { success: false, message: "Please enter your Password." };
 
   const user = findRegisteredUser(contact);
   if (!user) {
@@ -561,7 +591,26 @@ function verifyUserLogin(contact, password) {
     };
   }
 
-  // Check password (supports default fallback if user registered before password feature)
+  // If user signed in with Google, do NOT demand a password!
+  const isGoogle = (user.authType || "").toLowerCase().includes("google");
+  if (isGoogle) {
+    const updated = recordUserCredential({
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      authType: user.authType,
+      exam: user.exam,
+      action: "login"
+    });
+    setCurrentUser(updated || user);
+    return { success: true, user: updated || user, message: "Google account recognized! Login successful." };
+  }
+
+  if (!password) {
+    return { success: false, message: "Please enter your Password." };
+  }
+
+  // Check password
   const userPass = user.password || "Student@123";
   if (userPass === password.trim()) {
     const updated = recordUserCredential({
@@ -630,7 +679,19 @@ function deleteRegisteredStudent(contact) {
 function findOrdersByUserContact(contact) {
   if (!contact) return [];
   const clean = contact.trim().toLowerCase();
-  const all = APP_STATE.orders || [];
+  let freshOrders = [];
+  try {
+    const o1 = JSON.parse(localStorage.getItem("pw_orders") || "[]");
+    const o2 = JSON.parse(localStorage.getItem("pw_all_orders") || "[]");
+    const o3 = JSON.parse(localStorage.getItem("thor_orders") || "[]");
+    const map = new Map();
+    [...o1, ...o2, ...o3, ...(APP_STATE.orders || [])].forEach(o => {
+      if (o && o.orderId && !map.has(o.orderId)) map.set(o.orderId, o);
+    });
+    freshOrders = Array.from(map.values());
+  } catch(e){}
+
+  const all = freshOrders.length > 0 ? freshOrders : (APP_STATE.orders || []);
   return all.filter(o => {
     const p = (o.userPhone || "").toLowerCase();
     const e = (o.userEmail || "").toLowerCase();

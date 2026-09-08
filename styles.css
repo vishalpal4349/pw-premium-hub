@@ -48,9 +48,14 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
   background-color: var(--bg-color);
   background-image: 
     radial-gradient(ellipse 90% 60% at 50% -15%, rgba(99, 102, 241, 0.22), transparent 70%),
@@ -1079,15 +1084,69 @@ body {
 
 /* Responsive Polish */
 @media (max-width: 640px) {
+  body {
+    padding: 10px 8px;
+  }
+  .app-container, .app-container.wide {
+    width: 100%;
+    max-width: 100%;
+  }
+  .glass-card {
+    padding: 18px 14px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
   .site-nav {
-    flex-wrap: wrap;
-    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 6px 2px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .brand-badge {
+    font-size: 0.92rem;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .brand-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
   }
   .nav-actions {
+    display: flex;
+    align-items: center;
     gap: 6px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .nav-earnings-pill {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
+  .nav-link-btn {
+    padding: 5px 10px;
+    font-size: 0.74rem;
+  }
+  .btn-hamburger {
+    width: 34px;
+    height: 34px;
+    margin-left: 2px;
+  }
+  .batches-grid {
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .batch-card {
     padding: 18px 16px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .batch-pricing {
     flex-direction: column;
@@ -1098,31 +1157,61 @@ body {
 
 @media (max-width: 480px) {
   body {
-    padding: 10px 6px;
+    padding: 8px 6px;
   }
   .glass-card {
-    padding: 16px 14px;
-    border-radius: 16px;
+    padding: 14px 10px;
+    border-radius: 14px;
   }
   .site-nav {
-    padding: 8px 10px;
+    padding: 6px 0px;
+    gap: 6px;
   }
   .brand-badge {
-    font-size: 0.88rem;
+    font-size: 0.85rem;
+    gap: 5px;
+  }
+  .brand-badge span:last-child {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .nav-actions {
+    gap: 4px;
   }
   .nav-earnings-pill {
+    padding: 3px 6px;
+    font-size: 0.68rem;
+  }
+  .nav-earnings-pill .earnings-pill-text {
+    font-size: 0.68rem;
+  }
+  .nav-link-btn {
     padding: 4px 8px;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
+  }
+  .btn-hamburger {
+    width: 32px;
+    height: 32px;
+    padding: 5px;
+  }
+  .btn-hamburger span {
+    width: 15px;
   }
   .headline {
-    font-size: 1.45rem;
+    font-size: 1.35rem;
+  }
+  .batch-card {
+    padding: 15px 12px;
+    border-radius: 14px;
   }
   .batch-title {
-    font-size: 1.02rem;
+    font-size: 1rem;
   }
   .btn-enroll {
-    padding: 8px 14px;
-    font-size: 0.82rem;
+    padding: 8px 12px;
+    font-size: 0.8rem;
   }
 }
 
