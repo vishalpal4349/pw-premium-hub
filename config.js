@@ -814,14 +814,14 @@ function generateUpiUrl(amount, note) {
 function getAppSpecificUpiUrls(amount, note) {
   const cfg = APP_STATE.config;
   const pa = encodeURIComponent(cfg.UPI_ID.trim());
-  const pn = encodeURIComponent(cfg.PAYMENT_NAME.trim());
+  const pn = encodeURIComponent((cfg.PAYMENT_NAME || "PW Batch Pass").trim());
   const tn = encodeURIComponent(note || cfg.TRANSACTION_NOTE.trim());
   const q = `pa=${pa}&pn=${pn}&am=${amount}&cu=INR&tn=${tn}`;
   return {
     generic: `upi://pay?${q}`,
-    gpay: `gpay://upi/pay?${q}`,
-    phonepe: `phonepe://pay?${q}`,
-    paytm: `paytmmp://pay?${q}`
+    gpay: `upi://pay?${q}`,
+    phonepe: `upi://pay?${q}`,
+    paytm: `upi://pay?${q}`
   };
 }
 

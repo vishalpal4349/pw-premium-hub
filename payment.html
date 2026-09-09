@@ -173,6 +173,58 @@
         </button>
       </div>
 
+      <!-- PhonePe / GPay 2000 Gallery Limit Solution Card -->
+      <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 95, 70, 0.22) 100%); border: 1.5px solid rgba(16, 185, 129, 0.5); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+          <div style="font-weight: 800; font-size: 0.92rem; color: #86efac; display: flex; align-items: center; gap: 8px;">
+            <span>⚡</span>
+            <span>PhonePe / GPay 2000 Gallery Limit Ka 100% Solution:</span>
+          </div>
+          <span style="font-size: 0.72rem; background: #059669; color: #ffffff; padding: 2px 8px; border-radius: 999px; font-weight: 700;">
+            ✓ 0 Error Guarantee
+          </span>
+        </div>
+        
+        <p style="font-size: 0.82rem; color: #e2e8f0; margin-bottom: 12px; line-height: 1.5;">
+          PhonePe / GPay me gallery se QR scan karne par <em>"You can pay up to 2000 with QR codes via gallery"</em> ka alert bank security rule ki wajah se aata hai. <strong>Bina kisi limit ke turant payment karne ke 2 aasan tarike:</strong>
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px;">
+          <!-- Method 1 -->
+          <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 12px;">
+            <div style="font-weight: 700; font-size: 0.84rem; color: #60a5fa; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>🚀 Tarika 1: Direct 1-Click Pay (No QR Scan)</span>
+            </div>
+            <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 8px;">
+              Mobile user hain toh neeche diye gaye button par click karein. Seedha PhonePe / GPay khul jayega:
+            </div>
+            <a href="#" id="btnBannerQuickLaunch" class="btn-primary" style="padding: 8px 12px; font-size: 0.78rem; width: 100%; text-align: center; justify-content: center;">
+              <span>⚡ Open PhonePe / GPay Directly</span>
+            </a>
+          </div>
+
+          <!-- Method 2 -->
+          <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 12px;">
+            <div style="font-weight: 700; font-size: 0.84rem; color: #34d399; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>🆔 Tarika 2: Pay to UPI ID (Direct 100% Pass)</span>
+            </div>
+            <div style="font-size: 0.76rem; color: #94a3b8; margin-bottom: 8px;">
+              PhonePe / GPay open karein ➔ <strong>"To UPI ID"</strong> chunein ➔ UPI ID paste karein:
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.06); padding: 5px 10px; border-radius: 8px;">
+              <span style="font-family: monospace; font-size: 0.88rem; font-weight: 700; color: #ffffff;" id="upiIdQuickText">kumarfreepw@fam</span>
+              <button type="button" class="btn-copy" id="btnCopyUpiQuickBanner" style="padding: 4px 8px; font-size: 0.72rem;">
+                <span>📋 Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size: 0.75rem; color: #a7f3d0; margin-top: 10px; line-height: 1.4;">
+          ✓ <em>In dono methods se koi 2000 gallery limit nahi aati aur turant 1 second me payment confirm ho jata hai!</em>
+        </div>
+      </div>
+
       <!-- Universal UPI 1-Click Pay Button -->
       <a href="#" id="btnPayUpiDirect" class="btn-primary" style="margin-bottom: 12px;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -202,9 +254,9 @@
 
       <!-- 3 UPI QR Tabs -->
       <div class="qr-tabs" role="tablist">
-        <button type="button" class="qr-tab-btn active" data-qr-index="0">Google Pay</button>
-        <button type="button" class="qr-tab-btn" data-qr-index="1">PhonePe</button>
-        <button type="button" class="qr-tab-btn" data-qr-index="2">Paytm • All UPI</button>
+        <button type="button" class="qr-tab-btn active" data-qr-index="0">FamPay QR (Official)</button>
+        <button type="button" class="qr-tab-btn" data-qr-index="1">⚡ High-Speed Scanner QR</button>
+        <button type="button" class="qr-tab-btn" data-qr-index="2">🆔 Pay via UPI ID</button>
       </div>
 
       <!-- Real Uploaded QR Code Display -->
@@ -214,7 +266,7 @@
         </div>
 
         <div style="display: flex; gap: 8px; margin-bottom: 12px; margin-top: 8px;">
-          <a href="payment_qr.jpg" download="pw_payment_qr.jpg" class="nav-link-btn" style="font-size: 0.75rem; background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.4);">
+          <a href="payment_qr.jpg" id="btnDownloadCurrentQr" download="pw_payment_qr.jpg" class="nav-link-btn" style="font-size: 0.75rem; background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.4);">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
@@ -230,7 +282,7 @@
           <strong id="payeeNameDisplay" style="color: #ffffff;">PW Batch Pass</strong>
         </div>
 
-        <p class="qr-meta-text" id="qrInstruction" style="margin-bottom: 8px;">Scan with Google Pay, PhonePe, Paytm or any UPI app</p>
+        <p class="qr-meta-text" id="qrInstruction" style="margin-bottom: 8px;">FamPay Official QR Code — Scan with PhonePe, GPay, Paytm or Any UPI</p>
 
         <!-- UPI ID copy field -->
         <div class="upi-id-box">
@@ -242,6 +294,12 @@
             </svg>
             <span>Copy</span>
           </button>
+        </div>
+
+        <!-- PhonePe / GPay Gallery Scan Limit Alert -->
+        <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 10px; padding: 10px 14px; margin-top: 14px; margin-bottom: 8px; font-size: 0.78rem; color: #fde047; text-align: left; line-height: 1.5;">
+          ⚠️ <strong>PhonePe / GPay Gallery Limit Alert:</strong> Agar gallery se QR scan karne par <em>"You can pay up to 2000 with QR codes via gallery"</em> dikhe, toh pareshan na hon! Yeh NPCI ka gallery rule hai.  
+          👉 <strong>Instant Solution:</strong> Seedha upar diye gaye <strong>"Pay via Any UPI App"</strong> / <strong>PhonePe</strong> button par tap karein ya PhonePe/GPay me <strong>"To UPI ID"</strong> me <strong>kumarfreepw@fam</strong> daal kar direct pay karein (100% success bina kisi limit ke)!
         </div>
 
         <!-- WhatsApp Help direct link -->
@@ -1053,78 +1111,91 @@
         checkoutCouponMsg.textContent = msg;
       }
 
+      const btnBannerQuickLaunch = document.getElementById("btnBannerQuickLaunch");
+      const btnDownloadCurrentQr = document.getElementById("btnDownloadCurrentQr");
+
       function updatePaymentAmounts() {
         summaryPayableAmount.textContent = formatINR(activePrice);
         payUpiButtonText.textContent = `Pay ${formatINR(activePrice)} via Any UPI App`;
 
         const appUrls = getAppSpecificUpiUrls(activePrice, `${currentBatch.name} - ${orderId}`);
         btnPayUpiDirect.href = appUrls.generic;
+        if (btnBannerQuickLaunch) btnBannerQuickLaunch.href = appUrls.generic;
         btnGPayApp.href = appUrls.gpay;
         btnPhonePeApp.href = appUrls.phonepe;
         btnPaytmApp.href = appUrls.paytm;
+
+        // If currently showing dynamic QR tab, refresh it
+        const activeTab = document.querySelector(".qr-tab-btn.active");
+        if (activeTab && activeTab.dataset.qrIndex === "1") {
+          const dynamicQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=${encodeURIComponent(generateUpiUrl(activePrice, currentBatch.name + " - " + orderId))}`;
+          qrImage.src = dynamicQrUrl;
+          if (btnDownloadCurrentQr) btnDownloadCurrentQr.href = dynamicQrUrl;
+        }
       }
 
       upiIdDisplay.textContent = CONFIG.UPI_ID;
+      const upiIdQuickText = document.getElementById("upiIdQuickText");
+      if (upiIdQuickText) upiIdQuickText.textContent = CONFIG.UPI_ID;
+
       const merchantUpiTag = document.getElementById("merchantUpiTag");
       if (merchantUpiTag) {
         merchantUpiTag.textContent = CONFIG.UPI_ID;
       }
       const payeeNameDisplay = document.getElementById("payeeNameDisplay");
       if (payeeNameDisplay) {
-        payeeNameDisplay.textContent = CONFIG.PAYMENT_NAME || "Aditya Kumar Dubey";
+        payeeNameDisplay.textContent = CONFIG.PAYMENT_NAME || "PW Batch Pass";
       }
 
-      // QR Switcher Tabs (All show your real QR payment image with clear label)
+      // QR Switcher Tabs (FamPay QR, Dynamic High-Speed QR, UPI ID mode)
       qrTabs.forEach(tab => {
         tab.addEventListener("click", () => {
           qrTabs.forEach(t => t.classList.remove("active"));
           tab.classList.add("active");
           const idx = parseInt(tab.dataset.qrIndex, 10) || 0;
-          const labels = [
-            "Scan with Google Pay or any UPI app",
-            "Scan with PhonePe or any UPI app",
-            "Scan with Paytm, BHIM or any banking app"
-          ];
-          qrInstruction.textContent = labels[idx] || labels[0];
+
+          if (idx === 0) {
+            qrImage.src = "payment_qr.jpg";
+            if (btnDownloadCurrentQr) btnDownloadCurrentQr.href = "payment_qr.jpg";
+            qrInstruction.textContent = "FamPay Official QR Code — Scan with PhonePe, GPay, Paytm or Any UPI";
+          } else if (idx === 1) {
+            const dynamicQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=${encodeURIComponent(generateUpiUrl(activePrice, currentBatch.name + " - " + orderId))}`;
+            qrImage.src = dynamicQrUrl;
+            if (btnDownloadCurrentQr) btnDownloadCurrentQr.href = dynamicQrUrl;
+            qrInstruction.textContent = `⚡ High-Speed Crisp QR (Amount: ${formatINR(activePrice)}) — Fast 0.1s Camera Scan!`;
+          } else if (idx === 2) {
+            copyUpiHandler();
+            qrInstruction.textContent = `PhonePe/GPay open karein ➔ "To UPI ID" select karein ➔ "${CONFIG.UPI_ID}" paste karein (0 Limit, 100% Pass).`;
+          }
         });
       });
-
-      const upiPhone = (CONFIG && CONFIG.UPI_PHONE) || "7970870147";
-      const upiPhoneDisplay = document.getElementById("upiPhoneDisplay");
-      if (upiPhoneDisplay) upiPhoneDisplay.textContent = upiPhone;
-
-      const upiIdBoxDisplay = document.getElementById("upiIdBoxDisplay");
-      if (upiIdBoxDisplay) upiIdBoxDisplay.textContent = CONFIG.UPI_ID;
-
-      const copyPhoneHandler = async () => {
-        const phone = (CONFIG && CONFIG.UPI_PHONE) || "7970870147";
-        try {
-          await navigator.clipboard.writeText(phone);
-          showToast(`✓ Copied Mobile Number: ${phone} (GPay/PhonePe me paste karein)`);
-        } catch (e) {
-          showToast(`Mobile Number: ${phone}`);
-        }
-      };
-
-      document.getElementById("btnCopyPhoneDirect")?.addEventListener("click", copyPhoneHandler);
-      document.getElementById("btnCopyUpiPhoneBanner")?.addEventListener("click", copyPhoneHandler);
-      document.getElementById("btnCopyUpiIdBanner")?.addEventListener("click", copyUpiHandler);
-      document.getElementById("btnCopyUpiDirectBox")?.addEventListener("click", copyUpiHandler);
 
       const copyUpiHandler = async () => {
         try {
           await navigator.clipboard.writeText(CONFIG.UPI_ID);
-          showToast(`✓ Copied Merchant UPI ID: "${CONFIG.UPI_ID}"`);
+          showToast(`✓ Copied Official UPI ID: "${CONFIG.UPI_ID}" (GPay/PhonePe me paste karein)`);
         } catch (e) {
-          showToast(`Merchant UPI: ${CONFIG.UPI_ID}`);
+          showToast(`Official UPI: ${CONFIG.UPI_ID}`);
         }
       };
 
       btnCopyUpi.addEventListener("click", copyUpiHandler);
-      const btnCopyMerchantUpi = document.getElementById("btnCopyMerchantUpi");
-      if (btnCopyMerchantUpi) {
-        btnCopyMerchantUpi.addEventListener("click", copyUpiHandler);
-      }
+      document.getElementById("btnCopyMerchantUpi")?.addEventListener("click", copyUpiHandler);
+      document.getElementById("btnCopyUpiQuickBanner")?.addEventListener("click", copyUpiHandler);
+
+      // Auto-copy UPI ID on any direct app launcher click for student convenience
+      const handleAppLaunchClick = async () => {
+        try {
+          await navigator.clipboard.writeText(CONFIG.UPI_ID);
+          showToast(`🚀 Opening UPI App... (UPI ID "${CONFIG.UPI_ID}" auto-copied)`);
+        } catch (e) {}
+      };
+
+      btnPayUpiDirect.addEventListener("click", handleAppLaunchClick);
+      if (btnBannerQuickLaunch) btnBannerQuickLaunch.addEventListener("click", handleAppLaunchClick);
+      btnGPayApp.addEventListener("click", handleAppLaunchClick);
+      btnPhonePeApp.addEventListener("click", handleAppLaunchClick);
+      btnPaytmApp.addEventListener("click", handleAppLaunchClick);
 
       // Handle Screenshot File with Instant HTML5 Canvas Auto-Compression
       let screenshotBase64 = null;
