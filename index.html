@@ -25,6 +25,12 @@
           <span class="earnings-pill-text">Earn: <strong id="navEarningsAmt">₹0</strong></span>
         </a>
 
+        <!-- High-Visibility Meri Batches / My Purchases Button in Navbar -->
+        <a href="#myPurchasesSection" class="nav-purchases-btn" id="navMyPurchasesBtn" title="View Enrolled Batches, Live Verification Status & Classes">
+          <span>📚 Meri Batches</span>
+          <span class="nav-purchases-badge" id="navPurchasesCount" style="display: none;">0</span>
+        </a>
+
         <!-- User Login / Profile Button -->
         <button type="button" id="btnOpenAuth" class="nav-link-btn primary" style="padding: 6px 13px; font-size: 0.8rem;">
           <span id="navUserLabel">👤 Login</span>
@@ -50,6 +56,15 @@
       <div>
         <span>Offer Ends In: <span class="banner-timer" id="bannerTimer">01:45:30</span></span>
       </div>
+    </div>
+
+    <!-- Quick Access Jump Pill for My Purchases -->
+    <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+      <a href="#myPurchasesSection" class="hero-jump-purchases" id="heroJumpPurchases">
+        <span style="font-size: 1.1rem;">📚</span>
+        <span>Meri Batches / My Purchases</span>
+        <span style="font-size: 0.72rem; background: #10b981; color: #ffffff; padding: 2px 8px; border-radius: 999px; font-weight: 800;">Live Status & Portal ↗</span>
+      </a>
     </div>
 
     <!-- Main Content Glass Card -->
@@ -117,18 +132,21 @@
       </div>
 
       <!-- My Purchases / Meri Batches Section (Replaces How to Buy Video) -->
-      <div class="my-purchases-card" id="myPurchasesSection" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1.5px solid rgba(99, 102, 241, 0.35); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 22px; box-shadow: 0 8px 30px rgba(0,0,0,0.35);">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="font-size: 1.4rem; background: rgba(99, 102, 241, 0.2); width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(99,102,241,0.4);">
+      <div class="my-purchases-card" id="myPurchasesSection" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(30, 41, 59, 0.95) 100%); border: 2px solid rgba(16, 185, 129, 0.45); border-radius: var(--radius-lg); padding: 22px 20px; margin-bottom: 24px; box-shadow: 0 10px 35px rgba(0,0,0,0.4);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="font-size: 1.6rem; background: rgba(16, 185, 129, 0.2); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(16, 185, 129, 0.45);">
               📚
             </div>
             <div>
-              <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0;">My Purchases / Meri Batches</h3>
-              <p style="font-size: 0.78rem; color: #94a3b8; margin: 2px 0 0 0;">Aapke enroll kiye gaye batches, payment details aur live activation status</p>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <h3 style="font-size: 1.18rem; font-weight: 900; color: #ffffff; margin: 0;">My Purchases / Meri Batches & Live Access</h3>
+                <span style="font-size: 0.7rem; background: #10b981; color: #ffffff; font-weight: 800; padding: 2px 8px; border-radius: 999px;">OFFICIAL PORTAL</span>
+              </div>
+              <p style="font-size: 0.82rem; color: #cbd5e1; margin: 3px 0 0 0;">Aapke enroll kiye gaye batches, payment approval status aur pwthor.live website class link</p>
             </div>
           </div>
-          <button type="button" id="btnRefreshMyPurchases" class="btn-action" style="padding: 6px 14px; font-size: 0.76rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: #cbd5e1; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <button type="button" id="btnRefreshMyPurchases" class="btn-action" style="padding: 8px 16px; font-size: 0.8rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #86efac; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 700;">
             <span>🔄 Refresh Status</span>
           </button>
         </div>
@@ -341,6 +359,34 @@
           </ul>
         </div>
 
+      <!-- Dedicated Study & Website Access Guide Card in Footer -->
+      <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: var(--radius-md); padding: 20px 22px; margin-top: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); text-align: left;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.6rem;">📖</span>
+            <div>
+              <strong style="color: #ffffff; font-size: 1.05rem;">Student Study Portal & Free Notes Access Guide</strong>
+              <p style="font-size: 0.78rem; color: #94a3b8; margin: 2px 0 0 0;">Batches access karne aur notes download karne ka aasan tarika</p>
+            </div>
+          </div>
+          <a href="#myPurchasesSection" class="nav-purchases-btn" style="font-size: 0.82rem; padding: 7px 16px;">
+            <span>📚 Open Meri Batches Section</span>
+          </a>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px;">
+            <div style="font-weight: 700; color: #86efac; font-size: 0.85rem; margin-bottom: 4px;">1️⃣ Step 1: Admin Approval</div>
+            <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">Payment proof upload ke 10-15 minute ke andar team verify karti hai. Status 'Approved' hote hi portal unlock ho jata hai.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px;">
+            <div style="font-weight: 700; color: #93c5fd; font-size: 0.85rem; margin-bottom: 4px;">2️⃣ Step 2: Watch Video Guide</div>
+            <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">'Watch Video Guide' button par click karke 1 minute ki video dekhein jisme batch portal chalane ka poora process sikhaya gaya hai.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px;">
+            <div style="font-weight: 700; color: #fde047; font-size: 0.85rem; margin-bottom: 4px;">3️⃣ Step 3: Start Learning on pwthor.live</div>
+            <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">Official portal (pwthor.live) par daily live/recorded lectures, DPP video solutions aur teachers' handwritten notes 100% free milenge!</div>
+          </div>
+        </div>
       </div>
 
       <!-- Footer Bottom Bar with Discreet Admin Access -->
@@ -499,6 +545,84 @@
       <div style="margin-top: 14px; text-align: center; font-size: 0.74rem; color: #94a3b8;">
         🔒 Zero Password Required • Encrypted Account Protection
       </div>
+    </div>
+  </div>
+
+  <!-- Dedicated High-Visibility Approval Celebration Modal (Light Theme) -->
+  <div id="approvalCelebrationModal" class="approval-celebration-overlay" style="display: none;">
+    <div class="approval-celebration-card">
+      <button type="button" class="approval-modal-close" id="btnCloseApprovalModal" aria-label="Close modal">&times;</button>
+      
+      <!-- Top Badges & Celebration Icon -->
+      <div style="text-align: center; margin-bottom: 16px;">
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; border: 1.5px solid #86efac; color: #15803d; padding: 4px 14px; border-radius: 9999px; font-weight: 800; font-size: 0.78rem; margin-bottom: 10px;">
+          <span>🎉 ALL-BATCH ACCESS UNLOCKED</span>
+        </div>
+        <h2 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin-bottom: 6px; line-height: 1.3;">
+          🎉 Badhai Ho! Payment Approved Ho Gaya Hai!
+        </h2>
+        <p style="font-size: 0.88rem; color: #475569; margin: 0; line-height: 1.5;">
+          Aapka batch successfully activate ho chuka hai. Ab aap bina kisi rok-tok ke sabhi classes attend kar sakte hain!
+        </p>
+      </div>
+
+      <!-- Approved Batch Name Pill -->
+      <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 12px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+        <div>
+          <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: #16a34a; letter-spacing: 0.5px;">Enrolled Batch:</span>
+          <div id="modalApprovedBatchName" style="font-size: 1rem; font-weight: 800; color: #0f172a;">IIT-JEE & NEET All-Pass</div>
+        </div>
+        <span style="background: #10b981; color: #ffffff; font-size: 0.74rem; font-weight: 800; padding: 3px 10px; border-radius: 999px;">
+          ✓ LIFETIME ELIGIBLE
+        </span>
+      </div>
+
+      <!-- Step 1: Video Guide -->
+      <div class="approval-step-box">
+        <div class="approval-step-title">
+          <span style="background: #e0e7ff; color: #4338ca; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.76rem; font-weight: 900;">1</span>
+          <span>Step 1: Video Guide Dekhein (Kaise Access Karna Hai)</span>
+        </div>
+        <p style="font-size: 0.82rem; color: #475569; margin-bottom: 8px; line-height: 1.45;">
+          Iss video me bataya gaya hai ki pwthor.live portal par kaise login karna hai, lectures kaise run karne hain aur notes kaise download karne hain:
+        </p>
+        <div class="modal-video-wrap">
+          <iframe 
+            id="approvalYoutubeIframe"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+            title="Batch Walkthrough Video" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- Step 2: Open Dedicated Batch Portal Card -->
+      <div class="approval-step-box" style="background: #f0fdf4; border-color: #86efac;">
+        <div class="approval-step-title" style="color: #15803d;">
+          <span style="background: #10b981; color: #ffffff; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.76rem; font-weight: 900;">2</span>
+          <span>Step 2: Official Batch Portal (pwthor.live) Par Jayein</span>
+        </div>
+        <p style="font-size: 0.82rem; color: #166534; line-height: 1.5; margin-bottom: 12px;">
+          Ye hamari dedicated website hai jahan aapko <strong>Daily Live & 1080p Recorded Lectures</strong>, <strong>DPPs with detailed Video Solutions</strong>, <strong>Formula Books PDF</strong> aur <strong>All-India Mock Tests</strong> 100% free milenge!
+        </p>
+        <a href="https://pwthor.live" id="btnModalAccessPortal" target="_blank" rel="noopener noreferrer" class="btn-portal-launch">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span>👉 Click Here to Go to Website & Start Classes (pwthor.live) ↗</span>
+        </a>
+      </div>
+
+      <!-- Close Action Button -->
+      <div style="margin-top: 14px; text-align: center;">
+        <button type="button" id="btnDismissApprovalModal" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; padding: 10px 24px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+          ✓ Samajh Gaya / Close Window
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -763,25 +887,84 @@
         showToast("Referral link copied! Share with friends to earn 30% commission.");
       });
 
-      // Student Order Tracking Elements
+      // Student Order Tracking Elements & Approval Modal Elements
       const studentOrderStatusBanner = document.getElementById("studentOrderStatusBanner");
+      const navPurchasesCount = document.getElementById("navPurchasesCount");
+      const approvalCelebrationModal = document.getElementById("approvalCelebrationModal");
+      const btnCloseApprovalModal = document.getElementById("btnCloseApprovalModal");
+      const btnDismissApprovalModal = document.getElementById("btnDismissApprovalModal");
+      const modalApprovedBatchName = document.getElementById("modalApprovedBatchName");
+      const approvalYoutubeIframe = document.getElementById("approvalYoutubeIframe");
+      const btnModalAccessPortal = document.getElementById("btnModalAccessPortal");
+
+      let currentCelebrationOrderId = null;
+
+      function openApprovalModal(order) {
+        if (!approvalCelebrationModal || !order) return;
+        currentCelebrationOrderId = order.orderId;
+        if (modalApprovedBatchName) {
+          modalApprovedBatchName.textContent = order.batchName || "Complete PW Infinity Batch Pass";
+        }
+        if (approvalYoutubeIframe) {
+          const videoSrc = CONFIG.PRIVATE_YOUTUBE_LINK || CONFIG.HOW_TO_BUY_VIDEO || "https://www.youtube.com/embed/dQw4w9WgXcQ";
+          approvalYoutubeIframe.src = normalizeYoutubeUrl(videoSrc);
+        }
+        if (btnModalAccessPortal) {
+          btnModalAccessPortal.href = CONFIG.APP_PORTAL_LINK || "https://pwthor.live";
+        }
+        approvalCelebrationModal.style.display = "flex";
+      }
+
+      function closeApprovalModal() {
+        if (approvalCelebrationModal) {
+          approvalCelebrationModal.style.display = "none";
+        }
+        if (currentCelebrationOrderId) {
+          sessionStorage.setItem("dismissed_approval_" + currentCelebrationOrderId, "1");
+        }
+      }
+
+      btnCloseApprovalModal?.addEventListener("click", closeApprovalModal);
+      btnDismissApprovalModal?.addEventListener("click", closeApprovalModal);
+      approvalCelebrationModal?.addEventListener("click", (e) => {
+        if (e.target === approvalCelebrationModal) closeApprovalModal();
+      });
+
+      window.openApprovalModal = openApprovalModal;
 
       function refreshUserOrdersDisplay() {
         if (!APP_STATE.currentUser) {
           if (studentOrderStatusBanner) studentOrderStatusBanner.style.display = "none";
+          if (navPurchasesCount) navPurchasesCount.style.display = "none";
           return;
         }
         const contact = APP_STATE.currentUser.phone || APP_STATE.currentUser.email;
-        const matches = findOrdersByUserContact(contact);
+        const matches = findOrdersByUserContact(contact) || [];
+
+        if (navPurchasesCount) {
+          if (matches.length > 0) {
+            navPurchasesCount.textContent = matches.length;
+            navPurchasesCount.style.display = "inline-block";
+          } else {
+            navPurchasesCount.style.display = "none";
+          }
+        }
+
         if (matches && matches.length > 0) {
+          const latest = matches[0];
+          const isApproved = (latest.status === "approved");
+
+          // Auto-trigger celebration popup modal on main screen if approved and not dismissed
+          if (isApproved && !sessionStorage.getItem("dismissed_approval_" + latest.orderId)) {
+            openApprovalModal(latest);
+          }
 
           // Top Screen Alert / Banner for Logged-In Student
           if (studentOrderStatusBanner) {
-            const latest = matches[0];
-            const isApproved = (latest.status === "approved");
             studentOrderStatusBanner.style.display = "block";
 
             if (isApproved) {
+              const portalUrl = CONFIG.APP_PORTAL_LINK || "https://pwthor.live";
               studentOrderStatusBanner.innerHTML = `
                 <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.3) 100%); border: 1.5px solid rgba(16, 185, 129, 0.55); border-radius: var(--radius-md); padding: 16px 18px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.22); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
                   <div style="display: flex; align-items: center; gap: 12px;">
@@ -796,11 +979,19 @@
                       </p>
                     </div>
                   </div>
-                  <a href="success.html?orderId=${encodeURIComponent(latest.orderId)}" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); font-weight: 800; padding: 12px 22px; font-size: 0.92rem; text-decoration: none; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;">
-                    <span>🚀 Go and Start Learning Classes ↗</span>
-                  </a>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                    <button type="button" class="btn-primary btn-banner-video-guide" style="background: #ffffff; color: #065f46; font-weight: 800; padding: 10px 16px; font-size: 0.84rem; border-radius: 10px; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                      <span>📺 Watch Video Guide</span>
+                    </button>
+                    <a href="${portalUrl}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); font-weight: 800; padding: 11px 20px; font-size: 0.9rem; text-decoration: none; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                      <span>🚀 Start Learning (pwthor.live) ↗</span>
+                    </a>
+                  </div>
                 </div>
               `;
+              studentOrderStatusBanner.querySelector(".btn-banner-video-guide")?.addEventListener("click", () => {
+                openApprovalModal(latest);
+              });
             } else {
               studentOrderStatusBanner.innerHTML = `
                 <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.24) 100%); border: 1.5px solid rgba(245, 158, 11, 0.45); border-radius: var(--radius-md); padding: 16px 18px; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
@@ -835,12 +1026,14 @@
 
         if (!APP_STATE.currentUser) {
           container.innerHTML = `
-            <div style="text-align: center; padding: 22px 16px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.12);">
-              <div style="font-size: 1.6rem; margin-bottom: 6px;">🔒</div>
-              <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">Login to View Your Purchases</h4>
-              <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 12px;">Apne batches ka live verification status aur class access dekhne ke liye login karein.</p>
-              <button type="button" class="btn-enroll btn-trigger-google-modal" style="display: inline-flex; width: auto; padding: 8px 18px; font-size: 0.84rem; background: #ffffff; color: #1e293b; font-weight: 700; border-radius: 8px;">
-                <span>Sign In with Google</span>
+            <div style="text-align: center; padding: 26px 18px; background: rgba(0,0,0,0.25); border-radius: 16px; border: 1.5px dashed rgba(255,255,255,0.18);">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🔒</div>
+              <h4 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">Login to View Your Purchases & Classes</h4>
+              <p style="font-size: 0.84rem; color: #cbd5e1; margin-bottom: 16px; max-width: 480px; margin-left: auto; margin-right: auto;">
+                Apne enrolled batches ka live verification status, walkthrough video aur pwthor.live direct website link dekhne ke liye login karein.
+              </p>
+              <button type="button" class="btn-enroll btn-trigger-google-modal" style="display: inline-flex; width: auto; padding: 11px 24px; font-size: 0.9rem; background: #ffffff; color: #1e293b; font-weight: 800; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                <span>Sign In with Google (1-Click)</span>
               </button>
             </div>
           `;
@@ -855,46 +1048,123 @@
 
         if (matches.length === 0) {
           container.innerHTML = `
-            <div style="text-align: center; padding: 22px 14px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">
-              <div style="font-size: 1.6rem; margin-bottom: 4px;">📦</div>
-              <h4 style="font-size: 0.94rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">Koi Batch Enrolled Nahi Hai Abhi</h4>
-              <p style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px;">Niche diye gaye Infinity Passes me se apna manpasand batch chun kar enroll karein.</p>
-              <a href="#batchesGrid" class="btn-primary" style="display: inline-flex; width: auto; padding: 7px 16px; font-size: 0.82rem; text-decoration: none;">Browse Batches ↓</a>
+            <div style="text-align: center; padding: 26px 18px; background: rgba(0,0,0,0.25); border-radius: 16px; border: 1.5px dashed rgba(255,255,255,0.15);">
+              <div style="font-size: 2rem; margin-bottom: 6px;">📦</div>
+              <h4 style="font-size: 1.02rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">Koi Batch Enrolled Nahi Hai Abhi</h4>
+              <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 14px;">
+                Niche diye gaye Infinity Passes me se apna manpasand competition batch chun kar enroll karein.
+              </p>
+              <a href="#batchesGrid" class="btn-primary" style="display: inline-flex; width: auto; padding: 10px 22px; font-size: 0.86rem; text-decoration: none; border-radius: 10px; font-weight: 700;">Browse All Batches ↓</a>
             </div>
           `;
           return;
         }
 
         container.innerHTML = `
-          <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
             ${matches.map(m => {
               const isApproved = (m.status === 'approved');
-              return `
-                <div style="background: rgba(15, 23, 42, 0.65); border: 1.5px solid ${isApproved ? 'rgba(16, 185, 129, 0.45)' : 'rgba(245, 158, 11, 0.4)'}; border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.25);">
-                  <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="font-size: 1.5rem; background: ${isApproved ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)'}; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                      ${isApproved ? '🎓' : '⏳'}
+              if (isApproved) {
+                const portalUrl = CONFIG.APP_PORTAL_LINK || "https://pwthor.live";
+                // Light Theme, Big, High-Visibility Approved Batch Card
+                return `
+                  <div class="my-purchases-approved-card-light">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                      <div>
+                        <div style="display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 3px 10px; border-radius: 999px; font-size: 0.74rem; font-weight: 800; margin-bottom: 6px;">
+                          <span>✓ PAYMENT APPROVED & ACTIVE</span>
+                        </div>
+                        <h4 style="font-size: 1.25rem; font-weight: 900; color: #0f172a; margin: 0; line-height: 1.35;">
+                          ${escapeHtml(m.batchName || 'Batch Pass')}
+                        </h4>
+                      </div>
+                      <span style="font-size: 0.84rem; color: #475569; font-weight: 700; background: #f1f5f9; padding: 4px 10px; border-radius: 8px;">
+                        Order ID: <strong style="color: #0f172a; font-family: monospace;">${escapeHtml(m.orderId)}</strong>
+                      </span>
                     </div>
-                    <div>
-                      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <strong style="font-size: 0.94rem; color: #ffffff;">${escapeHtml(m.batchName || 'Batch Pass')}</strong>
-                        <span style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; ${isApproved ? 'background: #10b981; color: #ffffff;' : 'background: #f59e0b; color: #1e1b4b;'}">
-                          ${isApproved ? '✓ APPROVED & ACTIVE' : '⏳ VERIFYING (10-15 MIN)'}
-                        </span>
+
+                    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px;">
+                      <div style="font-size: 0.86rem; color: #166534; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                        <span>🎉</span>
+                        <span>Badhai Ho! Aapka batch unlock ho chuka hai!</span>
                       </div>
-                      <div style="font-size: 0.76rem; color: #94a3b8; margin-top: 3px;">
-                        Order ID: <code style="color: #cbd5e1;">${escapeHtml(m.orderId)}</code> • Amount: <strong style="color: #4ade80;">₹${m.amount}</strong> • ${m.date ? new Date(m.date).toLocaleDateString("en-IN") : 'Recent'}
-                      </div>
+                      <p style="font-size: 0.8rem; color: #1e293b; margin: 0; line-height: 1.5;">
+                        Aapki classes, daily live/recorded lectures, DPP video solutions, notes PDF aur test series hamari official portal website <strong>(pwthor.live)</strong> par chalengi.
+                      </p>
+                    </div>
+
+                    <!-- Action Buttons Row -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+                      <!-- Big Green Launch Button -->
+                      <a href="${portalUrl}" target="_blank" rel="noopener noreferrer" class="btn-portal-launch" style="padding: 13px 18px; font-size: 0.95rem;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        <span>🚀 Open Website (pwthor.live) ↗</span>
+                      </a>
+
+                      <!-- Watch Video Guide Button -->
+                      <button type="button" class="btn-primary btn-open-guide-modal" data-order='${escapeHtml(JSON.stringify(m))}' style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-weight: 800; padding: 13px 18px; font-size: 0.92rem; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span>📺 Step 1: Watch Video Guide</span>
+                      </button>
+                    </div>
+
+                    <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 0.76rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 10px;">
+                      <span>Paid: <strong style="color: #059669; font-size: 0.85rem;">₹${m.amount}</strong> via UPI</span>
+                      <a href="success.html?orderId=${encodeURIComponent(m.orderId)}" style="color: #4f46e5; text-decoration: none; font-weight: 700;">
+                        📄 View Receipt & Order Summary ↗
+                      </a>
                     </div>
                   </div>
-                  <a href="success.html?orderId=${encodeURIComponent(m.orderId)}" class="btn-primary" style="padding: 9px 18px; font-size: 0.84rem; text-decoration: none; border-radius: 8px; font-weight: 700; ${isApproved ? 'background: linear-gradient(135deg, #10b981 0%, #059669 100%);' : 'background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);'}">
-                    ${isApproved ? '🚀 Start Learning Classes ↗' : '🔍 Check Live Status'}
-                  </a>
-                </div>
-              `;
+                `;
+              } else {
+                // Pending Verification Card
+                return `
+                  <div class="my-purchases-pending-card-light">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+                      <div>
+                        <div style="display: inline-flex; align-items: center; gap: 6px; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 3px 10px; border-radius: 999px; font-size: 0.74rem; font-weight: 800; margin-bottom: 6px;">
+                          <span>⏳ VERIFYING (10-15 MIN)</span>
+                        </div>
+                        <h4 style="font-size: 1.15rem; font-weight: 800; color: #78350f; margin: 0;">
+                          ${escapeHtml(m.batchName || 'Batch Pass')}
+                        </h4>
+                      </div>
+                      <span style="font-size: 0.8rem; color: #92400e; font-weight: 700;">
+                        Order ID: <code style="font-family: monospace;">${escapeHtml(m.orderId)}</code>
+                      </span>
+                    </div>
+
+                    <p style="font-size: 0.82rem; color: #92400e; margin-bottom: 12px; line-height: 1.5;">
+                      Aapka payment proof verification ke liye submit hai. Team cross-check kar rahi hai (lagbhag <strong>10-15 minute</strong>). Approve hote hi yahan green button aur walkthrough video guide show ho jayegi!
+                    </p>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                      <span style="font-size: 0.78rem; color: #78350f;">Amount: <strong>₹${m.amount}</strong></span>
+                      <a href="success.html?orderId=${encodeURIComponent(m.orderId)}" class="btn-primary" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #1e1b4b; font-weight: 800; padding: 9px 18px; font-size: 0.82rem; border-radius: 8px; text-decoration: none;">
+                        <span>🔍 Check Live Status & Receipt ↗</span>
+                      </a>
+                    </div>
+                  </div>
+                `;
+              }
             }).join("")}
           </div>
         `;
+
+        // Wire video guide modal buttons
+        container.querySelectorAll(".btn-open-guide-modal").forEach(btn => {
+          btn.addEventListener("click", () => {
+            try {
+              const ord = JSON.parse(btn.getAttribute("data-order"));
+              openApprovalModal(ord);
+            } catch(e) {
+              openApprovalModal(matches[0]);
+            }
+          });
+        });
       }
 
       // Refresh My Purchases button listener

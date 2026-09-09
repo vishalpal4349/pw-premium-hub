@@ -566,6 +566,55 @@
     </div>
   </div>
 
+  <!-- Dedicated Payment Proof Success Popup Modal (Guidance to Step 2) -->
+  <div id="paymentSuccessPopup" class="payment-success-popup-overlay" style="display: none;">
+    <div class="payment-success-popup-card">
+      <div style="font-size: 2.8rem; margin-bottom: 8px; line-height: 1;">🎉</div>
+      
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; border: 1.5px solid #86efac; color: #15803d; padding: 4px 14px; border-radius: 9999px; font-weight: 800; font-size: 0.76rem; margin-bottom: 10px;">
+        <span>✓ PAYMENT PROOF RECEIVED</span>
+      </div>
+
+      <h3 style="font-size: 1.38rem; font-weight: 900; color: #0f172a; margin-bottom: 6px;">
+        Payment Submitted Successfully!
+      </h3>
+
+      <p style="font-size: 0.85rem; color: #475569; margin-bottom: 16px; line-height: 1.5;">
+        Aapka payment proof hamari verification team ko mil gaya hai. Hamari team lagbhag <strong>10-15 minute</strong> me verify kar ke batch unlock kar degi.
+      </p>
+
+      <!-- Order Receipt Mini Box -->
+      <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 14px 16px; text-align: left; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.82rem;">
+          <span style="color: #64748b;">Order ID:</span>
+          <strong id="popupOrderId" style="font-family: monospace; color: #4f46e5;">PW-XXXX</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.82rem;">
+          <span style="color: #64748b;">Selected Batch:</span>
+          <strong id="popupBatchName" style="color: #0f172a; text-align: right; max-width: 60%;">-</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.82rem;">
+          <span style="color: #64748b;">Amount Paid:</span>
+          <strong id="popupAmount" style="color: #059669;">₹299</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.82rem;">
+          <span style="color: #64748b;">Student Name:</span>
+          <strong id="popupStudentName" style="color: #0f172a;">Student</strong>
+        </div>
+      </div>
+
+      <!-- Step 2 Link Button -->
+      <a href="success.html" id="btnPopupGoToStep2" class="btn-step2-redirect">
+        <span>👉 Go to Step 2: Live Status & Batch Activation ↗</span>
+      </a>
+
+      <!-- Countdown Notice -->
+      <div style="margin-top: 12px; font-size: 0.78rem; color: #64748b;" id="popupCountdownText">
+        Automatically opening Step 2 status page in <strong id="popupSeconds" style="color: #0f172a;">4</strong>s...
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Element -->
   <div id="toast" class="toast">
     <span id="toastMsg">Notification message</span>
@@ -1474,7 +1523,44 @@
         }
 
         sessionStorage.setItem("active_order", JSON.stringify(newOrder));
-        window.location.href = `success.html?orderId=${encodeURIComponent(orderId)}`;
+
+        // Display Celebratory Modal with Step 2 Guidance
+        const paymentSuccessPopup = document.getElementById("paymentSuccessPopup");
+        const popupOrderId = document.getElementById("popupOrderId");
+        const popupBatchName = document.getElementById("popupBatchName");
+        const popupAmount = document.getElementById("popupAmount");
+        const popupStudentName = document.getElementById("popupStudentName");
+        const btnPopupGoToStep2 = document.getElementById("btnPopupGoToStep2");
+        const popupSeconds = document.getElementById("popupSeconds");
+
+        const targetSuccessUrl = `success.html?orderId=${encodeURIComponent(orderId)}`;
+
+        if (paymentSuccessPopup) {
+          if (popupOrderId) popupOrderId.textContent = orderId;
+          if (popupBatchName) popupBatchName.textContent = currentBatch.name;
+          if (popupAmount) popupAmount.textContent = formatINR(activePrice);
+          if (popupStudentName) popupStudentName.textContent = activeName;
+          if (btnPopupGoToStep2) btnPopupGoToStep2.href = targetSuccessUrl;
+
+          paymentSuccessPopup.style.display = "flex";
+
+          let countdownSecs = 4;
+          if (popupSeconds) popupSeconds.textContent = countdownSecs;
+          const timerId = setInterval(() => {
+            countdownSecs--;
+            if (popupSeconds) popupSeconds.textContent = countdownSecs;
+            if (countdownSecs <= 0) {
+              clearInterval(timerId);
+              window.location.href = targetSuccessUrl;
+            }
+          }, 1000);
+
+          btnPopupGoToStep2?.addEventListener("click", () => {
+            clearInterval(timerId);
+          });
+        } else {
+          window.location.href = targetSuccessUrl;
+        }
       });
 
       function showToast(msg) {
