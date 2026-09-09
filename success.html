@@ -334,7 +334,6 @@
       const congratsBanner = document.getElementById("congratsBanner");
       const commitmentNoteCard = document.getElementById("commitmentNoteCard");
       const bonusPerksCard = document.getElementById("bonusPerksCard");
-      const notesBenefitsCard = document.getElementById("notesBenefitsCard");
 
       const privateYoutubeIframe = document.getElementById("privateYoutubeIframe");
       const btnAccessLink = document.getElementById("btnAccessLink");
@@ -355,16 +354,9 @@
       const toast = document.getElementById("toast");
       const toastMsg = document.getElementById("toastMsg");
 
-      // Auth lookup elements
+      // Auth lookup elements (Passwordless instant lookup by Email or Mobile)
       const lookupInput = document.getElementById("lookupInput");
-      const lookupPassword = document.getElementById("lookupPassword");
       const btnLookupOrder = document.getElementById("btnLookupOrder");
-      const btnToggleResetBox = document.getElementById("btnToggleResetBox");
-      const inlineResetBox = document.getElementById("inlineResetBox");
-      const inlineResetContact = document.getElementById("inlineResetContact");
-      const inlineResetPass = document.getElementById("inlineResetPass");
-      const inlineResetConfirm = document.getElementById("inlineResetConfirm");
-      const btnInlineResetSubmit = document.getElementById("btnInlineResetSubmit");
 
       // Configure external links
       if (CONFIG.APP_PORTAL_LINK) {
@@ -380,9 +372,8 @@
       }
 
       // Pre-fill lookup if currentUser exists
-      if (APP_STATE.currentUser) {
+      if (APP_STATE.currentUser && lookupInput) {
         lookupInput.value = APP_STATE.currentUser.email || APP_STATE.currentUser.phone || "";
-        inlineResetContact.value = lookupInput.value;
       }
 
       // Find Order Data
@@ -395,43 +386,6 @@
           currentOrder = JSON.parse(sessionStorage.getItem("active_order"));
         } catch (e) {}
       }
-
-      // Toggle inline reset box
-      btnToggleResetBox?.addEventListener("click", () => {
-        const isHidden = inlineResetBox.style.display === "none";
-        inlineResetBox.style.display = isHidden ? "block" : "none";
-      });
-
-      // Submit inline password reset
-      btnInlineResetSubmit?.addEventListener("click", () => {
-        const contact = inlineResetContact.value.trim();
-        const p1 = inlineResetPass.value;
-        const p2 = inlineResetConfirm.value;
-
-        if (!contact) {
-          showToast("Please enter your registered Email or Mobile.");
-          return;
-        }
-        if (p1 !== p2) {
-          showToast("⚠️ Passwords do not match!");
-          return;
-        }
-
-        const res = resetUserPassword(contact, p1);
-        if (res.success) {
-          showToast(`✓ ${res.message}`);
-          inlineResetBox.style.display = "none";
-          lookupInput.value = contact;
-          lookupPassword.value = p1;
-          const found = findOrdersByUserContact(contact);
-          if (found.length > 0) {
-            currentOrder = found[0];
-            updateOrderStatusView();
-          }
-        } else {
-          showToast(`⚠️ ${res.message}`);
-        }
-      });
 
       // Copy Order ID
       document.getElementById("btnCopyOrderId")?.addEventListener("click", () => {

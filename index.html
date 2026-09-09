@@ -523,11 +523,7 @@
       const btnOpenAuth = document.getElementById("btnOpenAuth");
       const authModal = document.getElementById("authModal");
       const btnCloseAuth = document.getElementById("btnCloseAuth");
-      const authForm = document.getElementById("authForm");
       const navUserLabel = document.getElementById("navUserLabel");
-      const authName = document.getElementById("authName");
-      const authPhone = document.getElementById("authPhone");
-      const authExam = document.getElementById("authExam");
 
       // Search & Drawer elements
       const batchSearchInput = document.getElementById("batchSearchInput");
@@ -767,38 +763,17 @@
         showToast("Referral link copied! Share with friends to earn 30% commission.");
       });
 
-      // Auth Modal Open/Close
-      const authEmail = document.getElementById("authEmail");
-      const userOrdersListBox = document.getElementById("userOrdersListBox");
-      const userOrdersList = document.getElementById("userOrdersList");
-
+      // Student Order Tracking Elements
       const studentOrderStatusBanner = document.getElementById("studentOrderStatusBanner");
 
       function refreshUserOrdersDisplay() {
         if (!APP_STATE.currentUser) {
-          if (userOrdersListBox) userOrdersListBox.style.display = "none";
           if (studentOrderStatusBanner) studentOrderStatusBanner.style.display = "none";
           return;
         }
         const contact = APP_STATE.currentUser.phone || APP_STATE.currentUser.email;
         const matches = findOrdersByUserContact(contact);
         if (matches && matches.length > 0) {
-          if (userOrdersListBox) {
-            userOrdersListBox.style.display = "block";
-            userOrdersList.innerHTML = matches.map(m => `
-              <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-                <div>
-                  <strong style="font-size: 0.82rem; color: #ffffff;">${m.batchName}</strong>
-                  <div style="font-size: 0.72rem; font-weight: 600; color: ${m.status === 'approved' ? '#34d399' : '#fbbf24'};">
-                    ${m.status === 'approved' ? '✓ Access Approved' : '⏳ Verifying (10-15 mins approx)'}
-                  </div>
-                </div>
-                <a href="success.html?orderId=${encodeURIComponent(m.orderId)}" class="btn-enroll" style="padding: 5px 12px; font-size: 0.72rem; background: ${m.status === 'approved' ? '#10b981' : '#6366f1'}; flex-shrink: 0;">
-                  ${m.status === 'approved' ? 'Open Access' : 'View Status'}
-                </a>
-              </div>
-            `).join("");
-          }
 
           // Top Screen Alert / Banner for Logged-In Student
           if (studentOrderStatusBanner) {
@@ -849,7 +824,6 @@
             }
           }
         } else {
-          if (userOrdersListBox) userOrdersListBox.style.display = "none";
           if (studentOrderStatusBanner) studentOrderStatusBanner.style.display = "none";
         }
       }

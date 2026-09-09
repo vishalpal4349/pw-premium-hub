@@ -135,9 +135,17 @@
         <!-- Quick Tappable Coupon Chips -->
         <div class="quick-coupon-row">
           <span class="quick-coupon-label">Tap to apply:</span>
-          <button type="button" class="btn-quick-chip" id="btnQuickApplyPremium20" data-code="PREMIUM20" title="Click to apply PREMIUM20">
+          <button type="button" class="btn-quick-chip" data-code="PREMIUM20" title="Click to apply PREMIUM20">
             <span>🏷️ PREMIUM20</span>
             <span style="color: #86efac; font-weight: normal;">(Flat 20% OFF)</span>
+          </button>
+          <button type="button" class="btn-quick-chip" data-code="SAVE30" title="Click to apply SAVE30">
+            <span>🏷️ SAVE30</span>
+            <span style="color: #67e8f9; font-weight: normal;">(Flat 30% OFF)</span>
+          </button>
+          <button type="button" class="btn-quick-chip" data-code="SAVE50" title="Click to apply SAVE50">
+            <span>🏷️ SAVE50</span>
+            <span style="color: #fde047; font-weight: normal;">(Flat 50% OFF)</span>
           </button>
         </div>
 
@@ -1116,37 +1124,83 @@
       }
 
       btnCheckoutApplyCoupon.addEventListener("click", () => {
-        applyCouponCode(checkoutCouponInput.value.trim());
+        applyCouponCode(checkoutCouponInput.value);
       });
 
       checkoutCouponInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
-          applyCouponCode(checkoutCouponInput.value.trim());
+          applyCouponCode(checkoutCouponInput.value);
         }
       });
 
-      const btnQuickApplyPremium20 = document.getElementById("btnQuickApplyPremium20");
-      if (btnQuickApplyPremium20) {
-        btnQuickApplyPremium20.addEventListener("click", () => {
-          checkoutCouponInput.value = "PREMIUM20";
-          applyCouponCode("PREMIUM20");
+      // Quick Chips Click Listeners
+      document.querySelectorAll(".btn-quick-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          const code = chip.dataset.code;
+          if (code) {
+            checkoutCouponInput.value = code;
+            applyCouponCode(code);
+          }
         });
-      }
+      });
+
+      // Common Alias Mapping for Seamless User Experience
+      const COUPON_ALIASES = {
+        "PW20": "PREMIUM20",
+        "PREMIUM": "PREMIUM20",
+        "FLAT20": "PREMIUM20",
+        "DISCOUNT20": "PREMIUM20",
+        "PW30": "SAVE30",
+        "PW40": "SAVE40",
+        "PW50": "SAVE50",
+        "HALF": "SAVE50",
+        "HALF50": "SAVE50",
+        "PW60": "SAVE60",
+        "PW70": "SAVE70",
+        "PW80": "SAVE80",
+        "PW90": "SAVE90",
+        "PW100": "FREE100",
+        "FREE": "FREE100",
+        "PWFREE": "FREE100",
+        "100": "FREE100",
+        "VANDANA": "VANDANA1",
+        "VIVAN": "VIVAN01",
+        "KISHAN": "KISHAN01",
+        "AJAD": "AJAD01"
+      };
 
       function applyCouponCode(rawCode) {
-        const code = (rawCode || "").toUpperCase();
-        if (!code) return;
-
-        // Mutual exclusion: Block if wheel discount active
-        if (appliedSpinnerDiscount) {
-          showCouponError("Wheel discount is active. Remove wheel discount first to use a coupon code.");
+        let code = (rawCode || "").toString().trim().toUpperCase().replace(/\s+/g, "");
+        if (!code) {
+          showCouponError("Kripya coupon code enter karein ya niche chip par tap karein.");
           return;
         }
 
-        const found = APP_STATE.coupons.find(c => c.code.toUpperCase() === code);
+        if (COUPON_ALIASES[code]) {
+          code = COUPON_ALIASES[code];
+        }
+
+        // If wheel discount was active, smoothly override it with coupon
+        if (appliedSpinnerDiscount) {
+          appliedSpinnerDiscount = null;
+          if (btnSpinWheel) btnSpinWheel.disabled = false;
+          hasSpun = false;
+          if (wheelCanvas) {
+            wheelCanvas.style.transition = "none";
+            wheelCanvas.style.transform = "rotate(0deg)";
+          }
+          if (btnSpinWheelText) btnSpinWheelText.textContent = "Spin Lucky Wheel";
+          if (spinResultBox) spinResultBox.style.display = "none";
+        }
+
+        const couponsList = (window.APP_STATE && Array.isArray(window.APP_STATE.coupons)) 
+          ? window.APP_STATE.coupons 
+          : DEFAULT_CONFIG.COUPONS;
+
+        const found = couponsList.find(c => c && c.code && c.code.toUpperCase() === code);
         if (!found) {
-          showCouponError("Invalid coupon code. Try code PREMIUM20");
+          showCouponError(`Invalid coupon code "${code}". Try tapping PREMIUM20, SAVE30 or SAVE50 below!`);
           return;
         }
 
@@ -1156,6 +1210,8 @@
         }
 
         appliedCoupon = found;
+        localStorage.setItem("applied_coupon", code);
+
         let discountVal = 0;
         if (found.specialPrice !== undefined && found.specialPrice !== null) {
           // Special VIP direct fixed price (e.g. VANDANA1 -> ₹1, VIVAN01/KISHAN01/AJAD01 -> ₹5)
@@ -1164,7 +1220,7 @@
           summaryCouponLabel.textContent = `Secret VIP Access (${code})`;
           summaryCouponSavings.textContent = `Pay only ${formatINR(found.specialPrice)}`;
         } else {
-          discountVal = Math.round((currentBatch.offerPrice * found.percent) / 100);
+          discountVal = Math.round((currentBatch.offerPrice * (found.percent || 0)) / 100);
           activePrice = Math.max(0, currentBatch.offerPrice - discountVal);
           summaryCouponLabel.textContent = `Coupon (${code}) -${found.percent}%`;
           summaryCouponSavings.textContent = `-${formatINR(discountVal)}`;
@@ -1190,7 +1246,7 @@
 
         summaryCouponRow.style.display = "flex";
 
-        document.getElementById("btnRemoveCoupon").addEventListener("click", () => {
+        document.getElementById("btnRemoveCoupon")?.addEventListener("click", () => {
           appliedCoupon = null;
           activePrice = currentBatch.offerPrice;
           checkoutCouponInput.disabled = false;
@@ -1201,9 +1257,11 @@
           summaryCouponRow.style.display = "none";
           localStorage.removeItem("applied_coupon");
           updatePaymentAmounts();
+          showToast("Coupon removed.");
         });
 
         updatePaymentAmounts();
+        showToast(`🎉 Coupon "${code}" applied! You saved ${formatINR(discountVal)}.`);
       }
 
       function showCouponError(msg) {

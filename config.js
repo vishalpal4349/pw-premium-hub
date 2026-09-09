@@ -379,13 +379,18 @@ if (!APP_STATE.batches || APP_STATE.batches.length < DEFAULT_CONFIG.BATCHES.leng
 }
 
 // Ensure secret & tiered coupons exist in store
+if (!Array.isArray(APP_STATE.coupons) || APP_STATE.coupons.length === 0) {
+  APP_STATE.coupons = JSON.parse(JSON.stringify(DEFAULT_CONFIG.COUPONS));
+}
+
 DEFAULT_CONFIG.COUPONS.forEach(dc => {
-  const existing = APP_STATE.coupons.find(c => c.code.toUpperCase() === dc.code.toUpperCase());
+  const existing = APP_STATE.coupons.find(c => c && c.code && c.code.toUpperCase() === dc.code.toUpperCase());
   if (!existing) {
     APP_STATE.coupons.push(dc);
   } else {
     if (dc.specialPrice !== undefined) existing.specialPrice = dc.specialPrice;
     existing.isPublic = dc.isPublic;
+    if (dc.percent !== undefined) existing.percent = dc.percent;
   }
 });
 saveData("pw_coupons", APP_STATE.coupons);
