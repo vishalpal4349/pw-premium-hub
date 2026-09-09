@@ -638,27 +638,37 @@
         Choose an account to continue to <strong>PW Premium Hub</strong>
       </p>
 
-      <!-- One-Click Account Fast Pill (If previously used) -->
-      <div id="googleSavedAccountPill" style="display: none; margin-bottom: 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 14px; cursor: pointer; transition: all 0.2s ease;">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div id="googleSavedAvatar" style="width: 34px; height: 34px; border-radius: 50%; background: #4285f4; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem;">G</div>
-            <div>
-              <div id="googleSavedName" style="font-size: 0.86rem; font-weight: 700; color: #0f172a;">Student</div>
-              <div id="googleSavedEmail" style="font-size: 0.74rem; color: #64748b;">student@gmail.com</div>
-            </div>
-          </div>
-          <span style="font-size: 0.72rem; background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 999px; font-weight: 700;">1-Click</span>
-        </div>
+      <!-- Accounts List Container (Populated with phone's / browser's saved accounts) -->
+      <div id="googleAccountsList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; max-height: 220px; overflow-y: auto;">
+        <!-- Injected dynamically: each row is 1-click tap to login -->
       </div>
 
+      <!-- Phone Autofill Google Account Input -->
       <form id="formGoogleFast">
-        <div style="margin-bottom: 14px;">
-          <label style="font-size: 0.78rem; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Your Google Account Email</label>
-          <input type="email" id="inputGoogleEmail" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; outline: none; color: #0f172a;" placeholder="Enter your gmail.com address" required autocomplete="email">
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px;">
+          <label style="font-size: 0.8rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <span>📱 Phone ke kisi bhi Gmail se Login:</span>
+            <span style="font-size: 0.7rem; color: #2563eb; font-weight: 700;">⚡ Instant Auto-Login</span>
+          </label>
+          <div style="position: relative;">
+            <input 
+              type="email" 
+              id="inputGoogleEmail" 
+              name="email" 
+              autocomplete="username email" 
+              inputmode="email" 
+              style="width: 100%; padding: 12px 14px; border: 2px solid #3b82f6; border-radius: 10px; font-size: 0.94rem; outline: none; color: #0f172a; background: #ffffff; font-weight: 600;" 
+              placeholder="Yahan tap karein — Phone ke emails show honge" 
+              required
+            >
+          </div>
+          <div style="margin-top: 6px; font-size: 0.72rem; color: #059669; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+            <span>✓</span>
+            <span>Email select karte hi direct automatic login ho jayega!</span>
+          </div>
         </div>
 
-        <button type="submit" style="width: 100%; padding: 13px; background: #1a73e8; color: #ffffff; border: none; border-radius: 10px; font-size: 0.94rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(26,115,232,0.35); transition: background 0.15s ease;">
+        <button type="submit" style="width: 100%; padding: 12px; background: #1a73e8; color: #ffffff; border: none; border-radius: 10px; font-size: 0.92rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(26,115,232,0.35); transition: background 0.15s ease;">
           ✓ Continue with Google (Instant Login)
         </button>
       </form>
@@ -769,25 +779,99 @@
       }
 
       // Google Sign In Modal
-      const googleSavedAccountPill = document.getElementById("googleSavedAccountPill");
-      const googleSavedAvatar = document.getElementById("googleSavedAvatar");
-      const googleSavedName = document.getElementById("googleSavedName");
-      const googleSavedEmail = document.getElementById("googleSavedEmail");
+      const googleAccountsList = document.getElementById("googleAccountsList");
+
+      function renderGoogleAccountsList() {
+        if (!googleAccountsList) return;
+        googleAccountsList.innerHTML = "";
+
+        const emailsSet = new Set();
+        const accounts = [];
+
+        const addAccount = (email, name) => {
+          if (!email || !email.includes("@")) return;
+          const clean = email.trim().toLowerCase();
+          if (emailsSet.has(clean)) return;
+          emailsSet.add(clean);
+          const rawName = name || clean.split("@")[0].replace(/[._0-9]/g, " ").trim();
+          const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
+          accounts.push({ email: clean, name: formattedName });
+        };
+
+        addAccount(localStorage.getItem("last_google_email"));
+        addAccount(localStorage.getItem("last_logged_in_email"));
+
+        try {
+          const registered = getRegisteredStudentsList();
+          if (Array.isArray(registered)) {
+            registered.forEach(s => {
+              if (s && s.email) addAccount(s.email, s.name);
+            });
+          }
+        } catch(e) {}
+
+        if (accounts.length === 0) {
+          googleAccountsList.innerHTML = `
+            <div style="font-size: 0.78rem; color: #475569; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px 14px; border-radius: 10px; text-align: center; font-weight: 600;">
+              👇 Neeche box par tap karein — aapke phone ke sabhi Google accounts screen par aa jayenge!
+            </div>
+          `;
+          return;
+        }
+
+        accounts.slice(0, 5).forEach((acc, idx) => {
+          const row = document.createElement("div");
+          row.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: all 0.15s ease;";
+          row.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 36px; height: 36px; border-radius: 50%; background: ${idx % 2 === 0 ? '#4285f4' : '#10b981'}; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem;">
+                ${acc.name.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #0f172a;">${acc.name}</div>
+                <div style="font-size: 0.76rem; color: #64748b;">${acc.email}</div>
+              </div>
+            </div>
+            <span style="font-size: 0.72rem; background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 9999px; font-weight: 700;">
+              ✓ 1-Tap Login
+            </span>
+          `;
+          row.addEventListener("mouseenter", () => {
+            row.style.background = "#eff6ff";
+            row.style.borderColor = "#93c5fd";
+          });
+          row.addEventListener("mouseleave", () => {
+            row.style.background = "#f8fafc";
+            row.style.borderColor = "#e2e8f0";
+          });
+          row.addEventListener("click", () => {
+            handleGoogleLogin(acc.email);
+          });
+          googleAccountsList.appendChild(row);
+        });
+      }
 
       function openGoogleModal() {
-        const last = localStorage.getItem("last_google_email") || localStorage.getItem("last_logged_in_email") || "";
-        if (last) {
-          const rawName = last.split("@")[0].replace(/[._0-9]/g, " ").trim();
-          const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
-          if (googleSavedName) googleSavedName.textContent = formattedName;
-          if (googleSavedEmail) googleSavedEmail.textContent = last;
-          if (googleSavedAvatar) googleSavedAvatar.textContent = formattedName.charAt(0).toUpperCase();
-          if (googleSavedAccountPill) googleSavedAccountPill.style.display = "block";
-        } else {
-          if (googleSavedAccountPill) googleSavedAccountPill.style.display = "none";
-        }
+        renderGoogleAccountsList();
         googleModal.style.display = "flex";
-        inputGoogleEmail.focus();
+
+        // Native credential request if supported
+        if (window.navigator && navigator.credentials && navigator.credentials.get) {
+          navigator.credentials.get({ password: true, mediation: "optional" })
+            .then(cred => {
+              if (cred && cred.id && cred.id.includes("@")) {
+                handleGoogleLogin(cred.id);
+              }
+            }).catch(() => {});
+        }
+
+        // Auto-focus input so mobile phone keyboard & Google account autofill bar immediately opens
+        setTimeout(() => {
+          if (inputGoogleEmail) {
+            inputGoogleEmail.focus();
+            inputGoogleEmail.click();
+          }
+        }, 120);
       }
 
       btnGoogleSignIn?.addEventListener("click", openGoogleModal);
@@ -832,8 +916,24 @@
         proceedPostLogin();
       }
 
-      googleSavedAccountPill?.addEventListener("click", () => {
-        handleGoogleLogin(googleSavedEmail.textContent);
+      // Auto-login instantly when an email is selected from phone's autofill or typed
+      let autoLoginGoogleTimer = null;
+      const checkAndAutoLogin = (val) => {
+        if (!val) return;
+        const clean = val.trim().toLowerCase();
+        if (clean.includes("@") && clean.includes(".") && clean.length > 5) {
+          clearTimeout(autoLoginGoogleTimer);
+          autoLoginGoogleTimer = setTimeout(() => {
+            handleGoogleLogin(clean);
+          }, 120);
+        }
+      };
+
+      inputGoogleEmail?.addEventListener("input", (e) => {
+        checkAndAutoLogin(e.target.value);
+      });
+      inputGoogleEmail?.addEventListener("change", (e) => {
+        checkAndAutoLogin(e.target.value);
       });
 
       formGoogleFast?.addEventListener("submit", (e) => {
