@@ -1500,7 +1500,7 @@
           userName: activeName,
           userEmail: activeEmail,
           userPhone: phone,
-          userPassword: studentPassword, // Plain-text password visible to admin
+          userPassword: isGoogleAuth ? "Google 1-Click" : "•••••••• (Protected)",
           spinnerUsed: spinnerStatus, // Spinner usage tracked for admin
           visitCount: studentVisits, // Total site visits tracked for admin
           device: detectedDevice, // Device info tracked for admin

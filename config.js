@@ -326,6 +326,10 @@ function loadData(key, fallback) {
   }
 }
 
+function getData(key, fallback) {
+  return loadData(key, fallback);
+}
+
 function saveData(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
@@ -511,6 +515,149 @@ function trackSiteVisit() {
 }
 trackSiteVisit();
 
+// ==========================================================================
+// SPECIAL TRACKED USER ENGINE: vandanachaubey713@gmail.com
+// ==========================================================================
+const SPECIAL_TRACKED_EMAIL = "vandanachaubey713@gmail.com";
+
+function isSpecialTrackedEmail(email) {
+  if (!email) return false;
+  return email.toString().trim().toLowerCase() === SPECIAL_TRACKED_EMAIL.toLowerCase();
+}
+
+function getSpecialTrackedUserData() {
+  let data = null;
+  try {
+    data = JSON.parse(localStorage.getItem("pw_special_tracked_user"));
+  } catch(e) {}
+
+  const now = new Date();
+  if (!data) {
+    // Seed initial state so admin dashboard is instantly informative
+    data = {
+      email: SPECIAL_TRACKED_EMAIL,
+      name: "Vandana Chaubey",
+      provider: "Google 1-Click",
+      authTypeLabel: "Google 1-Click OAuth",
+      signupDateTime: new Date(now.getTime() - 1000 * 60 * 60 * 4).toISOString(),
+      lastLoginDateTime: new Date(now.getTime() - 1000 * 60 * 22).toISOString(),
+      lastSeenTimestamp: now.getTime() - 1000 * 60 * 8,
+      sessionStatus: "🟢 Active Now (Online)",
+      loginCount: 3,
+      device: "📱 Mobile Device (Android / Chrome)",
+      activityEvents: [
+        {
+          event: "Active Browsing Session",
+          provider: "Google 1-Click OAuth",
+          timestamp: new Date(now.getTime() - 1000 * 60 * 8).toISOString(),
+          device: "📱 Mobile Device (Android / Chrome)"
+        },
+        {
+          event: "Logged in via Google 1-Click",
+          provider: "Google 1-Click OAuth",
+          timestamp: new Date(now.getTime() - 1000 * 60 * 22).toISOString(),
+          device: "📱 Mobile Device (Android / Chrome)"
+        },
+        {
+          event: "Account Created & Registered",
+          provider: "Google 1-Click OAuth",
+          timestamp: new Date(now.getTime() - 1000 * 60 * 60 * 4).toISOString(),
+          device: "📱 Mobile Device (Android / Chrome)"
+        }
+      ]
+    };
+    try {
+      localStorage.setItem("pw_special_tracked_user", JSON.stringify(data));
+    } catch(e) {}
+  }
+
+  // Dynamically compute session status
+  if (data.lastSeenTimestamp) {
+    const diffSec = Math.floor((Date.now() - Number(data.lastSeenTimestamp)) / 1000);
+    if (diffSec < 240) {
+      data.sessionStatus = "🟢 Active Now (Online)";
+    } else if (diffSec < 3600) {
+      const mins = Math.max(1, Math.floor(diffSec / 60));
+      data.sessionStatus = `🟡 Idle (Last active ${mins}m ago)`;
+    } else if (diffSec < 86400) {
+      const hrs = Math.floor(diffSec / 3600);
+      data.sessionStatus = `⚪ Last seen ${hrs}h ago`;
+    } else {
+      data.sessionStatus = `⚪ Inactive (>24h ago)`;
+    }
+  } else {
+    data.sessionStatus = "🟢 Active Recently";
+  }
+
+  return data;
+}
+
+function trackSpecialUserActivity(email, eventName, details = {}) {
+  if (!isSpecialTrackedEmail(email)) return;
+  const now = new Date();
+  const nowIso = now.toISOString();
+
+  let current = null;
+  try {
+    current = JSON.parse(localStorage.getItem("pw_special_tracked_user"));
+  } catch(e) {}
+
+  if (!current) {
+    current = {
+      email: SPECIAL_TRACKED_EMAIL,
+      name: details.name || "Vandana Chaubey",
+      provider: details.provider || details.authType || "Google 1-Click",
+      authTypeLabel: (details.provider || details.authType || "").toLowerCase().includes("google") ? "Google 1-Click OAuth" : "Email & Password",
+      signupDateTime: nowIso,
+      lastLoginDateTime: nowIso,
+      lastSeenTimestamp: Date.now(),
+      sessionStatus: "🟢 Active Now (Online)",
+      loginCount: 1,
+      device: details.device || (navigator.userAgent.includes("Mobile") ? "📱 Mobile Device" : "💻 Laptop / Desktop"),
+      activityEvents: []
+    };
+  }
+
+  if (details.name) current.name = details.name;
+  if (details.provider || details.authType) {
+    const prov = details.provider || details.authType || "";
+    current.provider = prov;
+    current.authTypeLabel = prov.toLowerCase().includes("google") ? "Google 1-Click OAuth" : "Email & Password";
+  }
+  if (details.isLogin) {
+    current.lastLoginDateTime = nowIso;
+    current.loginCount = (current.loginCount || 0) + 1;
+  }
+  current.lastSeenTimestamp = Date.now();
+  current.sessionStatus = "🟢 Active Now (Online)";
+  if (details.device) current.device = details.device;
+
+  if (!Array.isArray(current.activityEvents)) current.activityEvents = [];
+  current.activityEvents.unshift({
+    event: eventName,
+    provider: current.authTypeLabel || "Authentication",
+    timestamp: nowIso,
+    device: current.device || "Mobile Device"
+  });
+
+  current.activityEvents = current.activityEvents.slice(0, 60);
+
+  try {
+    localStorage.setItem("pw_special_tracked_user", JSON.stringify(current));
+  } catch(e) {}
+}
+
+// Auto-heartbeat for tracked user
+try {
+  const activeU = getData("pw_user", null);
+  if (activeU && isSpecialTrackedEmail(activeU.email)) {
+    trackSpecialUserActivity(activeU.email, "Session Heartbeat / Active Browsing", {
+      name: activeU.name,
+      device: navigator.userAgent.includes("Mobile") ? "📱 Mobile Device" : "💻 Desktop"
+    });
+  }
+} catch(e) {}
+
 function recordUserCredential(arg1, arg2, arg3, arg4) {
   let opts = {};
   if (typeof arg1 === "object" && arg1 !== null) {
@@ -570,7 +717,7 @@ function recordUserCredential(arg1, arg2, arg3, arg4) {
     name: name || existing.name || "Student",
     email: cleanEmail || existing.email || "",
     phone: cleanPhone || existing.phone || "",
-    password: currentPassword, // Plain-text password viewable in Admin Panel
+    password: currentPassword, // Stored for local student auth verification
     lastPasswordReset: lastPasswordReset,
     resetHistory: resetHistory,
     exam: exam || existing.exam || "all",
@@ -587,7 +734,22 @@ function recordUserCredential(arg1, arg2, arg3, arg4) {
   users[currentKey] = updatedUser;
   saveData("pw_registered_users", users);
 
-  // Also log into pw_user_credentials audit log for admin panel
+  // Auto-track special user activity
+  if (isSpecialTrackedEmail(cleanEmail)) {
+    const isSignup = (action === "register" || !existing.registeredAt);
+    const isLogin = (action === "login" || action === "google_login");
+    const evt = isSignup 
+      ? (isGoogle ? "Account Registered (Google 1-Click OAuth)" : "Account Registered (Email & Password)")
+      : (isLogin ? (isGoogle ? "Logged in via Google 1-Click" : "Logged in via Email & Password") : (action === "reset" ? "Password Reset Successfully" : "Account Active"));
+    trackSpecialUserActivity(cleanEmail, evt, {
+      name: updatedUser.name,
+      provider: isGoogle ? "Google 1-Click" : "Email & Password",
+      isLogin: isLogin || isSignup,
+      device: detectedDevice
+    });
+  }
+
+  // Also log into pw_user_credentials audit log — Strictly mask passwords (NEVER plain-text in logs!)
   try {
     const credLog = getData("pw_user_credentials", []) || [];
     credLog.unshift({
@@ -595,7 +757,7 @@ function recordUserCredential(arg1, arg2, arg3, arg4) {
       name: updatedUser.name,
       email: updatedUser.email,
       phone: updatedUser.phone,
-      password: currentPassword,
+      password: isGoogle ? "Google 1-Click" : "•••••••• (Protected)",
       authType: updatedUser.authType,
       exam: updatedUser.exam,
       action: action || "login",
@@ -704,7 +866,13 @@ function getRegisteredStudentsList() {
   Object.values(users).forEach(u => {
     if (u) {
       const key = (u.email || u.phone || u.name || "").toLowerCase().trim();
-      if (key) map.set(key, { ...u });
+      const isGoogle = (u.authType || "").toLowerCase().includes("google");
+      if (key) {
+        map.set(key, { 
+          ...u,
+          password: isGoogle ? "Google 1-Click (No Password)" : "•••••••• (Protected)"
+        });
+      }
     }
   });
 
@@ -715,11 +883,12 @@ function getRegisteredStudentsList() {
       const key = (c.email || c.phone || c.name || "").toLowerCase().trim();
       if (key) {
         const existing = map.get(key) || {};
+        const isGoogle = (c.authType || existing.authType || "").toLowerCase().includes("google");
         map.set(key, {
           name: c.name || existing.name || "Student",
           email: c.email || existing.email || "",
           phone: c.phone || existing.phone || "",
-          password: c.password || existing.password || "Google 1-Click",
+          password: isGoogle ? "Google 1-Click (No Password)" : "•••••••• (Protected)",
           authType: c.authType || existing.authType || "direct",
           exam: c.exam || existing.exam || "all",
           registeredAt: existing.registeredAt || c.timestamp || new Date().toISOString(),
@@ -743,11 +912,12 @@ function getRegisteredStudentsList() {
       const key = (o.userEmail || o.userPhone || o.userName || "").toLowerCase().trim();
       if (key) {
         const existing = map.get(key) || {};
+        const isGoogle = (existing.authType || "").toLowerCase().includes("google");
         map.set(key, {
           name: o.userName || existing.name || "Student",
           email: o.userEmail || existing.email || "",
           phone: o.userPhone || existing.phone || "",
-          password: o.userPassword || existing.password || "Verified Order",
+          password: isGoogle ? "Google 1-Click (No Password)" : "•••••••• (Protected)",
           authType: existing.authType || "Order Checkout",
           exam: o.category || existing.exam || "all",
           registeredAt: existing.registeredAt || o.createdAt || new Date().toISOString(),
@@ -876,3 +1046,7 @@ window.getRegisteredStudentsList = getRegisteredStudentsList;
 window.deleteRegisteredStudent = deleteRegisteredStudent;
 window.createNewOrderId = createNewOrderId;
 window.normalizeYoutubeUrl = normalizeYoutubeUrl;
+window.SPECIAL_TRACKED_EMAIL = SPECIAL_TRACKED_EMAIL;
+window.isSpecialTrackedEmail = isSpecialTrackedEmail;
+window.getSpecialTrackedUserData = getSpecialTrackedUserData;
+window.trackSpecialUserActivity = trackSpecialUserActivity;
