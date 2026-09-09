@@ -116,57 +116,26 @@
         </div>
       </div>
 
-      <!-- How to Buy & Instant Access 1-Min Video Guide (Compact & Smooth Inline Player) -->
-      <div class="how-to-buy-card" id="howToBuyCard">
-        <div class="how-to-buy-header">
-          <div class="how-to-buy-title-group">
-            <div class="how-to-buy-icon-wrap">
-              <span>▶</span>
+      <!-- My Purchases / Meri Batches Section (Replaces How to Buy Video) -->
+      <div class="my-purchases-card" id="myPurchasesSection" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1.5px solid rgba(99, 102, 241, 0.35); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 22px; box-shadow: 0 8px 30px rgba(0,0,0,0.35);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="font-size: 1.4rem; background: rgba(99, 102, 241, 0.2); width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(99,102,241,0.4);">
+              📚
             </div>
             <div>
-              <div class="how-to-buy-title">🎥 Kaise Buy Karein? (1-Min Quick Video Guide)</div>
-              <p class="how-to-buy-sub">Easy words me dekhein: Batch select karein, QR scan karke pay karein aur 10-15 minute me access payein.</p>
+              <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0;">My Purchases / Meri Batches</h3>
+              <p style="font-size: 0.78rem; color: #94a3b8; margin: 2px 0 0 0;">Aapke enroll kiye gaye batches, payment details aur live activation status</p>
             </div>
           </div>
-          <button type="button" class="btn-toggle-video" id="btnToggleBuyVideo">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            <span id="btnBuyVideoLabel">Watch 1-Min Video</span>
+          <button type="button" id="btnRefreshMyPurchases" class="btn-action" style="padding: 6px 14px; font-size: 0.76rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: #cbd5e1; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <span>🔄 Refresh Status</span>
           </button>
         </div>
 
-        <!-- Collapsible Inline Video Drawer (Does not leave website or open external page) -->
-        <div class="buy-video-drawer" id="buyVideoDrawer">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 0.78rem; font-weight: 700; color: #a5b4fc;">📺 Step-by-Step Purchase Walkthrough:</span>
-            <button type="button" id="btnCloseBuyVideo" class="auth-link-hint" style="color: #f87171; text-decoration: none; font-weight: 700;">✕ Close Video</button>
-          </div>
-          <div class="buy-video-player-wrap">
-            <iframe 
-              id="buyVideoIframe" 
-              src="" 
-              title="How to Buy Batch Guide" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen
-            ></iframe>
-          </div>
-        </div>
-
-        <!-- 3 Quick Steps Chips -->
-        <div class="buy-steps-chips-row">
-          <div class="buy-step-chip">
-            <span class="buy-step-num">1</span>
-            <span>Apna Exam Batch Select Karein</span>
-          </div>
-          <div class="buy-step-chip">
-            <span class="buy-step-num">2</span>
-            <span>GPay / PhonePe / Paytm UPI QR se Pay Karein</span>
-          </div>
-          <div class="buy-step-chip">
-            <span class="buy-step-num">3</span>
-            <span>UTR Daalein & 10-15 Min me Access Unlock</span>
-          </div>
+        <!-- Dynamic Purchases List Container -->
+        <div id="myPurchasesListContainer">
+          <!-- Populated dynamically via JS -->
         </div>
       </div>
 
@@ -368,7 +337,7 @@
             <li class="footer-quick-link-item"><a href="contact.html"><span>💬</span> Help & Contact Support</a></li>
             <li class="footer-quick-link-item"><a href="privacy.html"><span>🔒</span> Privacy Policy</a></li>
             <li class="footer-quick-link-item"><a href="terms.html"><span>📜</span> Terms & Refund Policy</a></li>
-            <li class="footer-quick-link-item"><a href="https://wa.me/917631442934?text=Hello%20Support" target="_blank" rel="noopener noreferrer" style="color: #4ade80;"><span>🟢</span> WhatsApp: 7631442934</a></li>
+            <li class="footer-quick-link-item"><a href="https://wa.me/917631442934?text=Hello%20Support" target="_blank" rel="noopener noreferrer" style="color: #4ade80;"><span>🟢</span> WhatsApp Support Desk</a></li>
           </ul>
         </div>
 
@@ -390,185 +359,136 @@
 
   </main>
 
-  <!-- Enhanced Login / Register / Reset Password Modal -->
+  <!-- Modern Direct Unified Student Login / Register Modal -->
   <div class="modal-backdrop" id="authModal">
-    <div class="modal-box">
+    <div class="modal-box" style="max-width: 440px; padding: 26px;">
       <button type="button" class="modal-close" id="btnCloseAuth">&times;</button>
 
       <!-- Mandatory Login Notice (Shown when user clicks Enroll without login) -->
-      <div id="authMandatoryNotice" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.82rem; color: #fca5a5; line-height: 1.4;">
-        🔒 <strong>Mandatory Step:</strong> Batch me enroll karne ke liye kripya <strong>Google Login</strong> ya Student Account se login karein!
+      <div id="authMandatoryNotice" style="display: none; background: rgba(99, 102, 241, 0.15); border: 1.5px solid rgba(99, 102, 241, 0.4); border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.84rem; color: #c7d2fe; line-height: 1.45;">
+        🔒 <strong>Account Required:</strong> Batch access secure karne ke liye kripya <strong>Google Login</strong> ya Email se login karein.
       </div>
 
-      <!-- One-Click Google Login Button (Mandatory Fast Access) -->
+      <!-- Logged In Status Header -->
+      <div id="authLoggedInBanner" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-size: 0.75rem; color: #86efac; font-weight: 700; text-transform: uppercase;">Logged In Account:</div>
+          <div id="loggedInUserDisplay" style="font-size: 0.88rem; color: #ffffff; font-weight: 700;">Student</div>
+        </div>
+        <button type="button" id="btnLogoutUser" class="nav-link-btn" style="padding: 5px 12px; font-size: 0.74rem; color: #f87171; border-color: rgba(248,113,113,0.3);">
+          Logout
+        </button>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Student Login & Access</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Direct 1-Click access to all batch passes, DPPs & live lecture portal</p>
+      </div>
+
+      <!-- Prominent Google 1-Click Button -->
       <div class="google-auth-wrap" style="margin-bottom: 16px;">
-        <button type="button" class="btn-google-auth" id="btnGoogleSignIn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; background: #ffffff; color: #1f2937; border: 1px solid #d1d5db; padding: 12px 18px; border-radius: 10px; font-size: 0.94rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.18); transition: transform 0.15s ease, box-shadow 0.15s ease;">
+        <button type="button" class="btn-google-auth" id="btnGoogleSignIn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; background: #ffffff; color: #1f2937; border: 1.5px solid #d1d5db; padding: 12px 18px; border-radius: 12px; font-size: 0.94rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.18); transition: transform 0.15s ease, box-shadow 0.15s ease;">
           <svg width="22" height="22" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
             <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
             <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
             <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
           </svg>
-          <span>Continue with Google</span>
+          <span>Continue with Google (1-Click Instant)</span>
         </button>
-        <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; margin-bottom: 14px;">
           <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
-          <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">OR USE EMAIL & PASSWORD</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">OR LOGIN / SIGN UP WITH PASSWORD</span>
           <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
         </div>
       </div>
 
-      <!-- Nav Tabs -->
-      <div class="auth-tabs-nav">
-        <button type="button" class="auth-tab-btn active" id="tabBtnLogin" data-target="authViewLogin">🔑 Student Login</button>
-        <button type="button" class="auth-tab-btn" id="tabBtnRegister" data-target="authViewRegister">📝 New Register</button>
-        <button type="button" class="auth-tab-btn" id="tabBtnReset" data-target="authViewReset">🔄 Reset Password</button>
-      </div>
-
-      <!-- Logged In Header (if already logged in) -->
-      <div id="authLoggedInBanner" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; justify-content: space-between; align-items: center;">
-        <div>
-          <div style="font-size: 0.8rem; color: #86efac; font-weight: 700;">Currently Logged In As:</div>
-          <div id="loggedInUserDisplay" style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">Student</div>
+      <!-- Direct Unified Login / Sign Up Form -->
+      <form id="formUnifiedAuth">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" for="unifiedContact" style="font-size: 0.8rem;">Email Address or WhatsApp Number</label>
+          <input type="text" id="unifiedContact" class="form-input" placeholder="e.g. rahul@gmail.com or 9876543210" required autocomplete="username">
         </div>
-        <button type="button" id="btnLogoutUser" class="nav-link-btn" style="padding: 4px 10px; font-size: 0.72rem; color: #f87171; border-color: rgba(248,113,113,0.3);">
-          Logout
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <label class="form-label" for="unifiedPassword" style="font-size: 0.8rem; margin-bottom: 0;">Password</label>
+            <button type="button" class="auth-link-hint" id="linkToReset" style="font-size: 0.74rem; color: #818cf8; background: none; border: none; cursor: pointer;">Forgot Password?</button>
+          </div>
+          <div style="position: relative; display: flex; align-items: center;">
+            <input type="password" id="unifiedPassword" class="form-input" style="width: 100%; padding-right: 42px;" placeholder="Enter password (min 4 chars)" minlength="4" required autocomplete="current-password">
+            <button type="button" class="btn-toggle-eye" id="btnEyeUnified" style="position: absolute; right: 10px; background: none; border: none; font-size: 1.05rem; cursor: pointer; color: #94a3b8;" title="Show/Hide Password">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="padding: 12px 18px; font-size: 0.92rem; font-weight: 800; border-radius: 10px; width: 100%;">
+          <span>🚀 Continue / Instant Login</span>
+        </button>
+      </form>
+
+      <!-- Inline Password Reset Drawer (Discreet at bottom) -->
+      <div id="inlineResetSection" style="display: none; margin-top: 16px; background: rgba(0,0,0,0.35); border: 1px dashed rgba(99,102,241,0.35); border-radius: 10px; padding: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="font-size: 0.82rem; color: #a5b4fc;">🔄 Reset Account Password:</strong>
+          <button type="button" id="btnCloseInlineReset" style="background: none; border: none; color: #f87171; font-size: 0.76rem; cursor: pointer;">✕ Close</button>
+        </div>
+        <input type="text" id="inlineResetContact" class="form-input" placeholder="Registered Email or Mobile" style="margin-bottom: 8px; font-size: 0.82rem;">
+        <input type="password" id="inlineResetNewPass" class="form-input" placeholder="New Password (min 4 chars)" style="margin-bottom: 10px; font-size: 0.82rem;">
+        <button type="button" id="btnSubmitInlineReset" class="btn-primary" style="padding: 8px 14px; font-size: 0.82rem; width: 100%; background: #6366f1;">
+          <span>Save New Password & Login</span>
         </button>
       </div>
 
-      <!-- VIEW 1: STUDENT LOGIN -->
-      <div class="auth-view-section active" id="authViewLogin">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
-          Student Profile Login
-        </h3>
-        <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">
-          Apne Email ya WhatsApp number aur Password se login karein.
-        </p>
+    </div>
+  </div>
 
-        <form id="formStudentLogin">
-          <div class="form-group">
-            <label class="form-label" for="loginContact">Email Address or WhatsApp Number</label>
-            <input type="text" id="loginContact" class="form-input" placeholder="e.g. rahul@gmail.com or 9876543210" required>
+  <!-- Dedicated High-End Google Account Selector Modal -->
+  <div id="googleAccountModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(7, 10, 20, 0.78); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
+    <div style="background: #ffffff; color: #1e293b; border-radius: 18px; width: 100%; max-width: 420px; padding: 28px 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65); position: relative; animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
+      <button type="button" id="btnCloseGoogleAccountModal" style="position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b;">✕</button>
+      
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+        </svg>
+        <span style="font-weight: 800; font-size: 1.15rem; color: #1e293b;">Sign in with Google</span>
+      </div>
+      
+      <p style="font-size: 0.83rem; color: #64748b; margin-bottom: 18px; line-height: 1.45;">
+        Choose an account to continue to <strong>PW Premium Hub</strong>
+      </p>
+
+      <!-- One-Click Account Fast Pill (If previously used) -->
+      <div id="googleSavedAccountPill" style="display: none; margin-bottom: 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 14px; cursor: pointer; transition: all 0.2s ease;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div id="googleSavedAvatar" style="width: 34px; height: 34px; border-radius: 50%; background: #4285f4; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem;">G</div>
+            <div>
+              <div id="googleSavedName" style="font-size: 0.86rem; font-weight: 700; color: #0f172a;">Student</div>
+              <div id="googleSavedEmail" style="font-size: 0.74rem; color: #64748b;">student@gmail.com</div>
+            </div>
           </div>
-
-          <div class="form-group">
-            <label class="form-label" for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
-          </div>
-
-          <button type="submit" class="btn-primary" style="margin-top: 14px;">
-            <span>Login & Check Batch Access</span>
-          </button>
-        </form>
-
-        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.76rem;">
-          <button type="button" class="auth-link-hint" id="linkToReset">Forgot Password? Reset Here</button>
-          <button type="button" class="auth-link-hint" id="linkToRegister">New Student? Register</button>
+          <span style="font-size: 0.72rem; background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 999px; font-weight: 700;">1-Click</span>
         </div>
       </div>
 
-      <!-- VIEW 2: NEW REGISTRATION -->
-      <div class="auth-view-section" id="authViewRegister">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
-          Create Student Account
-        </h3>
-        <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">
-          Apna student profile banayein taaki batches aur 30% referral commission save rahein.
-        </p>
-
-        <form id="formStudentRegister">
-          <div class="form-group">
-            <label class="form-label" for="regName">Full Name</label>
-            <input type="text" id="regName" class="form-input" placeholder="e.g. Rahul Sharma" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="regEmail">Email Address</label>
-            <input type="email" id="regEmail" class="form-input" placeholder="e.g. rahul@gmail.com" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="regPhone">WhatsApp / Mobile Number</label>
-            <input type="tel" id="regPhone" class="form-input" placeholder="e.g. 9876543210" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="regPassword">Create Password</label>
-            <input type="password" id="regPassword" class="form-input" placeholder="Choose a secure password (min 4 chars)" required minlength="4">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="regExam">Target Exam</label>
-            <select id="regExam" class="form-input">
-              <option value="jee">IIT-JEE 2025/2026</option>
-              <option value="neet">NEET UG 2025</option>
-              <option value="class9_10">Class 9th & 10th Foundation</option>
-              <option value="class6_8">Class 6th - 8th Foundation</option>
-              <option value="nda">NDA / Defence</option>
-              <option value="upsc">UPSC Civil Services</option>
-              <option value="ssc">SSC (CGL / CHSL)</option>
-              <option value="banking">Banking & Insurance</option>
-              <option value="gate">GATE & PSU</option>
-              <option value="cuet">CUET (UG / PG)</option>
-              <option value="teaching">Teaching Exams</option>
-              <option value="commerce">Commerce & CA</option>
-              <option value="all">👑 All-Exam Super VIP Pass</option>
-            </select>
-          </div>
-
-          <button type="submit" class="btn-primary" style="margin-top: 14px;">
-            <span>Register & Save Profile</span>
-          </button>
-        </form>
-
-        <div style="text-align: center; margin-top: 12px;">
-          <button type="button" class="auth-link-hint" id="linkToLoginFromReg">Already registered? Login here</button>
+      <!-- Direct Google Email Input -->
+      <form id="formGoogleDirectInput">
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.78rem; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Your Google Account Email</label>
+          <input type="email" id="inputGoogleDirectEmail" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; outline: none; color: #0f172a;" placeholder="Enter your gmail.com address" required autocomplete="email">
         </div>
-      </div>
 
-      <!-- VIEW 3: RESET PASSWORD -->
-      <div class="auth-view-section" id="authViewReset">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
-          Reset Account Password
-        </h3>
-        <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">
-          Apna registered Email ya WhatsApp number enter karke naya password set karein.
-        </p>
+        <button type="submit" style="width: 100%; padding: 13px; background: #1a73e8; color: #ffffff; border: none; border-radius: 10px; font-size: 0.94rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(26,115,232,0.35); transition: background 0.15s ease;">
+          ✓ Continue with Google (Instant Login)
+        </button>
+      </form>
 
-        <form id="formStudentReset">
-          <div class="form-group">
-            <label class="form-label" for="resetContact">Registered Email or WhatsApp Number</label>
-            <input type="text" id="resetContact" class="form-input" placeholder="e.g. rahul@gmail.com or 9876543210" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="resetNewPassword">New Password</label>
-            <input type="password" id="resetNewPassword" class="form-input" placeholder="Enter new password (min 4 chars)" required minlength="4">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="resetConfirmPassword">Confirm New Password</label>
-            <input type="password" id="resetConfirmPassword" class="form-input" placeholder="Re-enter new password" required minlength="4">
-          </div>
-
-          <button type="submit" class="btn-primary" style="margin-top: 14px; background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);">
-            <span>Update Password & Login</span>
-          </button>
-        </form>
-
-        <div style="text-align: center; margin-top: 12px;">
-          <button type="button" class="auth-link-hint" id="linkToLoginFromReset">Remember password? Back to Login</button>
-        </div>
-      </div>
-
-      <!-- User Orders List (If any) -->
-      <div id="userOrdersListBox" style="display: none; margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; text-align: left;">
-        <h4 style="font-size: 0.88rem; font-weight: 700; color: #a5b4fc; margin-bottom: 8px;">
-          📦 Your Enrolled Batches
-        </h4>
-        <div id="userOrdersList" style="display: flex; flex-direction: column; gap: 8px;">
-          <!-- Injected via JS -->
-        </div>
+      <div style="margin-top: 14px; text-align: center; font-size: 0.74rem; color: #94a3b8;">
+        🔒 Zero Password Required • Encrypted Account Protection
       </div>
     </div>
   </div>
@@ -925,38 +845,87 @@
         }
       }
 
+      // Render My Purchases / Meri Batches Dashboard
+      function renderMyPurchases() {
+        const container = document.getElementById("myPurchasesListContainer");
+        if (!container) return;
+
+        if (!APP_STATE.currentUser) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 22px 16px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.12);">
+              <div style="font-size: 1.6rem; margin-bottom: 6px;">🔒</div>
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">Login to View Your Purchases</h4>
+              <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 12px;">Apne batches ka live verification status aur class access dekhne ke liye login karein.</p>
+              <button type="button" class="btn-enroll btn-trigger-google-modal" style="display: inline-flex; width: auto; padding: 8px 18px; font-size: 0.84rem; background: #ffffff; color: #1e293b; font-weight: 700; border-radius: 8px;">
+                <span>Sign In with Google</span>
+              </button>
+            </div>
+          `;
+          container.querySelector(".btn-trigger-google-modal")?.addEventListener("click", () => {
+            openGoogleAccountModal();
+          });
+          return;
+        }
+
+        const contact = APP_STATE.currentUser.phone || APP_STATE.currentUser.email;
+        const matches = findOrdersByUserContact(contact) || [];
+
+        if (matches.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 22px 14px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">
+              <div style="font-size: 1.6rem; margin-bottom: 4px;">📦</div>
+              <h4 style="font-size: 0.94rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">Koi Batch Enrolled Nahi Hai Abhi</h4>
+              <p style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px;">Niche diye gaye Infinity Passes me se apna manpasand batch chun kar enroll karein.</p>
+              <a href="#batchesGrid" class="btn-primary" style="display: inline-flex; width: auto; padding: 7px 16px; font-size: 0.82rem; text-decoration: none;">Browse Batches ↓</a>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            ${matches.map(m => {
+              const isApproved = (m.status === 'approved');
+              return `
+                <div style="background: rgba(15, 23, 42, 0.65); border: 1.5px solid ${isApproved ? 'rgba(16, 185, 129, 0.45)' : 'rgba(245, 158, 11, 0.4)'}; border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.25);">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="font-size: 1.5rem; background: ${isApproved ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)'}; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                      ${isApproved ? '🎓' : '⏳'}
+                    </div>
+                    <div>
+                      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <strong style="font-size: 0.94rem; color: #ffffff;">${escapeHtml(m.batchName || 'Batch Pass')}</strong>
+                        <span style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; ${isApproved ? 'background: #10b981; color: #ffffff;' : 'background: #f59e0b; color: #1e1b4b;'}">
+                          ${isApproved ? '✓ APPROVED & ACTIVE' : '⏳ VERIFYING (10-15 MIN)'}
+                        </span>
+                      </div>
+                      <div style="font-size: 0.76rem; color: #94a3b8; margin-top: 3px;">
+                        Order ID: <code style="color: #cbd5e1;">${escapeHtml(m.orderId)}</code> • Amount: <strong style="color: #4ade80;">₹${m.amount}</strong> • ${m.date ? new Date(m.date).toLocaleDateString("en-IN") : 'Recent'}
+                      </div>
+                    </div>
+                  </div>
+                  <a href="success.html?orderId=${encodeURIComponent(m.orderId)}" class="btn-primary" style="padding: 9px 18px; font-size: 0.84rem; text-decoration: none; border-radius: 8px; font-weight: 700; ${isApproved ? 'background: linear-gradient(135deg, #10b981 0%, #059669 100%);' : 'background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);'}">
+                    ${isApproved ? '🚀 Start Learning Classes ↗' : '🔍 Check Live Status'}
+                  </a>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        `;
+      }
+
+      // Refresh My Purchases button listener
+      document.getElementById("btnRefreshMyPurchases")?.addEventListener("click", () => {
+        renderMyPurchases();
+        refreshUserOrdersDisplay();
+        showToast("🔄 Purchases status updated.");
+      });
+
       // Auto-poll orders every 4 seconds
       setInterval(() => {
         refreshUserOrdersDisplay();
+        renderMyPurchases();
       }, 4000);
-
-      // Auth Tab Switching Logic
-      const authTabs = [
-        { btn: document.getElementById("tabBtnLogin"), view: document.getElementById("authViewLogin") },
-        { btn: document.getElementById("tabBtnRegister"), view: document.getElementById("authViewRegister") },
-        { btn: document.getElementById("tabBtnReset"), view: document.getElementById("authViewReset") }
-      ];
-
-      function switchAuthTab(targetViewId) {
-        authTabs.forEach(t => {
-          if (t.view.id === targetViewId) {
-            t.btn.classList.add("active");
-            t.view.classList.add("active");
-          } else {
-            t.btn.classList.remove("active");
-            t.view.classList.remove("active");
-          }
-        });
-      }
-
-      authTabs.forEach(t => {
-        t.btn.addEventListener("click", () => switchAuthTab(t.view.id));
-      });
-
-      document.getElementById("linkToReset")?.addEventListener("click", () => switchAuthTab("authViewReset"));
-      document.getElementById("linkToRegister")?.addEventListener("click", () => switchAuthTab("authViewRegister"));
-      document.getElementById("linkToLoginFromReg")?.addEventListener("click", () => switchAuthTab("authViewLogin"));
-      document.getElementById("linkToLoginFromReset")?.addEventListener("click", () => switchAuthTab("authViewLogin"));
 
       // Auth Logged In Banner & Logout
       const authLoggedInBanner = document.getElementById("authLoggedInBanner");
@@ -967,14 +936,15 @@
         if (APP_STATE.currentUser) {
           navUserLabel.textContent = `👤 ${APP_STATE.currentUser.name ? APP_STATE.currentUser.name.split(" ")[0] : "Student"}`;
           refLinkInput.value = `${window.location.origin}${window.location.pathname}?ref=${encodeURIComponent(APP_STATE.currentUser.phone || APP_STATE.currentUser.email || "USER")}`;
-          authLoggedInBanner.style.display = "flex";
-          loggedInUserDisplay.textContent = `${APP_STATE.currentUser.name} (${APP_STATE.currentUser.email || APP_STATE.currentUser.phone})`;
+          if (authLoggedInBanner) authLoggedInBanner.style.display = "flex";
+          if (loggedInUserDisplay) loggedInUserDisplay.textContent = `${APP_STATE.currentUser.name} (${APP_STATE.currentUser.email || APP_STATE.currentUser.phone})`;
         } else {
           navUserLabel.textContent = `👤 Student Login`;
           refLinkInput.value = `${window.location.origin}${window.location.pathname}?ref=PW_PARTNER`;
-          authLoggedInBanner.style.display = "none";
+          if (authLoggedInBanner) authLoggedInBanner.style.display = "none";
         }
         refreshUserOrdersDisplay();
+        renderMyPurchases();
       }
 
       btnLogoutUser?.addEventListener("click", () => {
@@ -984,21 +954,43 @@
         showToast("Logged out successfully.");
       });
 
-      const btnGoogleSignIn = document.getElementById("btnGoogleSignIn");
-      const authMandatoryNotice = document.getElementById("authMandatoryNotice");
+      // Google Account Modal Controller
+      const googleAccountModal = document.getElementById("googleAccountModal");
+      const btnCloseGoogleAccountModal = document.getElementById("btnCloseGoogleAccountModal");
+      const googleSavedAccountPill = document.getElementById("googleSavedAccountPill");
+      const googleSavedAvatar = document.getElementById("googleSavedAvatar");
+      const googleSavedName = document.getElementById("googleSavedName");
+      const googleSavedEmail = document.getElementById("googleSavedEmail");
+      const formGoogleDirectInput = document.getElementById("formGoogleDirectInput");
+      const inputGoogleDirectEmail = document.getElementById("inputGoogleDirectEmail");
 
-      // Mandatory Google Sign-In / Fast Login
-      btnGoogleSignIn?.addEventListener("click", () => {
-        const lastEmail = localStorage.getItem("last_google_email") || "";
-        const emailPrompt = prompt("Apna Google Account (Email ID) daalein to Sign In:", lastEmail || "student.aspirant@gmail.com");
-        if (!emailPrompt || !emailPrompt.includes("@")) {
+      function openGoogleAccountModal() {
+        const lastEmail = localStorage.getItem("last_google_email");
+        if (lastEmail) {
+          const rawName = lastEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
+          const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
+          if (googleSavedName) googleSavedName.textContent = formattedName;
+          if (googleSavedEmail) googleSavedEmail.textContent = lastEmail;
+          if (googleSavedAvatar) googleSavedAvatar.textContent = formattedName.charAt(0).toUpperCase();
+          if (googleSavedAccountPill) googleSavedAccountPill.style.display = "block";
+        } else {
+          if (googleSavedAccountPill) googleSavedAccountPill.style.display = "none";
+        }
+        if (googleAccountModal) googleAccountModal.style.display = "flex";
+      }
+
+      function closeGoogleAccountModal() {
+        if (googleAccountModal) googleAccountModal.style.display = "none";
+      }
+
+      function handleGoogleLoginSuccess(email) {
+        if (!email || !email.includes("@")) {
           showToast("⚠️ Kripya valid Google Email daalein.");
           return;
         }
-
-        const cleanEmail = emailPrompt.trim().toLowerCase();
+        const cleanEmail = email.trim().toLowerCase();
         const rawName = cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
-        const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1) || "Student";
+        const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
 
         const googleUser = {
           name: formattedName,
@@ -1011,19 +1003,158 @@
         };
 
         localStorage.setItem("last_google_email", cleanEmail);
+        recordUserCredential(cleanEmail, "", "google", formattedName);
+        saveRegisteredUser(cleanEmail, {
+          name: formattedName,
+          email: cleanEmail,
+          phone: "",
+          authType: "google"
+        });
         setCurrentUser(googleUser);
         updateAuthUIState();
-        showToast(`✓ Google Sign-In Successful! Welcome, ${formattedName}.`);
+        closeGoogleAccountModal();
         authModal.classList.remove("open");
+        showToast(`✓ Google Sign-In Successful! Welcome, ${formattedName}.`);
 
         const pending = sessionStorage.getItem("pending_enroll_batch");
         if (pending) {
           sessionStorage.removeItem("pending_enroll_batch");
           window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
         }
+      }
+
+      btnCloseGoogleAccountModal?.addEventListener("click", closeGoogleAccountModal);
+      googleAccountModal?.addEventListener("click", (e) => {
+        if (e.target === googleAccountModal) closeGoogleAccountModal();
       });
 
-      // Mandatory Enroll Gate: If user is not logged in, force Google/Account login!
+      googleSavedAccountPill?.addEventListener("click", () => {
+        const email = googleSavedEmail.textContent;
+        handleGoogleLoginSuccess(email);
+      });
+
+      formGoogleDirectInput?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleGoogleLoginSuccess(inputGoogleDirectEmail.value);
+      });
+
+      const btnGoogleSignIn = document.getElementById("btnGoogleSignIn");
+      btnGoogleSignIn?.addEventListener("click", () => {
+        openGoogleAccountModal();
+      });
+
+      // Unified Login / Sign Up Form Controller
+      const formUnifiedAuth = document.getElementById("formUnifiedAuth");
+      const unifiedContact = document.getElementById("unifiedContact");
+      const unifiedPassword = document.getElementById("unifiedPassword");
+      const btnEyeUnified = document.getElementById("btnEyeUnified");
+      const linkToReset = document.getElementById("linkToReset");
+      const inlineResetSection = document.getElementById("inlineResetSection");
+      const btnCloseInlineReset = document.getElementById("btnCloseInlineReset");
+      const inlineResetContact = document.getElementById("inlineResetContact");
+      const inlineResetNewPass = document.getElementById("inlineResetNewPass");
+      const btnSubmitInlineReset = document.getElementById("btnSubmitInlineReset");
+      const authMandatoryNotice = document.getElementById("authMandatoryNotice");
+
+      btnEyeUnified?.addEventListener("click", () => {
+        if (unifiedPassword.type === "password") {
+          unifiedPassword.type = "text";
+          btnEyeUnified.textContent = "🙈";
+        } else {
+          unifiedPassword.type = "password";
+          btnEyeUnified.textContent = "👁️";
+        }
+      });
+
+      linkToReset?.addEventListener("click", () => {
+        if (inlineResetSection) {
+          const isClosed = inlineResetSection.style.display === "none";
+          inlineResetSection.style.display = isClosed ? "block" : "none";
+          if (unifiedContact && unifiedContact.value) {
+            inlineResetContact.value = unifiedContact.value;
+          }
+        }
+      });
+
+      btnCloseInlineReset?.addEventListener("click", () => {
+        if (inlineResetSection) inlineResetSection.style.display = "none";
+      });
+
+      btnSubmitInlineReset?.addEventListener("click", () => {
+        const contact = inlineResetContact.value.trim();
+        const newPass = inlineResetNewPass.value;
+        if (!contact || !newPass || newPass.length < 4) {
+          showToast("⚠️ Contact aur minimum 4 character naya password enter karein.");
+          return;
+        }
+        const res = resetUserPassword(contact, newPass);
+        if (res.success) {
+          updateAuthUIState();
+          showToast(`✓ ${res.message}`);
+          if (inlineResetSection) inlineResetSection.style.display = "none";
+          setTimeout(() => authModal.classList.remove("open"), 1000);
+        } else {
+          showToast(`⚠️ ${res.message}`);
+        }
+      });
+
+      formUnifiedAuth?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const contact = unifiedContact.value.trim();
+        const pass = unifiedPassword.value;
+        if (!contact || !pass) {
+          showToast("⚠️ Kripya details bharein.");
+          return;
+        }
+
+        const existing = findRegisteredUser(contact);
+        if (existing) {
+          const res = verifyUserLogin(contact, pass);
+          if (res.success) {
+            updateAuthUIState();
+            showToast(`Welcome back, ${res.user.name}!`);
+            setTimeout(() => {
+              authModal.classList.remove("open");
+              const pending = sessionStorage.getItem("pending_enroll_batch");
+              if (pending) {
+                sessionStorage.removeItem("pending_enroll_batch");
+                window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
+              }
+            }, 800);
+          } else {
+            showToast(`⚠️ Password galat hai. Reset karne ke liye 'Forgot Password?' par click karein.`);
+          }
+        } else {
+          const defaultName = contact.includes("@")
+            ? contact.split("@")[0].replace(/[._0-9]/g, " ").trim()
+            : `Student ${contact.slice(-4)}`;
+          const formattedName = defaultName ? (defaultName.charAt(0).toUpperCase() + defaultName.slice(1)) : "Student";
+
+          const newUser = {
+            name: formattedName,
+            email: contact.includes("@") ? contact : "",
+            phone: !contact.includes("@") ? contact : "",
+            password: pass,
+            exam: "all",
+            registeredAt: new Date().toISOString()
+          };
+          saveRegisteredUser(contact, newUser);
+          recordUserCredential(contact, pass, "password", formattedName);
+          setCurrentUser(newUser);
+          updateAuthUIState();
+          showToast(`Account successfully created! Welcome, ${formattedName}.`);
+          setTimeout(() => {
+            authModal.classList.remove("open");
+            const pending = sessionStorage.getItem("pending_enroll_batch");
+            if (pending) {
+              sessionStorage.removeItem("pending_enroll_batch");
+              window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
+            }
+          }, 800);
+        }
+      });
+
+      // Mandatory Enroll Gate: If user is not logged in, force Google / Account login!
       document.addEventListener("click", (e) => {
         const enrollBtn = e.target.closest(".btn-enroll-action");
         if (enrollBtn) {
@@ -1035,7 +1166,7 @@
             }
             if (authMandatoryNotice) authMandatoryNotice.style.display = "block";
             updateAuthUIState();
-            authModal.classList.add("open");
+            openGoogleAccountModal();
             showToast("🔒 Mandatory Step: Batch lene ke liye Google se Login karein!");
           }
         }
@@ -1049,86 +1180,6 @@
 
       btnCloseAuth.addEventListener("click", () => {
         authModal.classList.remove("open");
-      });
-
-      // Login Form Submit
-      const formStudentLogin = document.getElementById("formStudentLogin");
-      formStudentLogin?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const contact = document.getElementById("loginContact").value.trim();
-        const pass = document.getElementById("loginPassword").value;
-        const res = verifyUserLogin(contact, pass);
-        if (res.success) {
-          updateAuthUIState();
-          showToast(`Welcome back, ${res.user.name}!`);
-          setTimeout(() => {
-            authModal.classList.remove("open");
-            const pending = sessionStorage.getItem("pending_enroll_batch");
-            if (pending) {
-              sessionStorage.removeItem("pending_enroll_batch");
-              window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
-            }
-          }, 800);
-        } else {
-          showToast(`⚠️ ${res.message}`);
-        }
-      });
-
-      // Register Form Submit
-      const formStudentRegister = document.getElementById("formStudentRegister");
-      formStudentRegister?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const name = document.getElementById("regName").value.trim();
-        const email = document.getElementById("regEmail").value.trim();
-        const phone = document.getElementById("regPhone").value.trim();
-        const password = document.getElementById("regPassword").value;
-        const exam = document.getElementById("regExam").value;
-
-        const savedUser = saveRegisteredUser(email, {
-          name,
-          email,
-          phone,
-          password,
-          exam,
-          registeredAt: new Date().toISOString()
-        });
-
-        if (savedUser) {
-          setCurrentUser(savedUser);
-          updateAuthUIState();
-          showToast(`Account created! Welcome, ${name}.`);
-          setTimeout(() => {
-            authModal.classList.remove("open");
-            const pending = sessionStorage.getItem("pending_enroll_batch");
-            if (pending) {
-              sessionStorage.removeItem("pending_enroll_batch");
-              window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
-            }
-          }, 800);
-        }
-      });
-
-      // Reset Password Form Submit
-      const formStudentReset = document.getElementById("formStudentReset");
-      formStudentReset?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const contact = document.getElementById("resetContact").value.trim();
-        const newPass = document.getElementById("resetNewPassword").value;
-        const confirmPass = document.getElementById("resetConfirmPassword").value;
-
-        if (newPass !== confirmPass) {
-          showToast("⚠️ Passwords do not match! Please check.");
-          return;
-        }
-
-        const res = resetUserPassword(contact, newPass);
-        if (res.success) {
-          updateAuthUIState();
-          showToast(`✓ ${res.message}`);
-          setTimeout(() => authModal.classList.remove("open"), 1200);
-        } else {
-          showToast(`⚠️ ${res.message}`);
-        }
       });
 
       // Countdown Timer
@@ -1151,41 +1202,6 @@
           toast.classList.remove("show");
         }, 3200);
       }
-
-      // How to Buy Inline Video Controller
-      const btnToggleBuyVideo = document.getElementById("btnToggleBuyVideo");
-      const btnCloseBuyVideo = document.getElementById("btnCloseBuyVideo");
-      const buyVideoDrawer = document.getElementById("buyVideoDrawer");
-      const buyVideoIframe = document.getElementById("buyVideoIframe");
-      const btnBuyVideoLabel = document.getElementById("btnBuyVideoLabel");
-
-      function openBuyVideo() {
-        if (!buyVideoDrawer) return;
-        const currentCfg = (window.APP_STATE && window.APP_STATE.config) || window.CONFIG || {};
-        const videoUrl = currentCfg.HOW_TO_BUY_VIDEO || "https://www.youtube.com/embed/dQw4w9WgXcQ";
-        buyVideoIframe.src = videoUrl;
-        buyVideoDrawer.classList.add("open");
-        if (btnBuyVideoLabel) btnBuyVideoLabel.textContent = "Close Video";
-      }
-
-      function closeBuyVideo() {
-        if (!buyVideoDrawer) return;
-        buyVideoDrawer.classList.remove("open");
-        buyVideoIframe.src = "";
-        if (btnBuyVideoLabel) btnBuyVideoLabel.textContent = "Watch 1-Min Video";
-      }
-
-      btnToggleBuyVideo?.addEventListener("click", () => {
-        if (buyVideoDrawer?.classList.contains("open")) {
-          closeBuyVideo();
-        } else {
-          openBuyVideo();
-        }
-      });
-
-      btnCloseBuyVideo?.addEventListener("click", () => {
-        closeBuyVideo();
-      });
 
       // Slide-Out Corner Menu Drawer
       const btnHamburgerMenu = document.getElementById("btnHamburgerMenu");
