@@ -516,8 +516,8 @@
       <form id="formGoogleDirectInput">
         <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px;">
           <label style="font-size: 0.8rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-            <span>📱 Phone ke kisi bhi Gmail se Login:</span>
-            <span style="font-size: 0.7rem; color: #2563eb; font-weight: 700;">⚡ Instant Auto-Login</span>
+            <span>📱 Enter Google Email:</span>
+            <span style="font-size: 0.7rem; color: #2563eb; font-weight: 700;">Google Sign-In</span>
           </label>
           <div style="position: relative;">
             <input 
@@ -526,21 +526,21 @@
               name="email" 
               autocomplete="username email" 
               inputmode="email" 
-              style="width: 100%; padding: 12px 14px; border: 2px solid #3b82f6; border-radius: 10px; font-size: 0.94rem; outline: none; color: #0f172a; background: #ffffff; font-weight: 600;" 
-              placeholder="Yahan tap karein — Phone ke emails show honge" 
+              style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.94rem; outline: none; color: #0f172a; background: #ffffff; font-weight: 600;" 
+              placeholder="e.g. yourname@gmail.com" 
               required
             >
-          </div>
-          <div style="margin-top: 6px; font-size: 0.72rem; color: #059669; font-weight: 700; display: flex; align-items: center; gap: 4px;">
-            <span>✓</span>
-            <span>Email select karte hi direct automatic login ho jayega!</span>
           </div>
         </div>
 
         <button type="submit" id="btnGoogleDirectSubmit" style="width: 100%; padding: 12px; background: #1a73e8; color: #ffffff; border: none; border-radius: 10px; font-size: 0.92rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(26,115,232,0.35); transition: background 0.15s ease;">
-          ✓ Continue with Google (Instant Login)
+          Sign In with Google
         </button>
       </form>
+
+      <div style="text-align: center; margin-top: 14px; font-size: 0.8rem;">
+        <a href="login.html" style="color: #6366f1; text-decoration: underline; font-weight: 700;">Or open Full Student Login / Register Page →</a>
+      </div>
 
       <div style="margin-top: 14px; text-align: center; font-size: 0.74rem; color: #94a3b8;">
         🔒 Zero Password Required • Encrypted Account Protection
@@ -1357,26 +1357,7 @@
         if (e.target === googleAccountModal) closeGoogleAccountModal();
       });
 
-      // Auto-login instantly when an email is selected from phone's autofill or typed
-      let autoGoogleLoginTimer = null;
-      const checkAndAutoLoginGoogle = (val) => {
-        if (!val) return;
-        const clean = val.trim().toLowerCase();
-        if (clean.includes("@") && clean.includes(".") && clean.length > 5) {
-          clearTimeout(autoGoogleLoginTimer);
-          autoGoogleLoginTimer = setTimeout(() => {
-            handleGoogleLoginSuccess(clean);
-          }, 120);
-        }
-      };
-
-      inputGoogleDirectEmail?.addEventListener("input", (e) => {
-        checkAndAutoLoginGoogle(e.target.value);
-      });
-      inputGoogleDirectEmail?.addEventListener("change", (e) => {
-        checkAndAutoLoginGoogle(e.target.value);
-      });
-
+      // Explicit Google form submit (no auto-trigger on typing)
       formGoogleDirectInput?.addEventListener("submit", (e) => {
         e.preventDefault();
         handleGoogleLoginSuccess(inputGoogleDirectEmail.value);
