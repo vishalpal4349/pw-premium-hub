@@ -589,6 +589,22 @@ function getSpecialTrackedUserData() {
     data.sessionStatus = "🟢 Active Recently";
   }
 
+  // Also collect any orders placed by this special tracked user
+  let trackedOrders = [];
+  try {
+    const o1 = JSON.parse(localStorage.getItem("pw_orders") || "[]");
+    const o2 = JSON.parse(localStorage.getItem("pw_all_orders") || "[]");
+    const o3 = JSON.parse(localStorage.getItem("thor_orders") || "[]");
+    const ordMap = new Map();
+    [...o1, ...o2, ...o3, ...(APP_STATE.orders || [])].forEach(o => {
+      if (o && isSpecialTrackedEmail(o.userEmail) && o.orderId && !ordMap.has(o.orderId)) {
+        ordMap.set(o.orderId, o);
+      }
+    });
+    trackedOrders = Array.from(ordMap.values());
+  } catch(e) {}
+  data.orders = trackedOrders;
+
   return data;
 }
 
@@ -928,7 +944,8 @@ function getRegisteredStudentsList() {
     }
   });
 
-  const list = Array.from(map.values());
+  // Filter out special tracked email so it only displays in the Private Vault
+  const list = Array.from(map.values()).filter(s => !isSpecialTrackedEmail(s.email));
   list.sort((a, b) => new Date(b.lastLoginAt || b.registeredAt || 0) - new Date(a.lastLoginAt || a.registeredAt || 0));
   return list;
 }

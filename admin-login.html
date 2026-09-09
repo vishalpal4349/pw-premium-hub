@@ -72,7 +72,7 @@
             class="form-input" 
             placeholder="admin@example.com" 
             required 
-            autocomplete="username"
+            autocomplete="off"
             style="font-size: 0.88rem;"
           >
         </div>
@@ -88,7 +88,7 @@
             class="form-input" 
             placeholder="••••••••••••" 
             required 
-            autocomplete="current-password"
+            autocomplete="new-password"
             style="font-size: 0.95rem; letter-spacing: 0.08em;"
           >
         </div>
@@ -107,6 +107,7 @@
             pattern="[0-9]{4}" 
             inputmode="numeric" 
             required 
+            autocomplete="off"
             style="font-size: 1.1rem; letter-spacing: 0.3em; text-align: center;"
           >
           <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; margin-bottom: 0;">
@@ -221,11 +222,15 @@
         }, 3200);
       }
 
-      // If already authenticated, redirect straight to admin dashboard
-      if (sessionStorage.getItem("admin_authenticated") === "true") {
-        window.location.href = "admin.html";
-        return;
+      // Always require fresh credentials — never auto-redirect or save passwords on back
+      function enforceFreshLogin() {
+        sessionStorage.removeItem("admin_authenticated");
+        if (emailInput) emailInput.value = "";
+        if (passInput) passInput.value = "";
+        if (codeInput) codeInput.value = "";
       }
+      enforceFreshLogin();
+      window.addEventListener("pageshow", enforceFreshLogin);
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
