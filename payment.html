@@ -124,7 +124,7 @@
             autocomplete="off"
             spellcheck="false"
           >
-          <button type="button" id="btnCheckoutApplyCoupon" class="btn-apply">
+          <button type="button" id="btnCheckoutApplyCoupon" class="btn-apply" onclick="applyCouponCode(document.getElementById('checkoutCouponInput').value)">
             <span>Apply</span>
             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
@@ -135,15 +135,15 @@
         <!-- Quick Tappable Coupon Chips -->
         <div class="quick-coupon-row">
           <span class="quick-coupon-label">Tap to apply:</span>
-          <button type="button" class="btn-quick-chip" data-code="PREMIUM20" title="Click to apply PREMIUM20">
+          <button type="button" class="btn-quick-chip" onclick="applyCouponCode('PREMIUM20')" data-code="PREMIUM20" title="Click to apply PREMIUM20">
             <span>🏷️ PREMIUM20</span>
             <span style="color: #86efac; font-weight: normal;">(Flat 20% OFF)</span>
           </button>
-          <button type="button" class="btn-quick-chip" data-code="SAVE30" title="Click to apply SAVE30">
+          <button type="button" class="btn-quick-chip" onclick="applyCouponCode('SAVE30')" data-code="SAVE30" title="Click to apply SAVE30">
             <span>🏷️ SAVE30</span>
             <span style="color: #67e8f9; font-weight: normal;">(Flat 30% OFF)</span>
           </button>
-          <button type="button" class="btn-quick-chip" data-code="SAVE50" title="Click to apply SAVE50">
+          <button type="button" class="btn-quick-chip" onclick="applyCouponCode('SAVE50')" data-code="SAVE50" title="Click to apply SAVE50">
             <span>🏷️ SAVE50</span>
             <span style="color: #fde047; font-weight: normal;">(Flat 50% OFF)</span>
           </button>
@@ -181,57 +181,7 @@
         </button>
       </div>
 
-      <!-- PhonePe / GPay 2000 Gallery Limit Solution Card -->
-      <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 95, 70, 0.22) 100%); border: 1.5px solid rgba(16, 185, 129, 0.5); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
-          <div style="font-weight: 800; font-size: 0.92rem; color: #86efac; display: flex; align-items: center; gap: 8px;">
-            <span>⚡</span>
-            <span>PhonePe / GPay 2000 Gallery Limit Ka 100% Solution:</span>
-          </div>
-          <span style="font-size: 0.72rem; background: #059669; color: #ffffff; padding: 2px 8px; border-radius: 999px; font-weight: 700;">
-            ✓ 0 Error Guarantee
-          </span>
-        </div>
-        
-        <p style="font-size: 0.82rem; color: #e2e8f0; margin-bottom: 12px; line-height: 1.5;">
-          PhonePe / GPay me gallery se QR scan karne par <em>"You can pay up to 2000 with QR codes via gallery"</em> ka alert bank security rule ki wajah se aata hai. <strong>Bina kisi limit ke turant payment karne ke 2 aasan tarike:</strong>
-        </p>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px;">
-          <!-- Method 1 -->
-          <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 12px;">
-            <div style="font-weight: 700; font-size: 0.84rem; color: #60a5fa; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-              <span>🚀 Tarika 1: Direct 1-Click Pay (No QR Scan)</span>
-            </div>
-            <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 8px;">
-              Mobile user hain toh neeche diye gaye button par click karein. Seedha PhonePe / GPay khul jayega:
-            </div>
-            <a href="#" id="btnBannerQuickLaunch" class="btn-primary" style="padding: 8px 12px; font-size: 0.78rem; width: 100%; text-align: center; justify-content: center;">
-              <span>⚡ Open PhonePe / GPay Directly</span>
-            </a>
-          </div>
-
-          <!-- Method 2 -->
-          <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 12px;">
-            <div style="font-weight: 700; font-size: 0.84rem; color: #34d399; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-              <span>🆔 Tarika 2: Pay to UPI ID (Direct 100% Pass)</span>
-            </div>
-            <div style="font-size: 0.76rem; color: #94a3b8; margin-bottom: 8px;">
-              PhonePe / GPay open karein ➔ <strong>"To UPI ID"</strong> chunein ➔ UPI ID paste karein:
-            </div>
-            <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.06); padding: 5px 10px; border-radius: 8px;">
-              <span style="font-family: monospace; font-size: 0.88rem; font-weight: 700; color: #ffffff;" id="upiIdQuickText">kumarfreepw@fam</span>
-              <button type="button" class="btn-copy" id="btnCopyUpiQuickBanner" style="padding: 4px 8px; font-size: 0.72rem;">
-                <span>📋 Copy</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div style="font-size: 0.75rem; color: #a7f3d0; margin-top: 10px; line-height: 1.4;">
-          ✓ <em>In dono methods se koi 2000 gallery limit nahi aati aur turant 1 second me payment confirm ho jata hai!</em>
-        </div>
-      </div>
 
       <!-- Universal UPI 1-Click Pay Button -->
       <a href="#" id="btnPayUpiDirect" class="btn-primary" style="margin-bottom: 12px;">
@@ -1116,58 +1066,71 @@
       summaryOriginalPrice.textContent = formatINR(currentBatch.originalPrice);
       summaryBasePrice.textContent = formatINR(currentBatch.offerPrice);
 
-      const preCoupon = localStorage.getItem("applied_coupon");
-      if (preCoupon) {
-        applyCouponCode(preCoupon);
-      } else {
-        updatePaymentAmounts();
+      const btnDownloadCurrentQr = document.getElementById("btnDownloadCurrentQr");
+
+      function updatePaymentAmounts() {
+        if (summaryPayableAmount) summaryPayableAmount.textContent = formatINR(activePrice);
+        if (payUpiButtonText) payUpiButtonText.textContent = `Pay ${formatINR(activePrice)} via Any UPI App`;
+
+        const appUrls = getAppSpecificUpiUrls(activePrice, `${currentBatch.name} - ${orderId}`);
+        if (btnPayUpiDirect) btnPayUpiDirect.href = appUrls.generic;
+        if (btnGPayApp) btnGPayApp.href = appUrls.gpay;
+        if (btnPhonePeApp) btnPhonePeApp.href = appUrls.phonepe;
+        if (btnPaytmApp) btnPaytmApp.href = appUrls.paytm;
+
+        // If currently showing dynamic QR tab, refresh it
+        const activeTab = document.querySelector(".qr-tab-btn.active");
+        if (activeTab && activeTab.dataset.qrIndex === "1") {
+          const dynamicQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=${encodeURIComponent(generateUpiUrl(activePrice, currentBatch.name + " - " + orderId))}`;
+          if (qrImage) qrImage.src = dynamicQrUrl;
+          if (btnDownloadCurrentQr) btnDownloadCurrentQr.href = dynamicQrUrl;
+        }
       }
 
-      btnCheckoutApplyCoupon.addEventListener("click", () => {
-        applyCouponCode(checkoutCouponInput.value);
-      });
-
-      checkoutCouponInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          applyCouponCode(checkoutCouponInput.value);
-        }
-      });
-
-      // Quick Chips Click Listeners
-      document.querySelectorAll(".btn-quick-chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-          const code = chip.dataset.code;
-          if (code) {
-            checkoutCouponInput.value = code;
-            applyCouponCode(code);
-          }
-        });
-      });
-
-      // Common Alias Mapping for Seamless User Experience
+      // Master Coupon Aliases & Auto-Normalizations
       const COUPON_ALIASES = {
         "PW20": "PREMIUM20",
         "PREMIUM": "PREMIUM20",
+        "PREMIUM20": "PREMIUM20",
         "FLAT20": "PREMIUM20",
         "DISCOUNT20": "PREMIUM20",
+        "20": "PREMIUM20",
         "PW30": "SAVE30",
+        "SAVE30": "SAVE30",
+        "30": "SAVE30",
         "PW40": "SAVE40",
+        "SAVE40": "SAVE40",
+        "40": "SAVE40",
         "PW50": "SAVE50",
+        "SAVE50": "SAVE50",
         "HALF": "SAVE50",
         "HALF50": "SAVE50",
+        "50": "SAVE50",
         "PW60": "SAVE60",
+        "SAVE60": "SAVE60",
+        "60": "SAVE60",
         "PW70": "SAVE70",
+        "SAVE70": "SAVE70",
+        "70": "SAVE70",
         "PW80": "SAVE80",
+        "SAVE80": "SAVE80",
+        "80": "SAVE80",
         "PW90": "SAVE90",
+        "SAVE90": "SAVE90",
+        "90": "SAVE90",
         "PW100": "FREE100",
+        "FREE100": "FREE100",
         "FREE": "FREE100",
         "PWFREE": "FREE100",
         "100": "FREE100",
         "VANDANA": "VANDANA1",
+        "VANDANA1": "VANDANA1",
         "VIVAN": "VIVAN01",
+        "VIVAN01": "VIVAN01",
         "KISHAN": "KISHAN01",
-        "AJAD": "AJAD01"
+        "KISHAN01": "KISHAN01",
+        "AJAD": "AJAD01",
+        "AJAD01": "AJAD01"
       };
 
       function applyCouponCode(rawCode) {
@@ -1196,16 +1159,20 @@
 
         const couponsList = (window.APP_STATE && Array.isArray(window.APP_STATE.coupons)) 
           ? window.APP_STATE.coupons 
-          : DEFAULT_CONFIG.COUPONS;
+          : ((typeof DEFAULT_CONFIG !== "undefined" && DEFAULT_CONFIG.COUPONS) ? DEFAULT_CONFIG.COUPONS : []);
 
-        const found = couponsList.find(c => c && c.code && c.code.toUpperCase() === code);
-        if (!found) {
-          showCouponError(`Invalid coupon code "${code}". Try tapping PREMIUM20, SAVE30 or SAVE50 below!`);
-          return;
+        let found = couponsList.find(c => c && c.code && c.code.toUpperCase() === code);
+
+        // Fallback for direct percentage input (e.g. student enters "20" or "50")
+        if (!found && /^\d+$/.test(code)) {
+          const num = parseInt(code, 10);
+          if (num >= 5 && num <= 90) {
+            found = { code: `SAVE${num}`, percent: num, isPublic: true, description: `${num}% OFF` };
+          }
         }
 
-        if (found.minOrder && currentBatch.offerPrice < found.minOrder) {
-          showCouponError(`Coupon ${code} requires minimum batch price of ${formatINR(found.minOrder)}`);
+        if (!found) {
+          showCouponError(`Invalid coupon code "${code}". Try tapping PREMIUM20, SAVE30 or SAVE50 below!`);
           return;
         }
 
@@ -1217,85 +1184,97 @@
           // Special VIP direct fixed price (e.g. VANDANA1 -> ₹1, VIVAN01/KISHAN01/AJAD01 -> ₹5)
           activePrice = found.specialPrice;
           discountVal = Math.max(0, currentBatch.offerPrice - found.specialPrice);
-          summaryCouponLabel.textContent = `Secret VIP Access (${code})`;
-          summaryCouponSavings.textContent = `Pay only ${formatINR(found.specialPrice)}`;
+          if (summaryCouponLabel) summaryCouponLabel.textContent = `Secret VIP Access (${code})`;
+          if (summaryCouponSavings) summaryCouponSavings.textContent = `Pay only ${formatINR(found.specialPrice)}`;
         } else {
-          discountVal = Math.round((currentBatch.offerPrice * (found.percent || 0)) / 100);
+          const pct = found.percent || 20;
+          discountVal = Math.round((currentBatch.offerPrice * pct) / 100);
           activePrice = Math.max(0, currentBatch.offerPrice - discountVal);
-          summaryCouponLabel.textContent = `Coupon (${code}) -${found.percent}%`;
-          summaryCouponSavings.textContent = `-${formatINR(discountVal)}`;
+          if (summaryCouponLabel) summaryCouponLabel.textContent = `Coupon (${code}) -${pct}%`;
+          if (summaryCouponSavings) summaryCouponSavings.textContent = `-${formatINR(discountVal)}`;
         }
 
-        checkoutCouponInput.value = code;
-        checkoutCouponInput.disabled = true;
-        btnCheckoutApplyCoupon.style.display = "none";
+        if (checkoutCouponInput) checkoutCouponInput.value = code;
 
-        checkoutCouponMsg.className = "coupon-message success";
-        checkoutCouponMsg.style.display = "flex";
-        if (found.specialPrice !== undefined && found.specialPrice !== null) {
-          checkoutCouponMsg.innerHTML = `
-            <span>🎉 Secret VIP Pass <strong>${code}</strong> Activated! Pay only <strong>${formatINR(found.specialPrice)}</strong></span>
-            <button type="button" class="btn-remove-coupon" id="btnRemoveCoupon">Remove</button>
-          `;
-        } else {
-          checkoutCouponMsg.innerHTML = `
-            <span>✓ Code <strong>${code}</strong> applied! (-${found.percent}%)</span>
-            <button type="button" class="btn-remove-coupon" id="btnRemoveCoupon">Remove</button>
-          `;
+        if (checkoutCouponMsg) {
+          checkoutCouponMsg.className = "coupon-message success";
+          checkoutCouponMsg.style.display = "flex";
+          if (found.specialPrice !== undefined && found.specialPrice !== null) {
+            checkoutCouponMsg.innerHTML = `
+              <span>🎉 Secret VIP Pass <strong>${code}</strong> Activated! Pay only <strong>${formatINR(found.specialPrice)}</strong></span>
+              <button type="button" class="btn-remove-coupon" id="btnRemoveCoupon">Remove</button>
+            `;
+          } else {
+            checkoutCouponMsg.innerHTML = `
+              <span>✓ Code <strong>${code}</strong> applied! (-${found.percent}%) Saved ${formatINR(discountVal)}</span>
+              <button type="button" class="btn-remove-coupon" id="btnRemoveCoupon">Remove</button>
+            `;
+          }
+
+          document.getElementById("btnRemoveCoupon")?.addEventListener("click", () => {
+            appliedCoupon = null;
+            activePrice = currentBatch.offerPrice;
+            if (checkoutCouponInput) {
+              checkoutCouponInput.value = "";
+              checkoutCouponInput.placeholder = "ENTER CODE (E.G. PREMIUM20)";
+            }
+            if (checkoutCouponMsg) checkoutCouponMsg.style.display = "none";
+            if (summaryCouponRow) summaryCouponRow.style.display = "none";
+            localStorage.removeItem("applied_coupon");
+            updatePaymentAmounts();
+            showToast("Coupon removed.");
+          });
         }
 
-        summaryCouponRow.style.display = "flex";
-
-        document.getElementById("btnRemoveCoupon")?.addEventListener("click", () => {
-          appliedCoupon = null;
-          activePrice = currentBatch.offerPrice;
-          checkoutCouponInput.disabled = false;
-          checkoutCouponInput.value = "";
-          checkoutCouponInput.placeholder = "ENTER CODE (E.G. PREMIUM20)";
-          btnCheckoutApplyCoupon.style.display = "inline-flex";
-          checkoutCouponMsg.style.display = "none";
-          summaryCouponRow.style.display = "none";
-          localStorage.removeItem("applied_coupon");
-          updatePaymentAmounts();
-          showToast("Coupon removed.");
-        });
+        if (summaryCouponRow) summaryCouponRow.style.display = "flex";
 
         updatePaymentAmounts();
-        showToast(`🎉 Coupon "${code}" applied! You saved ${formatINR(discountVal)}.`);
+        showToast(`🎉 Coupon "${code}" applied! Saved ${formatINR(discountVal)}.`);
       }
+
+      window.applyCouponCode = applyCouponCode;
+      window.updatePaymentAmounts = updatePaymentAmounts;
 
       function showCouponError(msg) {
-        checkoutCouponMsg.className = "coupon-message error";
-        checkoutCouponMsg.style.display = "flex";
-        checkoutCouponMsg.textContent = msg;
-      }
-
-      const btnBannerQuickLaunch = document.getElementById("btnBannerQuickLaunch");
-      const btnDownloadCurrentQr = document.getElementById("btnDownloadCurrentQr");
-
-      function updatePaymentAmounts() {
-        summaryPayableAmount.textContent = formatINR(activePrice);
-        payUpiButtonText.textContent = `Pay ${formatINR(activePrice)} via Any UPI App`;
-
-        const appUrls = getAppSpecificUpiUrls(activePrice, `${currentBatch.name} - ${orderId}`);
-        btnPayUpiDirect.href = appUrls.generic;
-        if (btnBannerQuickLaunch) btnBannerQuickLaunch.href = appUrls.generic;
-        btnGPayApp.href = appUrls.gpay;
-        btnPhonePeApp.href = appUrls.phonepe;
-        btnPaytmApp.href = appUrls.paytm;
-
-        // If currently showing dynamic QR tab, refresh it
-        const activeTab = document.querySelector(".qr-tab-btn.active");
-        if (activeTab && activeTab.dataset.qrIndex === "1") {
-          const dynamicQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=${encodeURIComponent(generateUpiUrl(activePrice, currentBatch.name + " - " + orderId))}`;
-          qrImage.src = dynamicQrUrl;
-          if (btnDownloadCurrentQr) btnDownloadCurrentQr.href = dynamicQrUrl;
+        if (checkoutCouponMsg) {
+          checkoutCouponMsg.className = "coupon-message error";
+          checkoutCouponMsg.style.display = "flex";
+          checkoutCouponMsg.textContent = msg;
         }
       }
 
+      // Initial payment calculation
+      updatePaymentAmounts();
+
+      // Apply saved coupon on load if exists
+      const preCoupon = localStorage.getItem("applied_coupon");
+      if (preCoupon) {
+        applyCouponCode(preCoupon);
+      }
+
+      btnCheckoutApplyCoupon?.addEventListener("click", () => {
+        applyCouponCode(checkoutCouponInput.value);
+      });
+
+      checkoutCouponInput?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          applyCouponCode(checkoutCouponInput.value);
+        }
+      });
+
+      // Quick Chips Click Listeners
+      document.querySelectorAll(".btn-quick-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          const code = chip.dataset.code;
+          if (code) {
+            if (checkoutCouponInput) checkoutCouponInput.value = code;
+            applyCouponCode(code);
+          }
+        });
+      });
+
       upiIdDisplay.textContent = CONFIG.UPI_ID;
-      const upiIdQuickText = document.getElementById("upiIdQuickText");
-      if (upiIdQuickText) upiIdQuickText.textContent = CONFIG.UPI_ID;
 
       const merchantUpiTag = document.getElementById("merchantUpiTag");
       if (merchantUpiTag) {
@@ -1340,7 +1319,6 @@
 
       btnCopyUpi.addEventListener("click", copyUpiHandler);
       document.getElementById("btnCopyMerchantUpi")?.addEventListener("click", copyUpiHandler);
-      document.getElementById("btnCopyUpiQuickBanner")?.addEventListener("click", copyUpiHandler);
 
       // Auto-copy UPI ID on any direct app launcher click for student convenience
       const handleAppLaunchClick = async () => {
@@ -1351,7 +1329,6 @@
       };
 
       btnPayUpiDirect.addEventListener("click", handleAppLaunchClick);
-      if (btnBannerQuickLaunch) btnBannerQuickLaunch.addEventListener("click", handleAppLaunchClick);
       btnGPayApp.addEventListener("click", handleAppLaunchClick);
       btnPhonePeApp.addEventListener("click", handleAppLaunchClick);
       btnPaytmApp.addEventListener("click", handleAppLaunchClick);
