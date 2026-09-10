@@ -25,12 +25,6 @@
           <span class="earnings-pill-text">Earn: <strong id="navEarningsAmt">₹0</strong></span>
         </a>
 
-        <!-- High-Visibility Meri Batches / My Purchases Button in Navbar -->
-        <a href="#myPurchasesSection" class="nav-purchases-btn" id="navMyPurchasesBtn" title="View Enrolled Batches, Live Verification Status & Classes">
-          <span>📚 Meri Batches</span>
-          <span class="nav-purchases-badge" id="navPurchasesCount" style="display: none;">0</span>
-        </a>
-
         <!-- User Login / Profile Button -->
         <button type="button" id="btnOpenAuth" class="nav-link-btn primary" style="padding: 6px 13px; font-size: 0.8rem;">
           <span id="navUserLabel">👤 Login</span>
@@ -64,6 +58,7 @@
         <span style="font-size: 1.1rem;">📚</span>
         <span>Meri Batches / My Purchases</span>
         <span style="font-size: 0.72rem; background: #10b981; color: #ffffff; padding: 2px 8px; border-radius: 999px; font-weight: 800;">Live Status & Portal ↗</span>
+        <span class="nav-purchases-badge" id="heroPurchasesCount" style="display: none; background: #fde047; color: #0f172a; font-weight: 800; padding: 2px 8px; border-radius: 999px; font-size: 0.72rem;">0</span>
       </a>
     </div>
 
@@ -941,12 +936,21 @@
         const contact = APP_STATE.currentUser.phone || APP_STATE.currentUser.email;
         const matches = findOrdersByUserContact(contact) || [];
 
+        const heroPurchasesCount = document.getElementById("heroPurchasesCount");
         if (navPurchasesCount) {
           if (matches.length > 0) {
             navPurchasesCount.textContent = matches.length;
             navPurchasesCount.style.display = "inline-block";
           } else {
             navPurchasesCount.style.display = "none";
+          }
+        }
+        if (heroPurchasesCount) {
+          if (matches.length > 0) {
+            heroPurchasesCount.textContent = matches.length;
+            heroPurchasesCount.style.display = "inline-block";
+          } else {
+            heroPurchasesCount.style.display = "none";
           }
         }
 
@@ -1624,8 +1628,18 @@
     <nav class="drawer-nav-menu">
       <div class="drawer-section-title">QUICK ACCESS & FEATURES</div>
 
-      <a href="#batchesGrid" class="drawer-nav-link" id="linkDrawerBatches">
+      <!-- Prominent Meri Batches item in drawer -->
+      <a href="#myPurchasesSection" class="drawer-nav-link drawer-link-purchases" id="linkDrawerMyPurchases">
         <span class="drawer-nav-icon">📚</span>
+        <div class="drawer-nav-info">
+          <span class="drawer-nav-name" style="font-weight: 800; color: #86efac;">Meri Batches / My Purchases</span>
+          <span class="drawer-nav-sub">Check order status, classes & study notes</span>
+        </div>
+        <span class="drawer-badge success" id="navPurchasesCount" style="display: none;">0</span>
+      </a>
+
+      <a href="#batchesGrid" class="drawer-nav-link" id="linkDrawerBatches">
+        <span class="drawer-nav-icon">🎓</span>
         <div class="drawer-nav-info">
           <span class="drawer-nav-name">All Exam Batches</span>
           <span class="drawer-nav-sub">JEE, NEET, UPSC, NDA, SSC & more</span>

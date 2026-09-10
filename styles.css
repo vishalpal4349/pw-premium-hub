@@ -142,6 +142,8 @@ body::before {
   justify-content: space-between;
   margin-bottom: 20px;
   padding: 10px 4px;
+  gap: 12px;
+  flex-wrap: nowrap;
 }
 
 .brand-badge {
@@ -152,6 +154,8 @@ body::before {
   font-size: 1.05rem;
   color: #ffffff;
   text-decoration: none;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .brand-icon {
@@ -166,12 +170,15 @@ body::before {
   font-size: 1rem;
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  flex-shrink: 0;
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
 }
 
 .nav-link-btn {
@@ -240,37 +247,71 @@ body::before {
   font-weight: 700;
 }
 
-/* Hamburger Menu Button */
+/* Hamburger Menu Button (Ultra-Premium Glass & Neon Indigo Glow) */
 .btn-hamburger {
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 4px;
-  width: 34px;
-  height: 34px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 9px;
+  gap: 4.5px;
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.16) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1.5px solid rgba(99, 102, 241, 0.45);
+  border-radius: 11px;
   cursor: pointer;
-  padding: 6px;
-  transition: var(--transition);
+  padding: 7px;
+  box-shadow: 
+    0 4px 14px rgba(0, 0, 0, 0.4),
+    0 0 16px rgba(99, 102, 241, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
+  position: relative;
+  z-index: 5;
 }
 
 .btn-hamburger:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.28);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.32) 0%, rgba(79, 70, 229, 0.28) 100%);
+  border-color: rgba(165, 180, 252, 0.85);
+  transform: translateY(-1.5px);
+  box-shadow: 
+    0 6px 20px rgba(99, 102, 241, 0.5),
+    0 0 24px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.btn-hamburger:active {
+  transform: translateY(0) scale(0.94);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .btn-hamburger span {
   display: block;
-  width: 17px;
-  height: 2px;
-  background: #ffffff;
-  border-radius: 2px;
-  transition: var(--transition);
+  height: 2.2px;
+  background: linear-gradient(90deg, #ffffff 0%, #c7d2fe 100%);
+  border-radius: 4px;
+  transition: all 0.22s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.btn-hamburger span:nth-child(1) {
+  width: 19px;
+}
+
+.btn-hamburger span:nth-child(2) {
+  width: 14px;
+  align-self: flex-start;
+  margin-left: 1px;
+}
+
+.btn-hamburger span:nth-child(3) {
+  width: 19px;
+}
+
+.btn-hamburger:hover span:nth-child(2) {
+  width: 19px;
+  margin-left: 0;
 }
 
 /* Slide-out Navigation Drawer */
@@ -383,6 +424,18 @@ body::before {
 .drawer-nav-link:hover {
   background: rgba(255, 255, 255, 0.06);
   color: #ffffff;
+  transform: translateX(3px);
+}
+
+.drawer-link-purchases {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(5, 150, 105, 0.08) 100%) !important;
+  border: 1px solid rgba(16, 185, 129, 0.38) !important;
+  margin-bottom: 4px;
+}
+
+.drawer-link-purchases:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.18) 100%) !important;
+  border-color: rgba(16, 185, 129, 0.65) !important;
   transform: translateX(3px);
 }
 
@@ -1151,9 +1204,11 @@ body::before {
     font-size: 0.74rem;
   }
   .btn-hamburger {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
     margin-left: 2px;
+    display: inline-flex !important;
+    flex-shrink: 0;
   }
   .batches-grid {
     gap: 14px;
@@ -1182,40 +1237,51 @@ body::before {
   }
   .site-nav {
     padding: 6px 0px;
-    gap: 6px;
+    gap: 8px;
+    flex-wrap: nowrap;
   }
   .brand-badge {
-    font-size: 0.85rem;
-    gap: 5px;
+    font-size: 0.88rem;
+    gap: 6px;
+    min-width: 0;
+    flex-shrink: 1;
   }
   .brand-badge span:last-child {
-    max-width: 100px;
+    max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .nav-actions {
-    gap: 4px;
+    gap: 6px;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
   }
   .nav-earnings-pill {
-    padding: 3px 6px;
-    font-size: 0.68rem;
+    padding: 4px 7px;
+    font-size: 0.7rem;
   }
   .nav-earnings-pill .earnings-pill-text {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
   }
   .nav-link-btn {
-    padding: 4px 8px;
-    font-size: 0.72rem;
+    padding: 5px 9px;
+    font-size: 0.74rem;
   }
   .btn-hamburger {
-    width: 32px;
-    height: 32px;
-    padding: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    display: inline-flex !important;
+    flex-shrink: 0;
   }
   .btn-hamburger span {
-    width: 15px;
+    height: 2px;
   }
+  .btn-hamburger span:nth-child(1) { width: 18px; }
+  .btn-hamburger span:nth-child(2) { width: 13px; }
+  .btn-hamburger span:nth-child(3) { width: 18px; }
+  .btn-hamburger:hover span:nth-child(2) { width: 18px; }
   .headline {
     font-size: 1.35rem;
   }
