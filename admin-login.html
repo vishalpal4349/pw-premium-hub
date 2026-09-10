@@ -242,15 +242,15 @@
           
           <div class="form-group-admin">
             <label class="form-label-admin" for="adminIdentifier">
-              <span>👤 Admin Username or Email</span>
+              <span>👤 Enter Admin Username</span>
             </label>
             <input 
               type="text" 
               id="adminIdentifier" 
               class="form-input-admin" 
-              placeholder="e.g. Vivan1320 or onlyfaltu39@gmail.com" 
+              placeholder="Enter Admin Username" 
               required 
-              autocomplete="username"
+              autocomplete="off"
             >
           </div>
 
@@ -263,7 +263,7 @@
                 type="password" 
                 id="adminPassword" 
                 class="form-input-admin" 
-                placeholder="Enter password" 
+                placeholder="Enter admin password" 
                 required 
                 autocomplete="current-password"
               >
@@ -274,6 +274,18 @@
           <button type="submit" class="btn-admin-submit" id="btnSubmitAdminLogin">
             <span>🚀 Sign In to Admin Portal</span>
           </button>
+
+          <!-- Hint box: ONLY displays after 3 consecutive wrong attempts -->
+          <div id="loginHintBox" style="display: none; background: rgba(99, 102, 241, 0.12); border: 1px dashed rgba(99, 102, 241, 0.5); border-radius: 10px; padding: 11px 14px; margin-top: 14px; font-size: 0.82rem; color: #cbd5e1; text-align: left; line-height: 1.5;">
+            <div style="font-weight: 700; color: #a5b4fc; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>💡</span>
+              <span>Credentials Recovery Hint (3 Wrong Attempts):</span>
+            </div>
+            <div style="font-size: 0.78rem; color: #e2e8f0;">
+              • Email me <strong>'faltu'</strong> word aata hai.<br>
+              • Username <strong>'V'</strong> se start hota hai aur sath me <strong>dono dates / numbers</strong> hain.
+            </div>
+          </div>
         </form>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 0.8rem;">
@@ -285,7 +297,7 @@
       <!-- VIEW 2: RESET PASSWORD FORM -->
       <div id="viewAdminReset" style="display: none;">
         <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.8rem; color: #cbd5e1;">
-          🔑 Enter the authorized main admin email (<strong>onlyfaltu39@gmail.com</strong>) to update your administrative password.
+          🔑 Enter the authorized master admin email to update your administrative password.
         </div>
 
         <form id="formAdminReset">
@@ -297,7 +309,7 @@
               type="email" 
               id="resetAdminEmail" 
               class="form-input-admin" 
-              placeholder="onlyfaltu39@gmail.com" 
+              placeholder="Enter verified admin email" 
               required 
             >
           </div>
@@ -402,15 +414,34 @@
         window.toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
       }
 
+      // Failed login attempts tracking - Hint is shown ONLY after 3 wrong attempts
+      let failedAttempts = parseInt(sessionStorage.getItem("admin_failed_attempts") || "0", 10);
+      const loginHintBox = document.getElementById("loginHintBox");
+
+      function updateHintVisibility() {
+        if (loginHintBox) {
+          if (failedAttempts >= 3) {
+            loginHintBox.style.display = "block";
+          } else {
+            loginHintBox.style.display = "none";
+          }
+        }
+      }
+      updateHintVisibility();
+
       linkToReset?.addEventListener("click", () => {
         viewLogin.style.display = "none";
         viewReset.style.display = "block";
-        if (inputResetEmail) inputResetEmail.value = "onlyfaltu39@gmail.com";
+        if (inputResetEmail) {
+          inputResetEmail.value = "";
+          inputResetEmail.focus();
+        }
       });
 
       linkBackToLogin?.addEventListener("click", () => {
         viewReset.style.display = "none";
         viewLogin.style.display = "block";
+        if (inputIdentifier) inputIdentifier.focus();
       });
 
       // Clear session upon opening login page
@@ -437,15 +468,25 @@
 
         if (isIdentValid && isPassValid) {
           sessionStorage.setItem("admin_authenticated", "true");
+          sessionStorage.removeItem("admin_failed_attempts");
           showToast("✓ Login successful! Opening Admin Dashboard...", "✓");
           setTimeout(() => {
             window.location.href = "admin.html";
           }, 350);
         } else {
-          if (!isIdentValid) {
-            showToast("⚠️ Invalid Admin Username or Email.", "⚠️");
+          failedAttempts++;
+          sessionStorage.setItem("admin_failed_attempts", String(failedAttempts));
+          updateHintVisibility();
+
+          if (failedAttempts >= 3) {
+            showToast("⚠️ 3 Incorrect attempts. Recovery hint unlocked below!", "💡");
           } else {
-            showToast("⚠️ Incorrect Password. You can reset it below.", "⚠️");
+            const left = 3 - failedAttempts;
+            if (!isIdentValid) {
+              showToast(`⚠️ Invalid Admin Username (${left} attempt${left > 1 ? 's' : ''} left before hint).`, "⚠️");
+            } else {
+              showToast(`⚠️ Incorrect Password (${left} attempt${left > 1 ? 's' : ''} left before hint).`, "⚠️");
+            }
           }
           inputPassword.value = "";
           inputPassword.focus();
@@ -463,7 +504,7 @@
         const validEmail = (cfg.ADMIN_EMAIL || "onlyfaltu39@gmail.com").trim().toLowerCase();
 
         if (email !== validEmail) {
-          showToast("⚠️ Only the main admin email (onlyfaltu39@gmail.com) can reset the password.", "⚠️");
+          showToast("⚠️ Only the authorized main admin email can reset the password.", "⚠️");
           return;
         }
 
@@ -489,13 +530,13 @@
         viewReset.style.display = "none";
         viewLogin.style.display = "block";
         inputPassword.value = p1;
-        inputIdentifier.value = "Vivan1320";
+        if (inputIdentifier) inputIdentifier.focus();
       });
 
-      // Pre-fill username for convenience
-      if (inputIdentifier && !inputIdentifier.value) {
-        inputIdentifier.value = "Vivan1320";
-        if (inputPassword) inputPassword.focus();
+      // Input starts completely blank - zero credential leakage
+      if (inputIdentifier) {
+        inputIdentifier.value = "";
+        inputIdentifier.focus();
       }
     });
   </script>
