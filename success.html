@@ -135,7 +135,7 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
           </svg>
-          <span>💬 Need Instant Approval? Chat on WhatsApp Support</span>
+          <span>💬 Need Faster Verification? Chat on WhatsApp Support</span>
         </a>
       </div>
 
@@ -252,12 +252,12 @@
             <span>PW Premium Hub</span>
           </div>
           <p class="footer-desc-text">
-            Affordable, high-yield preparation passes for India's top competitive exams. Instant automated UPI verification & access delivery.
+            Affordable, high-yield preparation passes for India's top competitive exams. Secure UPI payment with verified portal activation & student support.
           </p>
           <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
             <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px;">✓ 100% Encrypted UPI</span>
             <span style="font-size: 0.72rem; background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); padding: 3px 8px; border-radius: 4px;">⚡ 10-15m Verification</span>
-            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 4px;">⭐ 50K+ Students</span>
+            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 4px;">⭐ Quality Study Materials</span>
           </div>
         </div>
 
@@ -305,7 +305,7 @@
       <!-- Footer Bottom Bar with Discreet Admin Access -->
       <div class="footer-bottom-bar">
         <div>
-          © 2025-2026 PW Premium Hub. All Rights Reserved. Trusted by 50,000+ Indian Aspirants.
+          © 2025-2026 PW Premium Hub. All Rights Reserved. Empowering Aspirants Across India.
         </div>
         <div>
           <!-- Discreet Admin Portal Link at bottom -->
@@ -440,6 +440,53 @@
         render();
       }
 
+      // Server-Verified Status Polling
+      let isCheckingServerStatus = false;
+      async function fetchOrderStatusFromServer() {
+        if (!currentOrder || !currentOrder.orderId || isCheckingServerStatus) return;
+        isCheckingServerStatus = true;
+        try {
+          const res = await fetch(`/api/orders/status?orderId=${encodeURIComponent(currentOrder.orderId)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.status) {
+              const isPaid = (data.status === "PAID");
+              const isRejected = (data.status === "REJECTED");
+
+              if (isPaid && currentOrder.status !== "approved") {
+                currentOrder.status = "approved";
+                if (data.portalUrl && btnAccessLink) {
+                  btnAccessLink.href = data.portalUrl;
+                }
+
+                // Synchronize with local storage
+                let freshOrders = [];
+                try {
+                  freshOrders = JSON.parse(localStorage.getItem("pw_orders") || localStorage.getItem("pw_all_orders") || "[]");
+                } catch(e){}
+                const idx = freshOrders.findIndex(o => o.orderId === currentOrder.orderId);
+                if (idx !== -1) {
+                  freshOrders[idx].status = "approved";
+                  freshOrders[idx].approvedAt = data.updatedAt || new Date().toISOString();
+                }
+                try { localStorage.setItem("pw_orders", JSON.stringify(freshOrders)); } catch(e){}
+                try { localStorage.setItem("pw_all_orders", JSON.stringify(freshOrders)); } catch(e){}
+                try { localStorage.setItem("thor_orders", JSON.stringify(freshOrders)); } catch(e){}
+
+                updateOrderStatusView();
+              } else if (isRejected && currentOrder.status !== "rejected") {
+                currentOrder.status = "rejected";
+                updateOrderStatusView();
+              }
+            }
+          }
+        } catch (err) {
+          // Local storage fallback retained silently
+        } finally {
+          isCheckingServerStatus = false;
+        }
+      }
+
       function updateOrderStatusView() {
         let freshOrders = [];
         try {
@@ -448,7 +495,10 @@
 
         if (currentOrder) {
           const matched = freshOrders.find(o => o.orderId === currentOrder.orderId);
-          if (matched) currentOrder = matched;
+          if (matched) {
+            if (matched.status === "approved") currentOrder.status = "approved";
+            if (matched.status === "rejected") currentOrder.status = "rejected";
+          }
         } else if (APP_STATE.currentUser) {
           const found = findOrdersByUserContact(APP_STATE.currentUser.email || APP_STATE.currentUser.phone);
           if (found.length > 0) currentOrder = found[0];
@@ -480,7 +530,7 @@
             `_Sir, maine payment complete kar di hai. Kripya batch access approve karein!_`;
           btnSupportLink.href = `https://wa.me/917631442934?text=${encodeURIComponent(waProofMsg)}`;
 
-          if (currentOrder.status === "approved") {
+          if (currentOrder.status === "approved" || currentOrder.status === "PAID") {
             if (pendingBox) pendingBox.style.display = "none";
             if (approvedBox) approvedBox.style.display = "block";
 
@@ -501,6 +551,23 @@
               triggerConfetti();
               window.confettiFired = true;
             }
+          } else if (currentOrder.status === "rejected" || currentOrder.status === "REJECTED") {
+            if (pendingBox) pendingBox.style.display = "block";
+            if (approvedBox) approvedBox.style.display = "none";
+
+            orderStatusBadge.className = "badge-pill danger";
+            orderStatusBadge.style.background = "rgba(239, 68, 68, 0.15)";
+            orderStatusBadge.style.color = "#ef4444";
+            orderStatusBadge.style.borderColor = "rgba(239, 68, 68, 0.3)";
+            orderStatusText.textContent = "❌ Verification Failed / Rejected";
+            
+            receiptStatusBadge.className = "receipt-badge danger";
+            receiptStatusBadge.textContent = "Rejected";
+
+            successHeading.textContent = "Payment Verification Issue ⚠️";
+            successSubheading.innerHTML = `
+              Payment proof bank statement se match nahi hua ya transaction invalid payi gayi. Kripya niche WhatsApp button se support desk ko contact karein.
+            `;
           } else {
             if (pendingBox) pendingBox.style.display = "block";
             if (approvedBox) approvedBox.style.display = "none";
@@ -523,10 +590,13 @@
       }
 
       updateOrderStatusView();
+      fetchOrderStatusFromServer();
 
       btnRefreshStatus.addEventListener("click", () => {
-        updateOrderStatusView();
-        showToast("Order status refreshed!");
+        fetchOrderStatusFromServer().finally(() => {
+          updateOrderStatusView();
+          showToast("Order status checked & refreshed!");
+        });
       });
 
       // Quick Lookup by Email / Phone (Zero Password Required!)
@@ -541,6 +611,7 @@
         if (found.length > 0) {
           currentOrder = found[0];
           updateOrderStatusView();
+          fetchOrderStatusFromServer();
           showToast(`Found order ${currentOrder.orderId} for ${currentOrder.userName || 'Student'}!`);
         } else {
           showToast("No order found with this contact. Please verify spelling.");
@@ -549,6 +620,7 @@
 
       // Auto-poll status every 4 seconds in background
       setInterval(() => {
+        fetchOrderStatusFromServer();
         updateOrderStatusView();
       }, 4000);
 

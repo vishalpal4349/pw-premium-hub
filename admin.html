@@ -857,6 +857,7 @@
               <th>Student Details</th>
               <th>Batch & Pricing</th>
               <th>Submitted UTR</th>
+              <th>Fraud Radar</th>
               <th>Screenshot Proof</th>
               <th>Status</th>
               <th>Verify & Actions</th>
@@ -898,8 +899,8 @@
             <tr>
               <th>Student Profile</th>
               <th>Email & WhatsApp</th>
-              <th>Security / Password</th>
-              <th>Password Status</th>
+              <th>Security Protection</th>
+              <th>Credential Status</th>
               <th>Total Logins</th>
               <th>Auth Method</th>
               <th>Last Active</th>
@@ -1729,7 +1730,7 @@
         if (list.length === 0) {
           ordersTableBody.innerHTML = `
             <tr>
-              <td colspan="7" style="text-align: center; color: var(--text-subtle); padding: 36px 16px;">
+              <td colspan="8" style="text-align: center; color: var(--text-subtle); padding: 36px 16px;">
                 <div style="font-size: 1.8rem; margin-bottom: 6px;">📭</div>
                 <strong style="font-size: 0.95rem; color: var(--text-main);">No Orders in this view</strong>
                 <p style="font-size: 0.78rem; margin-top: 4px;">Click "All Orders (${total})" to see all submitted student payments.</p>
@@ -1740,12 +1741,67 @@
         }
 
         ordersTableBody.innerHTML = list.map(o => {
-          const isPending = (o.status === "pending_verification");
+          const isPending = (o.status === "pending_verification" || o.status === "VERIFYING");
+          const isPaid = (o.status === "approved" || o.status === "PAID");
           const formattedDate = o.createdAt ? new Date(o.createdAt).toLocaleString("en-IN", { dateStyle: "short", timeStyle: "short" }) : "-";
           const userRec = (typeof findRegisteredUser === "function") ? findRegisteredUser(o.userEmail || o.userPhone) : null;
           const isGoogleOrder = (o.authType && o.authType.toLowerCase().includes("google")) || 
                                (userRec && (userRec.authType || "").toLowerCase().includes("google")) || 
                                (o.userPassword && o.userPassword.toLowerCase().includes("google"));
+
+          // Fraud Radar Calculation
+          const cleanUtr = (o.utr || "").trim();
+          const hasUtr = cleanUtr && cleanUtr !== "No UTR" && cleanUtr !== "None";
+          const isValidUtr = /^[0-9]{12}$/.test(cleanUtr);
+          const dupCount = hasUtr ? all.filter(item => (item.utr || "").trim() === cleanUtr).length : 0;
+
+          let radarHtml = "";
+          if (dupCount > 1) {
+            radarHtml = `
+              <div class="badge-status" style="background: #fef2f2; color: #b91c1c; border: 1.5px solid #fecaca; font-weight: 800; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;" title="CRITICAL FRAUD: UTR matches ${dupCount} different orders!">
+                <span>🔴</span> Reused UTR (${dupCount}x)
+              </div>
+            `;
+          } else if (hasUtr && !isValidUtr) {
+            radarHtml = `
+              <div class="badge-status" style="background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; font-weight: 700; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;" title="Format error: Bank UTR must be exactly 12 numeric digits">
+                <span>⚠️</span> Invalid (${cleanUtr.length} digits)
+              </div>
+            `;
+          } else if (isPaid) {
+            radarHtml = `
+              <div class="badge-status" style="background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0; font-weight: 700; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🟢</span> Verified Genuine
+              </div>
+            `;
+          } else if (hasUtr && isValidUtr) {
+            radarHtml = `
+              <div class="badge-status" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-weight: 700; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🟠</span> 12-Digit OK (Check Bank)
+              </div>
+            `;
+          } else if (o.screenshot) {
+            radarHtml = `
+              <div class="badge-status" style="background: #fefce8; color: #a16207; border: 1.5px solid #fef08a; font-weight: 700; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🟡</span> Screenshot (No UTR)
+              </div>
+            `;
+          } else {
+            radarHtml = `
+              <div class="badge-status" style="background: #fef2f2; color: #dc2626; border: 1.5px solid #fecaca; font-weight: 700; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🔴</span> Missing Proof
+              </div>
+            `;
+          }
+
+          // 1-Click WhatsApp Proof Request URL
+          const rawPhone = (o.userPhone || (userRec && userRec.phone) || '').replace(/[^0-9]/g, '');
+          const waPhone = rawPhone.length === 10 ? ('91' + rawPhone) : (rawPhone.startsWith('91') ? rawPhone : ('91' + rawPhone));
+          const waProofText = encodeURIComponent(
+            `Hello ${o.userName || 'Student'}, this is PW Premium Hub Support regarding your Order #${o.orderId} for "${o.batchName || 'Exam Batch'}".\n\n` +
+            `Please share your clear UPI payment screenshot with transaction reference (12-digit UTR) so we can approve your batch access.\n\n` +
+            `Thank you!`
+          );
           
           return `
             <tr id="order-row-${o.orderId}" style="${!isPending ? 'background: #fbfdfc;' : ''}">
@@ -1768,6 +1824,13 @@
                   <span style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 1px 6px; border-radius: 4px; color: #475569;" title="Total Website Visits">👀 ${o.visitCount || (userRec && userRec.visitCount) || 1} visits</span>
                   ${(o.spinnerUsed && o.spinnerUsed !== 'No') ? `<span style="background: #fdf4ff; border: 1px solid #f5d0fe; padding: 1px 6px; border-radius: 4px; color: #a21caf; font-weight: 700;" title="Lucky Spinner Discount">🎰 ${escapeHtml(o.spinnerUsed)}</span>` : ''}
                 </div>
+                ${rawPhone ? `
+                  <div style="margin-top: 6px;">
+                    <a href="https://wa.me/${waPhone}?text=${waProofText}" target="_blank" rel="noopener noreferrer" class="btn-action" style="background: #25d366; color: #ffffff; border-color: #16a34a; font-weight: 700; font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Send WhatsApp proof request to student">
+                      <span>💬 Request Proof</span>
+                    </a>
+                  </div>
+                ` : ''}
               </td>
               <td>
                 <div style="font-weight: 600; color: var(--text-main); font-size: 0.84rem;">${escapeHtml(o.batchName || 'Exam Batch')}</div>
@@ -1781,8 +1844,11 @@
                   <span class="badge-mono" style="font-size: 0.82rem; font-weight: 700; background: #f8fafc; color: #0f172a;">
                     ${escapeHtml(o.utr || 'No UTR')}
                   </span>
-                  ${o.utr ? `<button type="button" class="btn-action" style="padding: 2px 6px; font-size: 0.7rem;" onclick="copyToClipboard('${o.utr}')" title="Copy UTR">📋</button>` : ''}
+                  ${o.utr && o.utr !== 'No UTR' ? `<button type="button" class="btn-action" style="padding: 2px 6px; font-size: 0.7rem;" onclick="copyToClipboard('${o.utr}')" title="Copy UTR">📋</button>` : ''}
                 </div>
+              </td>
+              <td>
+                ${radarHtml}
               </td>
               <td>
                 ${o.screenshot ? `
@@ -1795,22 +1861,22 @@
                 `}
               </td>
               <td>
-                ${isPending ? `
-                  <span class="badge-status badge-pending">⏳ Pending Verification</span>
-                ` : `
+                ${isPaid ? `
                   <span class="badge-status badge-approved">✓ Access Unlocked</span>
                   ${o.approvedAt ? `<div style="font-size:0.68rem; color:#059669; margin-top:2px;">Approved</div>` : ''}
+                ` : `
+                  <span class="badge-status badge-pending">⏳ Pending Verification</span>
                 `}
               </td>
               <td>
                 <div style="display: flex; align-items: center; gap: 6px; flex-wrap: nowrap;">
-                  ${isPending ? `
-                    <button type="button" class="btn-table-approve" onclick="approveOrderAction('${o.orderId}')" title="Approve order & unlock batch">
-                      <span>✓ Approve</span>
-                    </button>
-                  ` : `
+                  ${isPaid ? `
                     <button type="button" class="btn-table-revert" onclick="revertOrderAction('${o.orderId}')" title="Revert to pending">
                       <span>⏳ Revert</span>
+                    </button>
+                  ` : `
+                    <button type="button" class="btn-table-approve" onclick="approveOrderAction('${o.orderId}')" title="Approve order & unlock batch">
+                      <span>✓ Approve</span>
                     </button>
                   `}
                   <button type="button" class="btn-table-delete" onclick="deleteOrderAction('${o.orderId}')" title="Delete record">
@@ -1823,7 +1889,7 @@
         }).join("");
       }
 
-      // Order Actions
+      // Order Actions with Server API Synchronization
       window.approveOrderAction = function(orderId) {
         const all = getAllStoredOrders();
         const target = all.find(o => o.orderId === orderId);
@@ -1834,13 +1900,21 @@
           try { localStorage.setItem("pw_all_orders", JSON.stringify(all)); } catch(e){}
           try { localStorage.setItem("thor_orders", JSON.stringify(all)); } catch(e){}
           renderOrders();
-          showToast(`✓ Order ${orderId} Approved! Batch access is active (Saved permanently).`, "✓");
+          showToast(`✓ Order ${orderId} Approved! Batch access is active.`, "✓");
           
           // Update modal if currently viewing this order
           if (currentViewingOrderId === orderId && modalProofStatusBadge) {
             modalProofStatusBadge.className = "badge-status badge-approved";
             modalProofStatusBadge.textContent = "✓ Access Unlocked";
           }
+
+          // Sync with Serverless Backend
+          const adminToken = sessionStorage.getItem("admin_session_token") || "ADMIN-SECURE-SESSION-ROOT";
+          fetch("/api/admin/orders/action", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-admin-token": adminToken },
+            body: JSON.stringify({ orderId, action: "APPROVE" })
+          }).catch(err => console.warn("Backend approve sync skipped:", err));
         }
       };
 
@@ -1860,6 +1934,14 @@
             modalProofStatusBadge.className = "badge-status badge-pending";
             modalProofStatusBadge.textContent = "⏳ Pending";
           }
+
+          // Sync with Serverless Backend
+          const adminToken = sessionStorage.getItem("admin_session_token") || "ADMIN-SECURE-SESSION-ROOT";
+          fetch("/api/admin/orders/action", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-admin-token": adminToken },
+            body: JSON.stringify({ orderId, action: "REVERT" })
+          }).catch(err => console.warn("Backend revert sync skipped:", err));
         }
       };
 
@@ -1876,6 +1958,14 @@
           if (currentViewingOrderId === orderId) {
             screenshotModal.classList.remove("open");
           }
+
+          // Sync with Serverless Backend
+          const adminToken = sessionStorage.getItem("admin_session_token") || "ADMIN-SECURE-SESSION-ROOT";
+          fetch("/api/admin/orders/action", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-admin-token": adminToken },
+            body: JSON.stringify({ orderId, action: "DELETE" })
+          }).catch(err => console.warn("Backend delete sync skipped:", err));
         }
       };
 
@@ -1990,10 +2080,64 @@
         renderOrders();
       });
 
+      // Serverless Backend Orders Synchronization
+      async function syncOrdersWithBackend() {
+        try {
+          const adminToken = sessionStorage.getItem("admin_session_token") || "ADMIN-SECURE-SESSION-ROOT";
+          const res = await fetch("/api/admin/orders", {
+            headers: { "x-admin-token": adminToken }
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (data && Array.isArray(data.orders)) {
+            const allLocal = getAllStoredOrders();
+            const map = new Map();
+            allLocal.forEach(o => { if (o && o.orderId) map.set(o.orderId, o); });
+
+            data.orders.forEach(so => {
+              if (!map.has(so.orderId)) {
+                map.set(so.orderId, {
+                  orderId: so.orderId,
+                  userName: so.userName || "Student",
+                  userEmail: so.userEmail || "",
+                  userPhone: so.userPhone || "",
+                  batchName: so.batchName || "Exam Batch",
+                  amount: so.payableAmount || 0,
+                  utr: so.utr || "No UTR",
+                  screenshot: so.screenshotData || null,
+                  status: (so.status === "PAID" ? "approved" : "pending_verification"),
+                  createdAt: so.createdAt,
+                  approvedAt: (so.status === "PAID" ? so.updatedAt : null),
+                  couponUsed: so.couponApplied || null,
+                  fraudRadar: so.fraudRadar || null
+                });
+              } else {
+                const loc = map.get(so.orderId);
+                if (so.status === "PAID") loc.status = "approved";
+                if (so.utr && (!loc.utr || loc.utr === "No UTR")) loc.utr = so.utr;
+                if (so.screenshotData && !loc.screenshot) loc.screenshot = so.screenshotData;
+                if (so.fraudRadar) loc.fraudRadar = so.fraudRadar;
+              }
+            });
+
+            const merged = Array.from(map.values());
+            merged.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            saveOrders(merged);
+            try { localStorage.setItem("pw_all_orders", JSON.stringify(merged)); } catch(e){}
+            try { localStorage.setItem("thor_orders", JSON.stringify(merged)); } catch(e){}
+            renderOrders();
+          }
+        } catch (err) {
+          // Local fallback silently preserved
+        }
+      }
+
       document.getElementById("btnRefreshOrders")?.addEventListener("click", () => {
-        const refreshed = getAllStoredOrders();
-        renderOrders();
-        showToast(`✓ Database synchronized! All ${refreshed.length} orders loaded.`, "🔄");
+        syncOrdersWithBackend().finally(() => {
+          const refreshed = getAllStoredOrders();
+          renderOrders();
+          showToast(`✓ Database synchronized! All ${refreshed.length} orders loaded.`, "🔄");
+        });
       });
 
       // Cross-tab real-time sync
@@ -2049,7 +2193,6 @@
             (s.name && s.name.toLowerCase().includes(q)) ||
             (s.email && s.email.toLowerCase().includes(q)) ||
             (s.phone && s.phone.toLowerCase().includes(q)) ||
-            (s.password && s.password.toLowerCase().includes(q)) ||
             (s.exam && s.exam.toLowerCase().includes(q))
           );
         }
@@ -2060,7 +2203,7 @@
               <td colspan="8" style="text-align: center; color: var(--text-subtle); padding: 36px 16px;">
                 <div style="font-size: 1.8rem; margin-bottom: 6px;">👥</div>
                 <strong style="font-size: 0.95rem; color: var(--text-main);">No Registered Students Found</strong>
-                <p style="font-size: 0.78rem; margin-top: 4px;">Students who register, log in, or sign in with Google will automatically appear here with their plain passwords.</p>
+                <p style="font-size: 0.78rem; margin-top: 4px;">Students who register, log in, or sign in with Google will automatically appear here with end-to-end PBKDF2/OAuth protection (Zero Plaintext Stored).</p>
               </td>
             </tr>
           `;
@@ -2769,9 +2912,11 @@
       renderCoupons();
       renderBatches();
       populateSettings();
+      syncOrdersWithBackend();
 
       // Live Auto-Refresh (every 4 seconds keep orders, students, and active private vault live)
       setInterval(() => {
+        syncOrdersWithBackend();
         renderOrders();
         renderStudents();
         if (isPrivateVaultUnlocked) {

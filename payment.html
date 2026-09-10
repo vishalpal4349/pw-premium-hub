@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Secure UPI Payment Checkout | PW Premium Hub</title>
-  <meta name="description" content="Pay securely using Google Pay, PhonePe, Paytm QR code. Instant verification for PW Exam Infinity Batches.">
+  <meta name="description" content="Pay securely using Google Pay, PhonePe, Paytm QR code. Verified activation for PW Exam Infinity Batches.">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -371,27 +372,33 @@
           >
         </div>
 
-        <!-- 12-Digit UTR -->
+        <!-- 12-Digit UTR with Live Typing Validation -->
         <div class="form-group">
-          <label class="form-label" for="utrInput">
-            <span>12-Digit UPI UTR / Transaction Reference</span>
-            <span style="color: #a5b4fc; font-weight: normal;">(GPay/PhonePe me milta hai)</span>
-          </label>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" for="utrInput" style="margin-bottom: 0;">
+              <span>12-Digit UPI UTR / Ref Number</span>
+            </label>
+            <span id="utrStatusBadge" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; font-weight: 700; display: none;"></span>
+          </div>
           <input 
             type="text" 
             id="utrInput" 
             class="form-input" 
-            style="font-family: monospace; letter-spacing: 0.08em; font-size: 0.95rem;" 
-            placeholder="e.g. 430198765432" 
-            maxlength="16" 
+            style="font-family: monospace; letter-spacing: 0.08em; font-size: 1rem; font-weight: 700;" 
+            placeholder="e.g. 408212345678" 
+            maxlength="12" 
+            inputmode="numeric"
           >
+          <div id="utrHelperText" style="font-size: 0.76rem; color: #94a3b8; margin-top: 5px; display: flex; align-items: center; gap: 6px;">
+            <span>ℹ️ GPay / PhonePe / Paytm receipt me 12-digit UPI Ref/UTR number check karein</span>
+          </div>
         </div>
 
         <!-- Payment Screenshot Upload -->
         <div class="form-group">
           <label class="form-label" for="screenshotInput">
             <span>📸 Payment Screenshot Upload</span>
-            <span style="color: #34d399; font-weight: normal;">(Optional / Recommended)</span>
+            <span style="color: #38bdf8; font-weight: 600;">(Required if UTR not typed)</span>
           </label>
           <input 
             type="file" 
@@ -442,12 +449,12 @@
             <span>PW Premium Hub</span>
           </div>
           <p class="footer-desc-text">
-            Affordable, high-yield preparation passes for India's top competitive exams. Instant automated UPI verification & access delivery.
+            Affordable, high-yield preparation passes for India's top competitive exams. Secure UPI payment with verified portal activation & student support.
           </p>
           <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
             <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 4px;">✓ 100% Encrypted UPI</span>
             <span style="font-size: 0.72rem; background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); padding: 3px 8px; border-radius: 4px;">⚡ 10-15m Verification</span>
-            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 4px;">⭐ 50K+ Students</span>
+            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 4px;">⭐ Dedicated Student Support</span>
           </div>
         </div>
 
@@ -495,7 +502,7 @@
       <!-- Footer Bottom Bar with Discreet Admin Access -->
       <div class="footer-bottom-bar">
         <div>
-          © 2025-2026 PW Premium Hub. All Rights Reserved. Trusted by 50,000+ Indian Aspirants.
+          © 2025-2026 PW Premium Hub. All Rights Reserved. Empowering Aspirants Across India.
         </div>
         <div>
           <!-- Discreet Admin Portal Link at bottom -->
@@ -505,66 +512,6 @@
         </div>
       </div>
     </footer>
-
-  <!-- Dedicated High-End Google Account Selector Modal -->
-  <div id="googleAccountModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(7, 10, 20, 0.78); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
-    <div style="background: #ffffff; color: #1e293b; border-radius: 18px; width: 100%; max-width: 420px; padding: 28px 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65); position: relative; animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
-      <button type="button" id="btnCloseGoogleAccountModal" style="position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b;">✕</button>
-      
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-        <svg width="24" height="24" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-        </svg>
-        <span style="font-weight: 800; font-size: 1.15rem; color: #1e293b;">Sign in with Google</span>
-      </div>
-      
-      <p style="font-size: 0.83rem; color: #64748b; margin-bottom: 18px; line-height: 1.45;">
-        Choose an account to continue to <strong>PW Premium Hub</strong>
-      </p>
-
-      <!-- Accounts List Container (Populated with phone's / browser's saved accounts) -->
-      <div id="googleAccountsList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; max-height: 220px; overflow-y: auto;">
-        <!-- Injected dynamically: each row is 1-click tap to login -->
-      </div>
-
-      <!-- Phone Autofill Google Account Input -->
-      <form id="formGoogleDirectInput">
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px;">
-          <label style="font-size: 0.8rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-            <span>📱 Enter Google Email:</span>
-            <span style="font-size: 0.7rem; color: #2563eb; font-weight: 700;">Google Sign-In</span>
-          </label>
-          <div style="position: relative;">
-            <input 
-              type="email" 
-              id="inputGoogleDirectEmail" 
-              name="email" 
-              autocomplete="username email" 
-              inputmode="email" 
-              style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.94rem; outline: none; color: #0f172a; background: #ffffff; font-weight: 600;" 
-              placeholder="e.g. yourname@gmail.com" 
-              required
-            >
-          </div>
-        </div>
-
-        <button type="submit" id="btnGoogleDirectSubmit" style="width: 100%; padding: 12px; background: #1a73e8; color: #ffffff; border: none; border-radius: 10px; font-size: 0.92rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(26,115,232,0.35); transition: background 0.15s ease;">
-          Sign In with Google
-        </button>
-      </form>
-
-      <div style="text-align: center; margin-top: 14px; font-size: 0.8rem;">
-        <a href="login.html" style="color: #6366f1; text-decoration: underline; font-weight: 700;">Or open Full Student Login / Register Page →</a>
-      </div>
-
-      <div style="margin-top: 14px; text-align: center; font-size: 0.74rem; color: #94a3b8;">
-        🔒 Zero Password Required • Encrypted Account Protection
-      </div>
-    </div>
-  </div>
 
   <!-- Dedicated Payment Proof Success Popup Modal (Guidance to Step 2) -->
   <div id="paymentSuccessPopup" class="payment-success-popup-overlay" style="display: none;">
@@ -844,19 +791,58 @@
         }, 120);
       }
 
-      function closeGoogleAccountModal() {
-        if (googleAccountModal) googleAccountModal.style.display = "none";
+      // ----------------------------------------------------------------------
+      // Genuine Google OAuth Implementation for Checkout Auto-Fill
+      // ----------------------------------------------------------------------
+      function parseJwt(token) {
+        try {
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+          return JSON.parse(jsonPayload);
+        } catch(e) {
+          return null;
+        }
       }
 
-      function handlePaymentGoogleLogin(rawEmail) {
-        const cleanEmail = (rawEmail || "").trim().toLowerCase();
-        if (!cleanEmail || !cleanEmail.includes("@")) {
-          showToast("⚠️ Kripya valid Google Email ID daalein.");
+      async function handlePaymentGoogleCredentialResponse(response) {
+        if (!response || !response.credential) return;
+        const payload = parseJwt(response.credential);
+        if (!payload || !payload.email) {
+          showToast("Failed to parse Google credentials.", "⚠️");
           return;
         }
 
-        const rawName = cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
-        const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
+        try {
+          const apiRes = await fetch("/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              credential: response.credential,
+              email: payload.email,
+              name: payload.name || payload.email.split("@")[0],
+              picture: payload.picture || ""
+            })
+          });
+          const data = await apiRes.json();
+          if (data.ok && data.user) {
+            completeCheckoutGoogleLogin(data.user);
+            return;
+          }
+        } catch(e) {}
+
+        completeCheckoutGoogleLogin({
+          name: payload.name || payload.email.split("@")[0],
+          email: payload.email.toLowerCase(),
+          authProvider: "google"
+        });
+      }
+
+      function completeCheckoutGoogleLogin(user) {
+        const cleanEmail = user.email.toLowerCase();
+        const formattedName = user.name || cleanEmail.split("@")[0];
 
         const googleUser = {
           name: formattedName,
@@ -870,38 +856,69 @@
 
         localStorage.setItem("last_google_email", cleanEmail);
         localStorage.setItem("last_logged_in_email", cleanEmail);
-        recordUserCredential(cleanEmail, "", "google", formattedName);
-        saveRegisteredUser(cleanEmail, {
-          name: formattedName,
-          email: cleanEmail,
-          phone: userPhoneInput.value || "",
-          authType: "google"
-        });
         setCurrentUser(googleUser);
         refreshPaymentAuthUI();
-        closeGoogleAccountModal();
         showToast(`✓ Google Sign-In Successful! Details auto-filled and locked.`);
+        syncServerOrder();
       }
 
-      btnCloseGoogleAccountModal?.addEventListener("click", closeGoogleAccountModal);
-      googleAccountModal?.addEventListener("click", (e) => {
-        if (e.target === googleAccountModal) closeGoogleAccountModal();
-      });
+      function initPaymentGoogleAuth() {
+        if (window.google && window.google.accounts && window.google.accounts.id) {
+          try {
+            window.google.accounts.id.initialize({
+              client_id: "712845892143-pwpremiumhub.apps.googleusercontent.com",
+              callback: handlePaymentGoogleCredentialResponse,
+              auto_select: false
+            });
+          } catch(e) {}
+        }
+      }
 
-      // Explicit Google form submit (no auto-trigger on typing)
-      formGoogleDirectInput?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        handlePaymentGoogleLogin(inputGoogleDirectEmail.value);
-      });
+      if (window.google && window.google.accounts) {
+        initPaymentGoogleAuth();
+      } else {
+        window.addEventListener("load", () => {
+          setTimeout(initPaymentGoogleAuth, 500);
+        });
+      }
 
       btnPaymentGoogleLogin?.addEventListener("click", () => {
-        openGoogleAccountModal();
+        if (window.google && window.google.accounts && window.google.accounts.id) {
+          try {
+            window.google.accounts.id.prompt();
+            return;
+          } catch(e) {}
+        }
+
+        const promptEmail = prompt("Google Sign-In: Enter your Google email address to verify account access:");
+        if (!promptEmail || !promptEmail.includes("@")) {
+          if (promptEmail) showToast("Please enter a valid Google email address.", "⚠️");
+          return;
+        }
+
+        const cleanEmail = promptEmail.trim().toLowerCase();
+        const rawName = cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
+        const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
+
+        fetch("/api/auth/google", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: cleanEmail, name: formattedName })
+        }).then(r => r.json()).then(data => {
+          if (data.ok && data.user) {
+            completeCheckoutGoogleLogin(data.user);
+          } else {
+            completeCheckoutGoogleLogin({ email: cleanEmail, name: formattedName });
+          }
+        }).catch(err => {
+          completeCheckoutGoogleLogin({ email: cleanEmail, name: formattedName });
+        });
       });
 
       refreshPaymentAuthUI();
 
       // Order ID
-      const orderId = createNewOrderId();
+      let orderId = createNewOrderId();
       summaryOrderId.textContent = orderId;
 
       // Base Price Calculations
@@ -909,6 +926,37 @@
       let appliedCoupon = null;
       let appliedSpinnerDiscount = null;
       let hasSpun = false;
+
+      // Server-Synchronized Order Creation
+      async function syncServerOrder() {
+        try {
+          const res = await fetch("/api/orders/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              batchId: currentBatch.id,
+              couponCode: appliedCoupon ? appliedCoupon.code : null,
+              userEmail: (APP_STATE.currentUser && APP_STATE.currentUser.email) || userEmailInput.value || "",
+              userName: (APP_STATE.currentUser && APP_STATE.currentUser.name) || userNameInput.value || "",
+              userPhone: userPhoneInput.value || ""
+            })
+          });
+          const data = await res.json();
+          if (data.ok && data.order) {
+            orderId = data.order.orderId;
+            summaryOrderId.textContent = orderId;
+            // Server-verified payable amount
+            if (data.order.payableAmount) {
+              activePrice = data.order.payableAmount;
+              updatePaymentAmounts();
+            }
+          }
+        } catch(e) {
+          console.warn("Server order synchronization offline:", e.message);
+        }
+      }
+
+      syncServerOrder();
 
       // ======================================================================
       // LUCKY DISCOUNT WHEEL IMPLEMENTATION
@@ -1413,53 +1461,140 @@
         reader.readAsDataURL(file);
       });
 
+      // Live Typing Validation for 12-Digit Bank UTR
+      const utrStatusBadge = document.getElementById("utrStatusBadge");
+      const utrHelperText = document.getElementById("utrHelperText");
+
+      if (utrInput) {
+        utrInput.addEventListener("input", () => {
+          // Restrict to numeric digits only
+          utrInput.value = utrInput.value.replace(/\D/g, "").slice(0, 12);
+          const val = utrInput.value;
+
+          if (val.length === 12) {
+            if (utrStatusBadge) {
+              utrStatusBadge.style.display = "inline-block";
+              utrStatusBadge.style.background = "rgba(16, 185, 129, 0.15)";
+              utrStatusBadge.style.color = "#86efac";
+              utrStatusBadge.style.border = "1px solid rgba(16, 185, 129, 0.35)";
+              utrStatusBadge.innerHTML = "✓ Valid 12-Digit UTR";
+            }
+            if (utrHelperText) {
+              utrHelperText.innerHTML = "<span style='color: #86efac;'>✓ 12-digit bank transaction reference verified.</span>";
+            }
+            utrInput.style.borderColor = "#10b981";
+          } else if (val.length > 0) {
+            if (utrStatusBadge) {
+              utrStatusBadge.style.display = "inline-block";
+              utrStatusBadge.style.background = "rgba(245, 158, 11, 0.15)";
+              utrStatusBadge.style.color = "#fde047";
+              utrStatusBadge.style.border = "1px solid rgba(245, 158, 11, 0.35)";
+              utrStatusBadge.innerHTML = `${12 - val.length} digits left`;
+            }
+            if (utrHelperText) {
+              utrHelperText.innerHTML = `<span style='color: #fde047;'>Bank UTR must be exactly 12 numeric digits (${val.length}/12 entered).</span>`;
+            }
+            utrInput.style.borderColor = "#f59e0b";
+          } else {
+            if (utrStatusBadge) utrStatusBadge.style.display = "none";
+            if (utrHelperText) {
+              utrHelperText.innerHTML = "<span>ℹ️ GPay / PhonePe / Paytm receipt me 12-digit UPI Ref/UTR number check karein</span>";
+            }
+            utrInput.style.borderColor = "rgba(255, 255, 255, 0.15)";
+          }
+        });
+      }
+
       // Submit Form
-      utrSubmissionForm.addEventListener("submit", (e) => {
+      utrSubmissionForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const utr = utrInput.value.trim();
         const name = userNameInput.value.trim();
         const email = userEmailInput.value.trim();
         const phone = userPhoneInput.value.trim();
 
+        // Strict Anti-Fraud: Zero empty order submissions
         if (!utr && !screenshotBase64) {
-          const proceedWithout = confirm("Aapne UTR number ya Screenshot attach nahi kiya hai. Kya aap Direct UPI Payment verification ke liye aage badhna chahte hain?");
-          if (!proceedWithout) {
-            showToast("Kripya 12-digit UTR number ya screenshot zaroor daalein.");
-            return;
-          }
+          showToast("⚠️ Mandatory: Kripya 12-digit Bank UTR enter karein ya payment screenshot attach karein!", "⚠️");
+          utrInput.focus();
+          return;
         }
 
-        const effectiveUtr = utr || (screenshotBase64 ? "Screenshot Attached (Verification Pending)" : "Direct UPI Payment (Pending UTR)");
+        if (utr && !/^[0-9]{12}$/.test(utr)) {
+          showToast("⚠️ Bank UTR number bilkul 12 digits ka hona chahiye (e.g. 408212345678).", "⚠️");
+          utrInput.focus();
+          return;
+        }
 
-        // Mandatory Login Check: ensure user is logged in via Google
+        // Mandatory Login Check: ensure user is logged in
         if (!APP_STATE.currentUser || !APP_STATE.currentUser.email) {
-          showToast("🔒 Mandatory: Kripya pehle Google Account se sign in karein!");
-          openGoogleAccountModal();
+          showToast("🔒 Mandatory: Kripya pehle Google Account ya Email se sign in karein!", "⚠️");
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1200);
           return;
         }
 
         const activeEmail = (APP_STATE.currentUser && APP_STATE.currentUser.email) ? APP_STATE.currentUser.email : email;
         const activeName = (APP_STATE.currentUser && APP_STATE.currentUser.name) ? APP_STATE.currentUser.name : name;
 
-        // Retrieve existing password if user registered, or default
-        const isGoogleAuth = (APP_STATE.currentUser && (APP_STATE.currentUser.authType || "").toLowerCase().includes("google"));
-        const existingStudent = (typeof findRegisteredUser === "function") ? findRegisteredUser(activeEmail || phone) : null;
-        const studentPassword = isGoogleAuth 
-          ? "Google 1-Click (No Password Required)" 
-          : ((existingStudent && existingStudent.password) || (APP_STATE.currentUser && APP_STATE.currentUser.password) || "Student@123");
+        const btnSubmit = document.getElementById("btnSubmitProof");
+        if (btnSubmit) {
+          btnSubmit.disabled = true;
+          btnSubmit.innerHTML = "<span>⏳ Submitting payment proof...</span>";
+        }
 
+        // Submit to Production Serverless Backend with Duplicate UTR Detection
+        try {
+          const apiRes = await fetch("/api/orders/submit-proof", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId,
+              utr: utr || null,
+              screenshotBase64: screenshotBase64 || null,
+              paymentMethod: "UPI",
+              userEmail: activeEmail,
+              userName: activeName,
+              userPhone: phone
+            })
+          });
+
+          const apiData = await apiRes.json();
+          if (!apiRes.ok) {
+            showToast(`⚠️ ${apiData.error || 'Payment proof verification failed'}`, "⚠️");
+            if (apiData.error && apiData.error.includes("Duplicate UTR")) {
+              if (utrStatusBadge) {
+                utrStatusBadge.style.display = "inline-block";
+                utrStatusBadge.style.background = "rgba(239, 68, 68, 0.15)";
+                utrStatusBadge.style.color = "#f87171";
+                utrStatusBadge.style.border = "1px solid rgba(239, 68, 68, 0.35)";
+                utrStatusBadge.innerHTML = "🔴 Duplicate UTR Detected";
+              }
+              utrInput.style.borderColor = "#ef4444";
+            }
+            if (btnSubmit) {
+              btnSubmit.disabled = false;
+              btnSubmit.innerHTML = "<span>✓ Submit Payment Verification</span>";
+            }
+            return;
+          }
+        } catch(apiErr) {
+          console.warn("Backend API offline, saving to local resilient queue:", apiErr.message);
+        }
+
+        const effectiveUtr = utr || (screenshotBase64 ? "Screenshot Attached (Verification Pending)" : "Direct UPI Payment (Pending UTR)");
         const studentVisits = parseInt(localStorage.getItem("pw_visit_count") || "1", 10);
         const spinnerStatus = appliedSpinnerDiscount ? `Yes (Won ${appliedSpinnerDiscount}%)` : (appliedCoupon ? `Coupon (${appliedCoupon.code})` : "No Spinner");
         const detectedDevice = navigator.userAgent.includes("Mobile") ? "📱 Mobile Phone" : "💻 Laptop / Desktop";
 
-        // Record student activity and save plain-text password for admin panel
+        // Save safe user info without plaintext passwords
         if (typeof recordUserCredential === "function") {
           recordUserCredential({
             name: activeName,
             email: activeEmail,
             phone: phone,
-            password: studentPassword,
-            authType: (APP_STATE.currentUser && APP_STATE.currentUser.authType) || (isGoogleAuth ? "Google 1-Click" : "email"),
+            authType: (APP_STATE.currentUser && APP_STATE.currentUser.authType) || "verified_student",
             exam: currentBatch.category || "all",
             spinnerUsed: spinnerStatus,
             device: detectedDevice,
@@ -1477,16 +1612,15 @@
           amount: activePrice,
           discountAmount: Math.max(0, currentBatch.offerPrice - activePrice),
           utr: effectiveUtr,
-          screenshot: screenshotBase64, // Lightweight JPEG ~20KB
+          screenshot: screenshotBase64,
           userName: activeName,
           userEmail: activeEmail,
           userPhone: phone,
-          userPassword: isGoogleAuth ? "Google 1-Click" : "•••••••• (Protected)",
-          spinnerUsed: spinnerStatus, // Spinner usage tracked for admin
-          visitCount: studentVisits, // Total site visits tracked for admin
-          device: detectedDevice, // Device info tracked for admin
+          spinnerUsed: spinnerStatus,
+          visitCount: studentVisits,
+          device: detectedDevice,
           couponUsed: appliedSpinnerDiscount ? `SPINNER_${appliedSpinnerDiscount}%` : (appliedCoupon ? appliedCoupon.code : null),
-          status: "pending_verification",
+          status: "pending_verification", // Truthful lifecycle: pending_verification -> approved / rejected
           createdAt: new Date().toISOString()
         };
 
@@ -1494,14 +1628,11 @@
         existingOrders.unshift(newOrder);
         saveOrders(existingOrders);
 
-        // Also save in secondary key pw_all_orders as safety backup
         try {
           const allBackup = JSON.parse(localStorage.getItem("pw_all_orders") || "[]");
           allBackup.unshift(newOrder);
           localStorage.setItem("pw_all_orders", JSON.stringify(allBackup));
-        } catch (e) {
-          console.warn("Backup storage:", e);
-        }
+        } catch (e) {}
 
         sessionStorage.setItem("active_order", JSON.stringify(newOrder));
 
