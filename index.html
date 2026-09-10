@@ -6,7 +6,6 @@
   <title>PW Premium Hub | All-Exam Infinity Passes & Competition Batches</title>
   <meta name="description" content="Get complete access to all PW competition exam batches for JEE, NEET, Foundation, NDA, and Commerce with live classes, DPPs, and test series.">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -1258,28 +1257,6 @@
       }
 
       function startRealGoogleAuth() {
-        // Method 1: Google Identity Services tokenClient popup
-        if (window.google && window.google.accounts && window.google.accounts.oauth2) {
-          try {
-            const tokenClient = window.google.accounts.oauth2.initTokenClient({
-              client_id: GOOGLE_CLIENT_ID,
-              scope: "openid email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
-              callback: (tokenResponse) => {
-                if (tokenResponse && tokenResponse.access_token) {
-                  handleRealGoogleAuthResponse({ access_token: tokenResponse.access_token });
-                } else if (tokenResponse && tokenResponse.error) {
-                  showToast("Google authentication was not completed.", "⚠️");
-                }
-              }
-            });
-            tokenClient.requestAccessToken({ prompt: "select_account" });
-            return;
-          } catch(e) {
-            console.warn("GIS tokenClient initialization fallback:", e);
-          }
-        }
-
-        // Method 2: Genuine Google OAuth 2.0 Web Auth Redirection
         const redirectUri = window.location.origin + window.location.pathname;
         const scope = encodeURIComponent("openid email profile");
         const nonce = Math.random().toString(36).substring(2);
@@ -1302,28 +1279,7 @@
       }
       checkGoogleOAuthHashCallback();
 
-      // Initialize GIS Identity button if loaded
-      function initGsiClient() {
-        if (window.google && window.google.accounts && window.google.accounts.id) {
-          try {
-            window.google.accounts.id.initialize({
-              client_id: GOOGLE_CLIENT_ID,
-              callback: (resp) => {
-                if (resp && resp.credential) {
-                  handleRealGoogleAuthResponse({ credential: resp.credential });
-                }
-              },
-              auto_select: false
-            });
-          } catch(e) {}
-        }
-      }
-      if (window.google && window.google.accounts) {
-        initGsiClient();
-      } else {
-        window.addEventListener("load", () => setTimeout(initGsiClient, 500));
-      }
-
+      // Google Button Click Handler - Standard Google OAuth
       const btnGoogleSignIn = document.getElementById("btnGoogleSignIn");
       btnGoogleSignIn?.addEventListener("click", () => {
         startRealGoogleAuth();
