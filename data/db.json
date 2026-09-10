@@ -23,9 +23,81 @@
       "sessionToken": "80e35887b10305c4440066ee91b384a9464688a5f7fdcc8631009d9b5e6cde62",
       "createdAt": "2026-09-10T07:20:16.216Z",
       "lastLoginAt": "2026-09-10T07:20:16.217Z"
+    },
+    {
+      "id": "USR-1789026910205",
+      "email": "student_1789026910191@example.com",
+      "name": "Rohan Sharma",
+      "phone": "9876543210",
+      "authProvider": "email_password",
+      "salt": "532700487e2d873f03f40b96c471f359",
+      "passwordHash": "bf91b4083aa69e1ce2830f5ea6986352be05b5ed806be85d6666262515459fa5255306788b56a2b6ca9472e0d0eb8ca3ef817286ba7a1ed6fa0a28313e0d4f36",
+      "sessionToken": "16248556d919444f889f3577d43bc3b41e9d155770b82d6d0639db8f7557b952",
+      "createdAt": "2026-09-10T07:55:10.205Z",
+      "lastLoginAt": "2026-09-10T07:55:10.206Z"
+    },
+    {
+      "id": "USR-G-1789026910276",
+      "email": "student_google@gmail.com",
+      "name": "Google Student Verified",
+      "picture": "",
+      "authProvider": "google",
+      "salt": null,
+      "passwordHash": null,
+      "sessionToken": "fb8e7f49621c49b774e5788590af49116f4cceefffc84007b358415033a89790",
+      "createdAt": "2026-09-10T07:55:10.276Z",
+      "lastLoginAt": "2026-09-10T07:55:10.276Z"
     }
   ],
   "orders": [
+    {
+      "orderId": "PWHUB-20260910-AEFC51",
+      "batchId": "b-jee-infinity",
+      "batchName": "IIT-JEE Infinity All-Batch Pass",
+      "originalPrice": 4999,
+      "baseOfferPrice": 299,
+      "payableAmount": 299,
+      "couponApplied": null,
+      "discountPercent": 0,
+      "userEmail": "another_student@example.com",
+      "userName": "Another Student",
+      "userPhone": "",
+      "status": "ORDER_CREATED",
+      "paymentMethod": null,
+      "utr": null,
+      "screenshotAttached": false,
+      "fraudFlags": [
+        {
+          "type": "DUPLICATE_UTR",
+          "detail": "UTR 408286500328 was already submitted for order PWHUB-20260910-C0D2F3",
+          "timestamp": "2026-09-10T07:55:10.249Z"
+        }
+      ],
+      "createdAt": "2026-09-10T07:55:10.245Z",
+      "updatedAt": "2026-09-10T07:55:10.245Z",
+      "verifiedAt": null
+    },
+    {
+      "orderId": "PWHUB-20260910-C0D2F3",
+      "batchId": "b-jee-infinity",
+      "batchName": "IIT-JEE Infinity All-Batch Pass",
+      "originalPrice": 4999,
+      "baseOfferPrice": 299,
+      "payableAmount": 299,
+      "couponApplied": null,
+      "discountPercent": 0,
+      "userEmail": "student_1789026910191@example.com",
+      "userName": "Rohan Sharma",
+      "userPhone": "9876543210",
+      "status": "PAID",
+      "paymentMethod": null,
+      "utr": "408286500328",
+      "screenshotAttached": false,
+      "fraudFlags": [],
+      "createdAt": "2026-09-10T07:55:10.234Z",
+      "updatedAt": "2026-09-10T07:55:10.256Z",
+      "verifiedAt": "2026-09-10T07:55:10.256Z"
+    },
     {
       "orderId": "PWHUB-20260910-F2408A",
       "batchId": "b-jee-infinity",
@@ -125,10 +197,22 @@
   ],
   "utrIndex": {
     "408285081640": "PWHUB-20260910-A0B310",
-    "408241572288": "PWHUB-20260910-371139"
+    "408241572288": "PWHUB-20260910-371139",
+    "408286500328": "PWHUB-20260910-C0D2F3"
   },
   "resetTokens": {},
   "trackedUserEvents": [
+    {
+      "id": "TRK-1789026910220-f0fc",
+      "email": "vandanachaubey713@gmail.com",
+      "name": "Vandana Chaubey",
+      "authProvider": "email_password",
+      "event": "failed_login_unregistered",
+      "timestamp": "2026-09-10T07:55:10.220Z",
+      "ip": "127.0.0.1",
+      "userAgent": "Browser",
+      "status": "AUTHENTICATED"
+    },
     {
       "id": "TRK-1789024816234-g0cw",
       "email": "vandanachaubey713@gmail.com",
@@ -142,6 +226,11 @@
     }
   ],
   "adminAuditLog": [
+    {
+      "event": "ADMIN_LOGIN_SUCCESS",
+      "ip": "127.0.0.1",
+      "timestamp": "2026-09-10T07:55:10.226Z"
+    },
     {
       "event": "ADMIN_LOGIN_SUCCESS",
       "ip": "127.0.0.1",

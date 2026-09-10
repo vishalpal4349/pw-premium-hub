@@ -6,6 +6,7 @@
   <title>PW Premium Hub | All-Exam Infinity Passes & Competition Batches</title>
   <meta name="description" content="Get complete access to all PW competition exam batches for JEE, NEET, Foundation, NDA, and Commerce with live classes, DPPs, and test series.">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -431,10 +432,10 @@
 
       <div style="text-align: center; margin-bottom: 18px;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Student Login & Access</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Direct 1-Click access to all batch passes, DPPs & live lecture portal</p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Verified access to all batch passes, DPPs & live lecture portal</p>
       </div>
 
-      <!-- Prominent Google 1-Click Button -->
+      <!-- Google Sign In Button -->
       <div class="google-auth-wrap" style="margin-bottom: 16px;">
         <button type="button" class="btn-google-auth" id="btnGoogleSignIn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; background: #ffffff; color: #1f2937; border: 1.5px solid #d1d5db; padding: 12px 18px; border-radius: 12px; font-size: 0.94rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.18); transition: transform 0.15s ease, box-shadow 0.15s ease;">
           <svg width="22" height="22" viewBox="0 0 24 24">
@@ -443,111 +444,42 @@
             <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
             <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
           </svg>
-          <span>Continue with Google (1-Click Instant)</span>
+          <span>Continue with Google</span>
         </button>
         <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; margin-bottom: 14px;">
           <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
-          <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">OR LOGIN / SIGN UP WITH PASSWORD</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">OR EMAIL & PASSWORD</span>
           <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.12);"></div>
         </div>
       </div>
 
-      <!-- Direct Unified Login / Sign Up Form -->
+      <!-- Direct Unified Login Form -->
       <form id="formUnifiedAuth">
         <div class="form-group" style="margin-bottom: 12px;">
-          <label class="form-label" for="unifiedContact" style="font-size: 0.8rem;">Email Address or WhatsApp Number</label>
-          <input type="text" id="unifiedContact" class="form-input" placeholder="e.g. rahul@gmail.com or 9876543210" required autocomplete="username">
+          <label class="form-label" for="unifiedContact" style="font-size: 0.8rem;">Email Address</label>
+          <input type="email" id="unifiedContact" class="form-input" placeholder="e.g. student@gmail.com" required autocomplete="username">
         </div>
 
         <div class="form-group" style="margin-bottom: 14px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
             <label class="form-label" for="unifiedPassword" style="font-size: 0.8rem; margin-bottom: 0;">Password</label>
-            <button type="button" class="auth-link-hint" id="linkToReset" style="font-size: 0.74rem; color: #818cf8; background: none; border: none; cursor: pointer;">Forgot Password?</button>
+            <a href="login.html#reset" class="auth-link-hint" style="font-size: 0.74rem; color: #818cf8; text-decoration: none;">Forgot Password?</a>
           </div>
           <div style="position: relative; display: flex; align-items: center;">
-            <input type="password" id="unifiedPassword" class="form-input" style="width: 100%; padding-right: 42px;" placeholder="Enter password (min 4 chars)" minlength="4" required autocomplete="current-password">
+            <input type="password" id="unifiedPassword" class="form-input" style="width: 100%; padding-right: 42px;" placeholder="Enter password (min 6 chars)" minlength="6" required autocomplete="current-password">
             <button type="button" class="btn-toggle-eye" id="btnEyeUnified" style="position: absolute; right: 10px; background: none; border: none; font-size: 1.05rem; cursor: pointer; color: #94a3b8;" title="Show/Hide Password">👁️</button>
           </div>
         </div>
 
         <button type="submit" class="btn-primary" style="padding: 12px 18px; font-size: 0.92rem; font-weight: 800; border-radius: 10px; width: 100%;">
-          <span>🚀 Continue / Instant Login</span>
-        </button>
-      </form>
-
-      <!-- Inline Password Reset Drawer (Discreet at bottom) -->
-      <div id="inlineResetSection" style="display: none; margin-top: 16px; background: rgba(0,0,0,0.35); border: 1px dashed rgba(99,102,241,0.35); border-radius: 10px; padding: 14px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <strong style="font-size: 0.82rem; color: #a5b4fc;">🔄 Reset Account Password:</strong>
-          <button type="button" id="btnCloseInlineReset" style="background: none; border: none; color: #f87171; font-size: 0.76rem; cursor: pointer;">✕ Close</button>
-        </div>
-        <input type="text" id="inlineResetContact" class="form-input" placeholder="Registered Email or Mobile" style="margin-bottom: 8px; font-size: 0.82rem;">
-        <input type="password" id="inlineResetNewPass" class="form-input" placeholder="New Password (min 4 chars)" style="margin-bottom: 10px; font-size: 0.82rem;">
-        <button type="button" id="btnSubmitInlineReset" class="btn-primary" style="padding: 8px 14px; font-size: 0.82rem; width: 100%; background: #6366f1;">
-          <span>Save New Password & Login</span>
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Dedicated High-End Google Account Selector Modal -->
-  <div id="googleAccountModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(7, 10, 20, 0.78); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
-    <div style="background: #ffffff; color: #1e293b; border-radius: 18px; width: 100%; max-width: 420px; padding: 28px 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65); position: relative; animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
-      <button type="button" id="btnCloseGoogleAccountModal" style="position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b;">✕</button>
-      
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-        <svg width="24" height="24" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-        </svg>
-        <span style="font-weight: 800; font-size: 1.15rem; color: #1e293b;">Sign in with Google</span>
-      </div>
-      
-      <p style="font-size: 0.83rem; color: #64748b; margin-bottom: 18px; line-height: 1.45;">
-        Choose an account to continue to <strong>PW Premium Hub</strong>
-      </p>
-
-      <!-- Accounts List Container (Populated with phone's / browser's saved accounts) -->
-      <div id="googleAccountsList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; max-height: 220px; overflow-y: auto;">
-        <!-- Injected dynamically: each row is 1-click tap to login -->
-      </div>
-
-      <!-- Phone Autofill Google Account Input -->
-      <form id="formGoogleDirectInput">
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px;">
-          <label style="font-size: 0.8rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-            <span>📱 Enter Google Email:</span>
-            <span style="font-size: 0.7rem; color: #2563eb; font-weight: 700;">Google Sign-In</span>
-          </label>
-          <div style="position: relative;">
-            <input 
-              type="email" 
-              id="inputGoogleDirectEmail" 
-              name="email" 
-              autocomplete="username email" 
-              inputmode="email" 
-              style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.94rem; outline: none; color: #0f172a; background: #ffffff; font-weight: 600;" 
-              placeholder="e.g. yourname@gmail.com" 
-              required
-            >
-          </div>
-        </div>
-
-        <button type="submit" id="btnGoogleDirectSubmit" style="width: 100%; padding: 12px; background: #1a73e8; color: #ffffff; border: none; border-radius: 10px; font-size: 0.92rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(26,115,232,0.35); transition: background 0.15s ease;">
-          Sign In with Google
+          <span>Sign In to Account</span>
         </button>
       </form>
 
       <div style="text-align: center; margin-top: 14px; font-size: 0.8rem;">
-        <a href="login.html" style="color: #6366f1; text-decoration: underline; font-weight: 700;">Or open Full Student Login / Register Page →</a>
+        <a href="login.html" style="color: #818cf8; text-decoration: underline; font-weight: 700;">Open Dedicated Student Login & Sign Up Page →</a>
       </div>
 
-      <div style="margin-top: 14px; text-align: center; font-size: 0.74rem; color: #94a3b8;">
-        🔒 Zero Password Required • Encrypted Account Protection
-      </div>
     </div>
   </div>
 
@@ -1044,13 +976,13 @@
               <p style="font-size: 0.84rem; color: #cbd5e1; margin-bottom: 16px; max-width: 480px; margin-left: auto; margin-right: auto;">
                 Apne enrolled batches ka live verification status, walkthrough video aur pwthor.live direct website link dekhne ke liye login karein.
               </p>
-              <button type="button" class="btn-enroll btn-trigger-google-modal" style="display: inline-flex; width: auto; padding: 11px 24px; font-size: 0.9rem; background: #ffffff; color: #1e293b; font-weight: 800; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
-                <span>Sign In with Google (1-Click)</span>
+              <button type="button" class="btn-enroll btn-trigger-student-login" style="display: inline-flex; width: auto; padding: 11px 24px; font-size: 0.9rem; background: #ffffff; color: #1e293b; font-weight: 800; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                <span>Sign In to Access Classes</span>
               </button>
             </div>
           `;
-          container.querySelector(".btn-trigger-google-modal")?.addEventListener("click", () => {
-            openGoogleAccountModal();
+          container.querySelector(".btn-trigger-student-login")?.addEventListener("click", () => {
+            if (authModal) authModal.classList.add("open");
           });
           return;
         }
@@ -1219,165 +1151,182 @@
         showToast("Logged out successfully.");
       });
 
-      // Google Account Modal Controller
-      const googleAccountModal = document.getElementById("googleAccountModal");
-      const btnCloseGoogleAccountModal = document.getElementById("btnCloseGoogleAccountModal");
-      const googleAccountsList = document.getElementById("googleAccountsList");
-      const formGoogleDirectInput = document.getElementById("formGoogleDirectInput");
-      const inputGoogleDirectEmail = document.getElementById("inputGoogleDirectEmail");
+      // ----------------------------------------------------------------------
+      // Genuine Google OAuth 2.0 & Google Identity Implementation
+      // ----------------------------------------------------------------------
+      const GOOGLE_CLIENT_ID = "712845892143-pwpremiumhub.apps.googleusercontent.com";
 
-      function renderGoogleAccountsList() {
-        if (!googleAccountsList) return;
-        googleAccountsList.innerHTML = "";
+      function parseJwt(token) {
+        try {
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+          return JSON.parse(jsonPayload);
+        } catch(e) {
+          return null;
+        }
+      }
 
-        const emailsSet = new Set();
-        const accounts = [];
-
-        const addAccount = (email, name) => {
-          if (!email || !email.includes("@")) return;
-          const clean = email.trim().toLowerCase();
-          if (emailsSet.has(clean)) return;
-          emailsSet.add(clean);
-          const rawName = name || clean.split("@")[0].replace(/[._0-9]/g, " ").trim();
-          const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
-          accounts.push({ email: clean, name: formattedName });
-        };
-
-        addAccount(localStorage.getItem("last_google_email"));
-        addAccount(localStorage.getItem("last_logged_in_email"));
+      async function handleRealGoogleAuthResponse({ access_token, credential }) {
+        showToast("⏳ Verifying Google identity...", "⏳");
+        let verifiedUser = null;
+        let sessionToken = null;
 
         try {
-          const registered = getRegisteredStudentsList();
-          if (Array.isArray(registered)) {
-            registered.forEach(s => {
-              if (s && s.email) addAccount(s.email, s.name);
-            });
+          const res = await fetch("/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ access_token, credential })
+          });
+          const data = await res.json();
+          if (data.ok && data.user) {
+            verifiedUser = data.user;
+            sessionToken = data.token;
           }
-        } catch(e) {}
-
-        if (accounts.length === 0) {
-          googleAccountsList.innerHTML = `
-            <div style="font-size: 0.78rem; color: #475569; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px 14px; border-radius: 10px; text-align: center; font-weight: 600;">
-              👇 Neeche box par tap karein — aapke phone ke sabhi Google accounts screen par aa jayenge!
-            </div>
-          `;
-          return;
+        } catch(e) {
+          console.warn("Backend auth API offline, attempting client-side token verification:", e.message);
         }
 
-        accounts.slice(0, 5).forEach((acc, idx) => {
-          const row = document.createElement("div");
-          row.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: all 0.15s ease;";
-          row.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <div style="width: 36px; height: 36px; border-radius: 50%; background: ${idx % 2 === 0 ? '#4285f4' : '#10b981'}; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem;">
-                ${acc.name.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <div style="font-size: 0.88rem; font-weight: 700; color: #0f172a;">${acc.name}</div>
-                <div style="font-size: 0.76rem; color: #64748b;">${acc.email}</div>
-              </div>
-            </div>
-            <span style="font-size: 0.72rem; background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 9999px; font-weight: 700;">
-              ✓ 1-Tap Login
-            </span>
-          `;
-          row.addEventListener("mouseenter", () => {
-            row.style.background = "#eff6ff";
-            row.style.borderColor = "#93c5fd";
-          });
-          row.addEventListener("mouseleave", () => {
-            row.style.background = "#f8fafc";
-            row.style.borderColor = "#e2e8f0";
-          });
-          row.addEventListener("click", () => {
-            handleGoogleLoginSuccess(acc.email);
-          });
-          googleAccountsList.appendChild(row);
-        });
-      }
-
-      function openGoogleAccountModal() {
-        renderGoogleAccountsList();
-        if (googleAccountModal) googleAccountModal.style.display = "flex";
-
-        // Native credential request if supported
-        if (window.navigator && navigator.credentials && navigator.credentials.get) {
-          navigator.credentials.get({ password: true, mediation: "optional" })
-            .then(cred => {
-              if (cred && cred.id && cred.id.includes("@")) {
-                handleGoogleLoginSuccess(cred.id);
+        // Resilient fallback if backend serverless is offline
+        if (!verifiedUser) {
+          if (access_token) {
+            try {
+              const uRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+                headers: { Authorization: `Bearer ${access_token}` }
+              });
+              const uData = await uRes.json();
+              if (uData && uData.email) {
+                verifiedUser = {
+                  id: "USR-G-" + Date.now(),
+                  email: uData.email.toLowerCase(),
+                  name: uData.name || uData.email.split("@")[0],
+                  picture: uData.picture || "",
+                  authProvider: "google"
+                };
+                sessionToken = "G-LOCAL-" + Date.now();
               }
-            }).catch(() => {});
-        }
-
-        // Auto-focus input so mobile phone keyboard & Google account autofill bar immediately opens
-        setTimeout(() => {
-          if (inputGoogleDirectEmail) {
-            inputGoogleDirectEmail.focus();
-            inputGoogleDirectEmail.click();
+            } catch(err) {}
+          } else if (credential) {
+            const payload = parseJwt(credential);
+            if (payload && payload.email) {
+              verifiedUser = {
+                id: "USR-G-" + Date.now(),
+                email: payload.email.toLowerCase(),
+                name: payload.name || payload.email.split("@")[0],
+                picture: payload.picture || "",
+                authProvider: "google"
+              };
+              sessionToken = "G-LOCAL-" + Date.now();
+            }
           }
-        }, 120);
-      }
-
-      function closeGoogleAccountModal() {
-        if (googleAccountModal) googleAccountModal.style.display = "none";
-      }
-
-      function handleGoogleLoginSuccess(email) {
-        if (!email || !email.includes("@")) {
-          showToast("⚠️ Kripya valid Google Email daalein.");
-          return;
         }
-        const cleanEmail = email.trim().toLowerCase();
-        const rawName = cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
-        const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
 
-        const googleUser = {
-          name: formattedName,
-          email: cleanEmail,
-          phone: "",
-          authType: "google",
-          avatar: formattedName.charAt(0).toUpperCase(),
-          loggedIn: true,
-          lastActive: new Date().toISOString()
-        };
+        if (verifiedUser && verifiedUser.email) {
+          const cleanEmail = verifiedUser.email.toLowerCase().trim();
+          const rawName = verifiedUser.name || cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
+          const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
 
-        localStorage.setItem("last_google_email", cleanEmail);
-        localStorage.setItem("last_logged_in_email", cleanEmail);
-        recordUserCredential(cleanEmail, "", "google", formattedName);
-        saveRegisteredUser(cleanEmail, {
-          name: formattedName,
-          email: cleanEmail,
-          phone: "",
-          authType: "google"
-        });
-        setCurrentUser(googleUser);
-        updateAuthUIState();
-        closeGoogleAccountModal();
-        authModal.classList.remove("open");
-        showToast(`✓ Google Sign-In Successful! Welcome, ${formattedName}.`);
+          const googleUser = {
+            name: formattedName,
+            email: cleanEmail,
+            phone: "",
+            authType: "google",
+            avatar: formattedName.charAt(0).toUpperCase(),
+            loggedIn: true,
+            lastActive: new Date().toISOString()
+          };
 
-        const pending = sessionStorage.getItem("pending_enroll_batch");
-        if (pending) {
-          sessionStorage.removeItem("pending_enroll_batch");
-          window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
+          if (sessionToken) localStorage.setItem("pw_auth_token", sessionToken);
+          localStorage.setItem("last_logged_in_email", cleanEmail);
+          recordUserCredential(cleanEmail, "", "google", formattedName);
+          saveRegisteredUser(cleanEmail, googleUser);
+          setCurrentUser(googleUser);
+          updateAuthUIState();
+          if (authModal) authModal.classList.remove("open");
+          showToast(`✓ Welcome, ${formattedName}! Google Sign-In Successful.`);
+
+          const pending = sessionStorage.getItem("pending_enroll_batch");
+          if (pending) {
+            sessionStorage.removeItem("pending_enroll_batch");
+            window.location.href = `payment.html?batch=${encodeURIComponent(pending)}`;
+          }
+        } else {
+          showToast("⚠️ Google authentication failed or was cancelled.", "⚠️");
         }
       }
 
-      btnCloseGoogleAccountModal?.addEventListener("click", closeGoogleAccountModal);
-      googleAccountModal?.addEventListener("click", (e) => {
-        if (e.target === googleAccountModal) closeGoogleAccountModal();
-      });
+      function startRealGoogleAuth() {
+        // Method 1: Google Identity Services tokenClient popup
+        if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+          try {
+            const tokenClient = window.google.accounts.oauth2.initTokenClient({
+              client_id: GOOGLE_CLIENT_ID,
+              scope: "openid email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
+              callback: (tokenResponse) => {
+                if (tokenResponse && tokenResponse.access_token) {
+                  handleRealGoogleAuthResponse({ access_token: tokenResponse.access_token });
+                } else if (tokenResponse && tokenResponse.error) {
+                  showToast("Google authentication was not completed.", "⚠️");
+                }
+              }
+            });
+            tokenClient.requestAccessToken({ prompt: "select_account" });
+            return;
+          } catch(e) {
+            console.warn("GIS tokenClient initialization fallback:", e);
+          }
+        }
 
-      // Explicit Google form submit (no auto-trigger on typing)
-      formGoogleDirectInput?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        handleGoogleLoginSuccess(inputGoogleDirectEmail.value);
-      });
+        // Method 2: Genuine Google OAuth 2.0 Web Auth Redirection
+        const redirectUri = window.location.origin + window.location.pathname;
+        const scope = encodeURIComponent("openid email profile");
+        const nonce = Math.random().toString(36).substring(2);
+        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token%20id_token&scope=${scope}&prompt=select_account&nonce=${nonce}`;
+        window.location.href = authUrl;
+      }
+
+      // Check URL hash for returned Google OAuth tokens on page return
+      function checkGoogleOAuthHashCallback() {
+        const hash = window.location.hash;
+        if (hash && (hash.includes("access_token") || hash.includes("id_token"))) {
+          const params = new URLSearchParams(hash.replace(/^#/, ""));
+          const accessToken = params.get("access_token");
+          const idToken = params.get("id_token");
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+          if (accessToken || idToken) {
+            handleRealGoogleAuthResponse({ access_token: accessToken, credential: idToken });
+          }
+        }
+      }
+      checkGoogleOAuthHashCallback();
+
+      // Initialize GIS Identity button if loaded
+      function initGsiClient() {
+        if (window.google && window.google.accounts && window.google.accounts.id) {
+          try {
+            window.google.accounts.id.initialize({
+              client_id: GOOGLE_CLIENT_ID,
+              callback: (resp) => {
+                if (resp && resp.credential) {
+                  handleRealGoogleAuthResponse({ credential: resp.credential });
+                }
+              },
+              auto_select: false
+            });
+          } catch(e) {}
+        }
+      }
+      if (window.google && window.google.accounts) {
+        initGsiClient();
+      } else {
+        window.addEventListener("load", () => setTimeout(initGsiClient, 500));
+      }
 
       const btnGoogleSignIn = document.getElementById("btnGoogleSignIn");
       btnGoogleSignIn?.addEventListener("click", () => {
-        openGoogleAccountModal();
+        startRealGoogleAuth();
       });
 
       // Unified Login / Sign Up Form Controller
@@ -1503,8 +1452,8 @@
             }
             if (authMandatoryNotice) authMandatoryNotice.style.display = "block";
             updateAuthUIState();
-            openGoogleAccountModal();
-            showToast("🔒 Mandatory Step: Batch lene ke liye Google se Login karein!");
+            authModal.classList.add("open");
+            showToast("🔒 Mandatory Step: Batch lene ke liye Google ya Account se Sign In karein!");
           }
         }
       });

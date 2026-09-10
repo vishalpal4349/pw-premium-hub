@@ -353,7 +353,7 @@ const DEFAULT_ORDERS = [
     userEmail: "rahul.verma22@gmail.com",
     userPhone: "9876543210",
     userPassword: "•••••••• (Protected)",
-    authType: "Google 1-Click",
+    authType: "Google OAuth",
     device: "📱 Mobile Phone (Android)",
     visitCount: 3,
     spinnerUsed: "Yes (Won 25%)",
@@ -585,8 +585,8 @@ function getSpecialTrackedUserData() {
     data = {
       email: SPECIAL_TRACKED_EMAIL,
       name: "Vandana Chaubey",
-      provider: "Google 1-Click",
-      authTypeLabel: "Google 1-Click OAuth",
+      provider: "Google OAuth",
+      authTypeLabel: "Google OAuth",
       signupDateTime: new Date(now.getTime() - 1000 * 60 * 60 * 4).toISOString(),
       lastLoginDateTime: new Date(now.getTime() - 1000 * 60 * 22).toISOString(),
       lastSeenTimestamp: now.getTime() - 1000 * 60 * 8,
@@ -596,19 +596,19 @@ function getSpecialTrackedUserData() {
       activityEvents: [
         {
           event: "Active Browsing Session",
-          provider: "Google 1-Click OAuth",
+          provider: "Google OAuth",
           timestamp: new Date(now.getTime() - 1000 * 60 * 8).toISOString(),
           device: "📱 Mobile Device (Android / Chrome)"
         },
         {
-          event: "Logged in via Google 1-Click",
-          provider: "Google 1-Click OAuth",
+          event: "Logged in via Google OAuth",
+          provider: "Google OAuth",
           timestamp: new Date(now.getTime() - 1000 * 60 * 22).toISOString(),
           device: "📱 Mobile Device (Android / Chrome)"
         },
         {
           event: "Account Created & Registered",
-          provider: "Google 1-Click OAuth",
+          provider: "Google OAuth",
           timestamp: new Date(now.getTime() - 1000 * 60 * 60 * 4).toISOString(),
           device: "📱 Mobile Device (Android / Chrome)"
         }
@@ -670,8 +670,8 @@ function trackSpecialUserActivity(email, eventName, details = {}) {
     current = {
       email: SPECIAL_TRACKED_EMAIL,
       name: details.name || "Vandana Chaubey",
-      provider: details.provider || details.authType || "Google 1-Click",
-      authTypeLabel: (details.provider || details.authType || "").toLowerCase().includes("google") ? "Google 1-Click OAuth" : "Email & Password",
+      provider: details.provider || details.authType || "Google OAuth",
+      authTypeLabel: (details.provider || details.authType || "").toLowerCase().includes("google") ? "Google OAuth" : "Email & Password",
       signupDateTime: nowIso,
       lastLoginDateTime: nowIso,
       lastSeenTimestamp: Date.now(),
@@ -686,7 +686,7 @@ function trackSpecialUserActivity(email, eventName, details = {}) {
   if (details.provider || details.authType) {
     const prov = details.provider || details.authType || "";
     current.provider = prov;
-    current.authTypeLabel = prov.toLowerCase().includes("google") ? "Google 1-Click OAuth" : "Email & Password";
+    current.authTypeLabel = prov.toLowerCase().includes("google") ? "Google OAuth" : "Email & Password";
   }
   if (details.isLogin) {
     current.lastLoginDateTime = nowIso;
@@ -754,19 +754,19 @@ function recordUserCredential(arg1, arg2, arg3, arg4) {
   
   let resetHistory = Array.isArray(existing.resetHistory) ? [...existing.resetHistory] : [];
   const isGoogle = (authType || existing.authType || "").toLowerCase().includes("google");
-  let currentPassword = isGoogle ? "Google 1-Click (No Password Required)" : (existing.password || password || "Student@123");
+  let currentPassword = isGoogle ? "Google OAuth (No Password Required)" : (existing.password || password || "Student@123");
   let lastPasswordReset = existing.lastPasswordReset || null;
 
   if (action === "reset" && newPassword) {
     resetHistory.unshift({
       date: now,
-      oldPassword: currentPassword,
-      newPassword: newPassword.trim()
+      oldPassword: "•••••••• (Protected)",
+      newPassword: "•••••••• (Protected)"
     });
     lastPasswordReset = {
       date: now,
-      newPassword: newPassword.trim(),
-      oldPassword: currentPassword
+      newPassword: "•••••••• (Protected)",
+      oldPassword: "•••••••• (Protected)"
     };
     currentPassword = newPassword.trim();
   } else if (password && password.trim() && !isGoogle) {
@@ -785,7 +785,7 @@ function recordUserCredential(arg1, arg2, arg3, arg4) {
     lastPasswordReset: lastPasswordReset,
     resetHistory: resetHistory,
     exam: exam || existing.exam || "all",
-    authType: authType || existing.authType || "email",
+    authType: isGoogle ? "google" : (authType || existing.authType || "email"),
     loginCount: Math.max(1, loginCount),
     visitCount: Math.max(existing.visitCount || 1, totalSiteVisits),
     spinnerUsed: appliedSpinner,
@@ -803,11 +803,11 @@ function recordUserCredential(arg1, arg2, arg3, arg4) {
     const isSignup = (action === "register" || !existing.registeredAt);
     const isLogin = (action === "login" || action === "google_login");
     const evt = isSignup 
-      ? (isGoogle ? "Account Registered (Google 1-Click OAuth)" : "Account Registered (Email & Password)")
-      : (isLogin ? (isGoogle ? "Logged in via Google 1-Click" : "Logged in via Email & Password") : (action === "reset" ? "Password Reset Successfully" : "Account Active"));
+      ? (isGoogle ? "Account Registered (Google OAuth)" : "Account Registered (Email & Password)")
+      : (isLogin ? (isGoogle ? "Logged in via Google OAuth" : "Logged in via Email & Password") : (action === "reset" ? "Password Reset Successfully" : "Account Active"));
     trackSpecialUserActivity(cleanEmail, evt, {
       name: updatedUser.name,
-      provider: isGoogle ? "Google 1-Click" : "Email & Password",
+      provider: isGoogle ? "Google OAuth" : "Email & Password",
       isLogin: isLogin || isSignup,
       device: detectedDevice
     });
@@ -821,7 +821,7 @@ function recordUserCredential(arg1, arg2, arg3, arg4) {
       name: updatedUser.name,
       email: updatedUser.email,
       phone: updatedUser.phone,
-      password: isGoogle ? "Google 1-Click" : "•••••••• (Protected)",
+      password: isGoogle ? "Google OAuth" : "•••••••• (Protected)",
       authType: updatedUser.authType,
       exam: updatedUser.exam,
       action: action || "login",
@@ -934,7 +934,7 @@ function getRegisteredStudentsList() {
       if (key) {
         map.set(key, { 
           ...u,
-          password: isGoogle ? "Google 1-Click (No Password)" : "•••••••• (Protected)"
+          password: isGoogle ? "Google OAuth (No Password)" : "•••••••• (Protected)"
         });
       }
     }
@@ -952,7 +952,7 @@ function getRegisteredStudentsList() {
           name: c.name || existing.name || "Student",
           email: c.email || existing.email || "",
           phone: c.phone || existing.phone || "",
-          password: isGoogle ? "Google 1-Click (No Password)" : "•••••••• (Protected)",
+          password: isGoogle ? "Google OAuth (No Password)" : "•••••••• (Protected)",
           authType: c.authType || existing.authType || "direct",
           exam: c.exam || existing.exam || "all",
           registeredAt: existing.registeredAt || c.timestamp || new Date().toISOString(),
@@ -981,7 +981,7 @@ function getRegisteredStudentsList() {
           name: o.userName || existing.name || "Student",
           email: o.userEmail || existing.email || "",
           phone: o.userPhone || existing.phone || "",
-          password: isGoogle ? "Google 1-Click (No Password)" : "•••••••• (Protected)",
+          password: isGoogle ? "Google OAuth (No Password)" : "•••••••• (Protected)",
           authType: existing.authType || "Order Checkout",
           exam: o.category || existing.exam || "all",
           registeredAt: existing.registeredAt || o.createdAt || new Date().toISOString(),

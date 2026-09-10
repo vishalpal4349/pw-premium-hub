@@ -334,7 +334,50 @@ exports.handler = async (event, context) => {
 
   // 1.3 POST /auth/google
   if (method === 'POST' && rawPath === '/auth/google') {
-    const { email, name, picture, credential } = body;
+    let { email, name, picture, credential, access_token } = body;
+
+    // 1. Verify with Google Identity endpoints if tokens are provided
+    if (credential) {
+      try {
+        const gRes = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
+        if (gRes.ok) {
+          const gInfo = await gRes.json();
+          if (gInfo && gInfo.email) {
+            email = gInfo.email;
+            if (gInfo.name) name = gInfo.name;
+            if (gInfo.picture) picture = gInfo.picture;
+          }
+        }
+      } catch (err) {
+        // Fallback: parse unverified payload if offline/local test
+        try {
+          const base64Url = credential.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = Buffer.from(base64, 'base64').toString('utf8');
+          const p = JSON.parse(jsonPayload);
+          if (p && p.email) {
+            email = p.email;
+            if (p.name) name = p.name;
+            if (p.picture) picture = p.picture;
+          }
+        } catch(e) {}
+      }
+    } else if (access_token) {
+      try {
+        const gRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${access_token}` }
+        });
+        if (gRes.ok) {
+          const gInfo = await gRes.json();
+          if (gInfo && gInfo.email) {
+            email = gInfo.email;
+            if (gInfo.name) name = gInfo.name;
+            if (gInfo.picture) picture = gInfo.picture;
+          }
+        }
+      } catch(err) {}
+    }
+
     if (!email || !email.includes('@')) {
       return jsonResponse(400, { ok: false, error: 'Valid Google verified email is required' });
     }

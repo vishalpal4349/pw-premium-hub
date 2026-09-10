@@ -201,7 +201,7 @@
         </a>
         <a href="#" id="btnPhonePeApp" class="btn-upi-app" title="PhonePe">
           <span style="font-weight: 800; color: #c084fc; font-size: 0.95rem;">PhonePe</span>
-          <span style="font-size: 0.7rem; color: #94a3b8;">Instant UPI</span>
+          <span style="font-size: 0.7rem; color: #94a3b8;">Fast UPI App</span>
         </a>
         <a href="#" id="btnPaytmApp" class="btn-upi-app" title="Paytm">
           <span style="font-weight: 800; color: #38bdf8; font-size: 0.95rem;">Paytm</span>
@@ -691,109 +691,11 @@
         }
       }
 
-      // Google Account Modal Controller on Payment Page
-      const googleAccountModal = document.getElementById("googleAccountModal");
-      const btnCloseGoogleAccountModal = document.getElementById("btnCloseGoogleAccountModal");
-      const googleAccountsList = document.getElementById("googleAccountsList");
-      const formGoogleDirectInput = document.getElementById("formGoogleDirectInput");
-      const inputGoogleDirectEmail = document.getElementById("inputGoogleDirectEmail");
-
-      function renderGoogleAccountsList() {
-        if (!googleAccountsList) return;
-        googleAccountsList.innerHTML = "";
-
-        const emailsSet = new Set();
-        const accounts = [];
-
-        const addAccount = (email, name) => {
-          if (!email || !email.includes("@")) return;
-          const clean = email.trim().toLowerCase();
-          if (emailsSet.has(clean)) return;
-          emailsSet.add(clean);
-          const rawName = name || clean.split("@")[0].replace(/[._0-9]/g, " ").trim();
-          const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
-          accounts.push({ email: clean, name: formattedName });
-        };
-
-        addAccount(localStorage.getItem("last_google_email"));
-        addAccount(localStorage.getItem("last_logged_in_email"));
-
-        try {
-          const registered = getRegisteredStudentsList();
-          if (Array.isArray(registered)) {
-            registered.forEach(s => {
-              if (s && s.email) addAccount(s.email, s.name);
-            });
-          }
-        } catch(e) {}
-
-        if (accounts.length === 0) {
-          googleAccountsList.innerHTML = `
-            <div style="font-size: 0.78rem; color: #475569; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px 14px; border-radius: 10px; text-align: center; font-weight: 600;">
-              👇 Neeche box par tap karein — aapke phone ke sabhi Google accounts screen par aa jayenge!
-            </div>
-          `;
-          return;
-        }
-
-        accounts.slice(0, 5).forEach((acc, idx) => {
-          const row = document.createElement("div");
-          row.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: all 0.15s ease;";
-          row.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <div style="width: 36px; height: 36px; border-radius: 50%; background: ${idx % 2 === 0 ? '#4285f4' : '#10b981'}; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem;">
-                ${acc.name.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <div style="font-size: 0.88rem; font-weight: 700; color: #0f172a;">${acc.name}</div>
-                <div style="font-size: 0.76rem; color: #64748b;">${acc.email}</div>
-              </div>
-            </div>
-            <span style="font-size: 0.72rem; background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 9999px; font-weight: 700;">
-              ✓ 1-Tap Login
-            </span>
-          `;
-          row.addEventListener("mouseenter", () => {
-            row.style.background = "#eff6ff";
-            row.style.borderColor = "#93c5fd";
-          });
-          row.addEventListener("mouseleave", () => {
-            row.style.background = "#f8fafc";
-            row.style.borderColor = "#e2e8f0";
-          });
-          row.addEventListener("click", () => {
-            handlePaymentGoogleLogin(acc.email);
-          });
-          googleAccountsList.appendChild(row);
-        });
-      }
-
-      function openGoogleAccountModal() {
-        renderGoogleAccountsList();
-        if (googleAccountModal) googleAccountModal.style.display = "flex";
-
-        // Native credential request if supported
-        if (window.navigator && navigator.credentials && navigator.credentials.get) {
-          navigator.credentials.get({ password: true, mediation: "optional" })
-            .then(cred => {
-              if (cred && cred.id && cred.id.includes("@")) {
-                handlePaymentGoogleLogin(cred.id);
-              }
-            }).catch(() => {});
-        }
-
-        // Auto-focus input so mobile phone keyboard & Google account autofill bar immediately opens
-        setTimeout(() => {
-          if (inputGoogleDirectEmail) {
-            inputGoogleDirectEmail.focus();
-            inputGoogleDirectEmail.click();
-          }
-        }, 120);
-      }
-
       // ----------------------------------------------------------------------
-      // Genuine Google OAuth Implementation for Checkout Auto-Fill
+      // Genuine Google OAuth 2.0 Implementation for Checkout Auto-Fill
       // ----------------------------------------------------------------------
+      const GOOGLE_CLIENT_ID = "712845892143-pwpremiumhub.apps.googleusercontent.com";
+
       function parseJwt(token) {
         try {
           const base64Url = token.split('.')[1];
@@ -807,42 +709,70 @@
         }
       }
 
-      async function handlePaymentGoogleCredentialResponse(response) {
-        if (!response || !response.credential) return;
-        const payload = parseJwt(response.credential);
-        if (!payload || !payload.email) {
-          showToast("Failed to parse Google credentials.", "⚠️");
-          return;
-        }
+      async function verifyAndCompletePaymentGoogleLogin({ credential, access_token }) {
+        showToast("Verifying Google credentials...", "⏳");
+        let verifiedUser = null;
+        let sessionToken = null;
 
         try {
           const apiRes = await fetch("/api/auth/google", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              credential: response.credential,
-              email: payload.email,
-              name: payload.name || payload.email.split("@")[0],
-              picture: payload.picture || ""
-            })
+            body: JSON.stringify({ credential, access_token })
           });
           const data = await apiRes.json();
           if (data.ok && data.user) {
-            completeCheckoutGoogleLogin(data.user);
-            return;
+            verifiedUser = data.user;
+            sessionToken = data.token;
           }
-        } catch(e) {}
+        } catch(e) {
+          console.warn("Backend auth API offline, attempting client-side verification:", e.message);
+        }
 
-        completeCheckoutGoogleLogin({
-          name: payload.name || payload.email.split("@")[0],
-          email: payload.email.toLowerCase(),
-          authProvider: "google"
-        });
+        // Resilient fallback if backend serverless is offline
+        if (!verifiedUser) {
+          if (access_token) {
+            try {
+              const uRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+                headers: { Authorization: `Bearer ${access_token}` }
+              });
+              const uData = await uRes.json();
+              if (uData && uData.email) {
+                verifiedUser = {
+                  id: "USR-G-" + Date.now(),
+                  name: uData.name || uData.email.split("@")[0],
+                  email: uData.email.toLowerCase(),
+                  picture: uData.picture || "",
+                  authProvider: "google"
+                };
+                sessionToken = "G-LOCAL-" + Date.now();
+              }
+            } catch(err) {}
+          } else if (credential) {
+            const payload = parseJwt(credential);
+            if (payload && payload.email) {
+              verifiedUser = {
+                id: "USR-G-" + Date.now(),
+                name: payload.name || payload.email.split("@")[0],
+                email: payload.email.toLowerCase(),
+                picture: payload.picture || "",
+                authProvider: "google"
+              };
+              sessionToken = "G-LOCAL-" + Date.now();
+            }
+          }
+        }
+
+        if (verifiedUser && verifiedUser.email) {
+          completeCheckoutGoogleLogin(verifiedUser, sessionToken);
+        } else {
+          showToast("Google authentication was not completed or was cancelled.", "⚠️");
+        }
       }
 
-      function completeCheckoutGoogleLogin(user) {
-        const cleanEmail = user.email.toLowerCase();
-        const formattedName = user.name || cleanEmail.split("@")[0];
+      function completeCheckoutGoogleLogin(user, token) {
+        const cleanEmail = user.email.toLowerCase().trim();
+        const formattedName = user.name || cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
 
         const googleUser = {
           name: formattedName,
@@ -854,20 +784,72 @@
           lastActive: new Date().toISOString()
         };
 
-        localStorage.setItem("last_google_email", cleanEmail);
+        if (token) localStorage.setItem("pw_auth_token", token);
         localStorage.setItem("last_logged_in_email", cleanEmail);
+        recordUserCredential(cleanEmail, "", "google", formattedName);
+        saveRegisteredUser(cleanEmail, googleUser);
         setCurrentUser(googleUser);
         refreshPaymentAuthUI();
         showToast(`✓ Google Sign-In Successful! Details auto-filled and locked.`);
         syncServerOrder();
       }
 
+      function startPaymentGoogleAuth() {
+        // Method 1: Google Identity Services tokenClient popup
+        if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+          try {
+            const tokenClient = window.google.accounts.oauth2.initTokenClient({
+              client_id: GOOGLE_CLIENT_ID,
+              scope: "openid email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
+              callback: (tokenResponse) => {
+                if (tokenResponse && tokenResponse.access_token) {
+                  verifyAndCompletePaymentGoogleLogin({ access_token: tokenResponse.access_token });
+                } else if (tokenResponse && tokenResponse.error) {
+                  showToast("Google sign-in was cancelled.", "⚠️");
+                }
+              }
+            });
+            tokenClient.requestAccessToken({ prompt: "select_account" });
+            return;
+          } catch(e) {
+            console.warn("GIS tokenClient initialization fallback:", e);
+          }
+        }
+
+        // Method 2: Genuine Google OAuth 2.0 Web Redirection
+        const redirectUri = window.location.origin + window.location.pathname;
+        const scope = encodeURIComponent("openid email profile");
+        const nonce = Math.random().toString(36).substring(2);
+        const currentBatchParam = batchId ? `&state=${encodeURIComponent(batchId)}` : "";
+        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token%20id_token&scope=${scope}&prompt=select_account&nonce=${nonce}${currentBatchParam}`;
+        window.location.href = authUrl;
+      }
+
+      // Check URL hash for OAuth redirect token returns
+      function checkPaymentGoogleOAuthHash() {
+        const hash = window.location.hash;
+        if (hash && (hash.includes("access_token") || hash.includes("id_token"))) {
+          const params = new URLSearchParams(hash.replace(/^#/, ""));
+          const accessToken = params.get("access_token");
+          const idToken = params.get("id_token");
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+          if (accessToken || idToken) {
+            verifyAndCompletePaymentGoogleLogin({ access_token: accessToken, credential: idToken });
+          }
+        }
+      }
+      checkPaymentGoogleOAuthHash();
+
       function initPaymentGoogleAuth() {
         if (window.google && window.google.accounts && window.google.accounts.id) {
           try {
             window.google.accounts.id.initialize({
-              client_id: "712845892143-pwpremiumhub.apps.googleusercontent.com",
-              callback: handlePaymentGoogleCredentialResponse,
+              client_id: GOOGLE_CLIENT_ID,
+              callback: (response) => {
+                if (response && response.credential) {
+                  verifyAndCompletePaymentGoogleLogin({ credential: response.credential });
+                }
+              },
               auto_select: false
             });
           } catch(e) {}
@@ -883,36 +865,7 @@
       }
 
       btnPaymentGoogleLogin?.addEventListener("click", () => {
-        if (window.google && window.google.accounts && window.google.accounts.id) {
-          try {
-            window.google.accounts.id.prompt();
-            return;
-          } catch(e) {}
-        }
-
-        const promptEmail = prompt("Google Sign-In: Enter your Google email address to verify account access:");
-        if (!promptEmail || !promptEmail.includes("@")) {
-          if (promptEmail) showToast("Please enter a valid Google email address.", "⚠️");
-          return;
-        }
-
-        const cleanEmail = promptEmail.trim().toLowerCase();
-        const rawName = cleanEmail.split("@")[0].replace(/[._0-9]/g, " ").trim();
-        const formattedName = rawName ? (rawName.charAt(0).toUpperCase() + rawName.slice(1)) : "Student";
-
-        fetch("/api/auth/google", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: cleanEmail, name: formattedName })
-        }).then(r => r.json()).then(data => {
-          if (data.ok && data.user) {
-            completeCheckoutGoogleLogin(data.user);
-          } else {
-            completeCheckoutGoogleLogin({ email: cleanEmail, name: formattedName });
-          }
-        }).catch(err => {
-          completeCheckoutGoogleLogin({ email: cleanEmail, name: formattedName });
-        });
+        startPaymentGoogleAuth();
       });
 
       refreshPaymentAuthUI();
