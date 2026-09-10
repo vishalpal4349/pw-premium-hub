@@ -1224,28 +1224,29 @@
 
         <div class="form-grid-2">
           <div class="form-group-light">
-            <label class="form-label-light" for="settingAdminEmail">
-              <span>Admin Email Login</span>
+            <label class="form-label-light" for="settingAdminUsername">
+              <span>Admin Username</span>
             </label>
-            <input type="email" id="settingAdminEmail" class="form-input-light" placeholder="onlyfaltu39@gmail.com" required>
+            <input type="text" id="settingAdminUsername" class="form-input-light" placeholder="Vivan1320" required>
+            <span class="form-hint">Fast 1-click admin identifier.</span>
           </div>
 
           <div class="form-group-light">
-            <label class="form-label-light" for="settingAdminPassword">
-              <span>Master Admin Password</span>
+            <label class="form-label-light" for="settingAdminEmail">
+              <span>Primary Admin Email</span>
             </label>
-            <input type="text" id="settingAdminPassword" class="form-input-light" placeholder="visuzero1">
-            <span class="form-hint">Factor 2 credential in admin-login.html.</span>
+            <input type="email" id="settingAdminEmail" class="form-input-light" placeholder="onlyfaltu39@gmail.com" required>
+            <span class="form-hint">Main authorized email for password reset.</span>
           </div>
         </div>
 
         <div class="form-grid-2">
           <div class="form-group-light">
-            <label class="form-label-light" for="settingAdminSecurityCode">
-              <span>4-Digit Master PIN Code</span>
+            <label class="form-label-light" for="settingAdminPassword">
+              <span>Master Admin Password</span>
             </label>
-            <input type="text" id="settingAdminSecurityCode" class="form-input-light" maxlength="4" placeholder="0000" style="letter-spacing: 0.2em; font-family: var(--font-mono);">
-            <span class="form-hint">Factor 3 security code. Default: 0000.</span>
+            <input type="text" id="settingAdminPassword" class="form-input-light" placeholder="Vishu@001">
+            <span class="form-hint">Direct login password (Default: Vishu@001).</span>
           </div>
 
           <div style="display: flex; align-items: flex-end; gap: 10px;">
@@ -1603,7 +1604,35 @@
         });
       });
 
-      // Data Synchronization
+      // Order Normalizer
+      function normalizeOrderRecord(o) {
+        if (!o) return null;
+        return {
+          orderId: o.orderId || o.id || ("PW-" + Math.floor(1000 + Math.random() * 9000)),
+          batchId: o.batchId || "b-general",
+          batchName: o.batchName || o.batch || "Exam Batch",
+          category: o.category || "all",
+          amount: o.amount || o.price || o.offerPrice || 299,
+          originalPrice: o.originalPrice || 4999,
+          discountAmount: o.discountAmount || 0,
+          utr: o.utr || o.transactionId || o.txnId || "No UTR",
+          screenshot: o.screenshot || null,
+          userName: o.userName || o.name || o.studentName || "Student",
+          userEmail: o.userEmail || o.email || "",
+          userPhone: o.userPhone || o.phone || "",
+          userPassword: o.userPassword || "•••••••• (Protected)",
+          authType: o.authType || "email",
+          device: o.device || "Mobile Phone",
+          visitCount: o.visitCount || 1,
+          spinnerUsed: o.spinnerUsed || "No",
+          couponUsed: o.couponUsed || null,
+          status: o.status === "approved" ? "approved" : "pending_verification",
+          createdAt: o.createdAt || new Date().toISOString(),
+          approvedAt: o.approvedAt || (o.status === "approved" ? new Date().toISOString() : null)
+        };
+      }
+
+      // Master Data Synchronization (Zero Data Loss, Instant Live Sync)
       function getAllStoredOrders() {
         let o1 = [];
         let o2 = [];
@@ -1612,21 +1641,43 @@
         try { o2 = JSON.parse(localStorage.getItem("pw_all_orders") || "[]"); } catch(e){}
         try { o3 = JSON.parse(localStorage.getItem("thor_orders") || "[]"); } catch(e){}
         const appO = (window.APP_STATE && window.APP_STATE.orders) || [];
+        const fallbackO = (typeof DEFAULT_ORDERS !== "undefined") ? DEFAULT_ORDERS : [];
 
         const map = new Map();
-        [...o1, ...o2, ...o3, ...appO].forEach(o => {
-          if (o && o.orderId && !map.has(o.orderId)) {
-            map.set(o.orderId, o);
+        [...o1, ...o2, ...o3, ...appO, ...fallbackO].forEach(raw => {
+          if (!raw) return;
+          const o = normalizeOrderRecord(raw);
+          if (!o || !o.orderId) return;
+
+          if (!map.has(o.orderId)) {
+            map.set(o.orderId, { ...o });
+          } else {
+            const existing = map.get(o.orderId);
+            // If any record was marked approved, always preserve approved status & date!
+            if (o.status === "approved" || existing.status === "approved") {
+              existing.status = "approved";
+              existing.approvedAt = existing.approvedAt || o.approvedAt || new Date().toISOString();
+            }
+            if (!existing.screenshot && o.screenshot) existing.screenshot = o.screenshot;
+            if ((!existing.utr || existing.utr === "No UTR") && o.utr) existing.utr = o.utr;
+            if (!existing.userName && o.userName) existing.userName = o.userName;
+            if (!existing.userEmail && o.userEmail) existing.userEmail = o.userEmail;
+            if (!existing.userPhone && o.userPhone) existing.userPhone = o.userPhone;
+            if (!existing.batchName && o.batchName) existing.batchName = o.batchName;
+            if (!existing.amount && o.amount) existing.amount = o.amount;
           }
         });
 
         const merged = Array.from(map.values());
         merged.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-        const filtered = (typeof isSpecialTrackedEmail === "function") 
-          ? merged.filter(o => !isSpecialTrackedEmail(o.userEmail)) 
-          : merged;
-        APP_STATE.orders = filtered;
-        return filtered;
+
+        // Synchronize all storage keys
+        APP_STATE.orders = merged;
+        try { localStorage.setItem("pw_orders", JSON.stringify(merged)); } catch(e){}
+        try { localStorage.setItem("pw_all_orders", JSON.stringify(merged)); } catch(e){}
+        try { localStorage.setItem("thor_orders", JSON.stringify(merged)); } catch(e){}
+
+        return merged;
       }
 
       // Render Orders
@@ -1644,11 +1695,16 @@
           .filter(o => o.status === "approved")
           .reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
 
-        kpiTotalOrders.textContent = total;
-        kpiPendingOrders.textContent = pending;
-        kpiApprovedOrders.textContent = approved;
-        kpiTotalRevenue.textContent = "₹" + revenue.toLocaleString("en-IN");
-        countPendingOrders.textContent = pending;
+        if (kpiTotalOrders) kpiTotalOrders.textContent = total;
+        if (kpiPendingOrders) kpiPendingOrders.textContent = pending;
+        if (kpiApprovedOrders) kpiApprovedOrders.textContent = approved;
+        if (kpiTotalRevenue) kpiTotalRevenue.textContent = "₹" + revenue.toLocaleString("en-IN");
+        if (countPendingOrders) countPendingOrders.textContent = pending;
+
+        // Dynamic badges on filter buttons
+        if (btnFilterAll) btnFilterAll.innerHTML = `All Orders <span style="opacity:0.8; font-size:0.75rem;">(${total})</span>`;
+        if (btnFilterPending) btnFilterPending.innerHTML = `Pending <span style="opacity:0.8; font-size:0.75rem;">(${pending})</span>`;
+        if (btnFilterApproved) btnFilterApproved.innerHTML = `Approved <span style="opacity:0.8; font-size:0.75rem;">(${approved})</span>`;
 
         // Apply filters
         let list = all;
@@ -1664,6 +1720,7 @@
             (o.orderId && o.orderId.toLowerCase().includes(q)) ||
             (o.userName && o.userName.toLowerCase().includes(q)) ||
             (o.userEmail && o.userEmail.toLowerCase().includes(q)) ||
+            (o.userPhone && o.userPhone.toLowerCase().includes(q)) ||
             (o.utr && o.utr.toLowerCase().includes(q)) ||
             (o.batchName && o.batchName.toLowerCase().includes(q))
           );
@@ -1674,8 +1731,8 @@
             <tr>
               <td colspan="7" style="text-align: center; color: var(--text-subtle); padding: 36px 16px;">
                 <div style="font-size: 1.8rem; margin-bottom: 6px;">📭</div>
-                <strong style="font-size: 0.95rem; color: var(--text-main);">No Orders Found</strong>
-                <p style="font-size: 0.78rem; margin-top: 4px;">Orders submitted by students from mobile or laptop will display here automatically.</p>
+                <strong style="font-size: 0.95rem; color: var(--text-main);">No Orders in this view</strong>
+                <p style="font-size: 0.78rem; margin-top: 4px;">Click "All Orders (${total})" to see all submitted student payments.</p>
               </td>
             </tr>
           `;
@@ -1685,26 +1742,26 @@
         ordersTableBody.innerHTML = list.map(o => {
           const isPending = (o.status === "pending_verification");
           const formattedDate = o.createdAt ? new Date(o.createdAt).toLocaleString("en-IN", { dateStyle: "short", timeStyle: "short" }) : "-";
-          const userRec = findRegisteredUser(o.userEmail || o.userPhone);
+          const userRec = (typeof findRegisteredUser === "function") ? findRegisteredUser(o.userEmail || o.userPhone) : null;
           const isGoogleOrder = (o.authType && o.authType.toLowerCase().includes("google")) || 
                                (userRec && (userRec.authType || "").toLowerCase().includes("google")) || 
                                (o.userPassword && o.userPassword.toLowerCase().includes("google"));
           
           return `
-            <tr>
+            <tr id="order-row-${o.orderId}" style="${!isPending ? 'background: #fbfdfc;' : ''}">
               <td>
-                <div class="badge-mono" style="cursor: pointer;" onclick="copyToClipboard('${o.orderId}')" title="Click to copy Order ID">
+                <div class="badge-mono" style="cursor: pointer; font-weight: 800; color: #4338ca;" onclick="copyToClipboard('${o.orderId}')" title="Click to copy Order ID">
                   ${o.orderId}
                 </div>
                 <div style="font-size: 0.7rem; color: var(--text-subtle); margin-top: 4px;">${formattedDate}</div>
               </td>
               <td>
-                <div style="font-weight: 700; color: var(--text-main);">${escapeHtml(o.userName || 'Student')}</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 0.88rem;">${escapeHtml(o.userName || 'Student')}</div>
                 <div style="font-size: 0.76rem; color: #4338ca; font-weight: 600;">${escapeHtml(o.userEmail || '')}</div>
                 <div style="font-size: 0.74rem; color: var(--text-subtle);">${escapeHtml(o.userPhone || '')}</div>
                 <div style="margin-top: 4px; display: inline-flex; align-items: center; gap: 5px; ${isGoogleOrder ? 'background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8;' : 'background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857;'} padding: 2px 7px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">
                   <span>${isGoogleOrder ? '🌐' : '🔒'}</span>
-                  <span>${isGoogleOrder ? 'Google Verified (No Pass)' : 'Password Protected (••••••••)'}</span>
+                  <span>${isGoogleOrder ? 'Google 1-Click' : 'Password Protected'}</span>
                 </div>
                 <div style="margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px; font-size: 0.7rem;">
                   <span style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 1px 6px; border-radius: 4px; color: #475569;" title="Student Device">📱 ${escapeHtml(o.device || (userRec && userRec.device) || 'Mobile')}</span>
@@ -1713,10 +1770,10 @@
                 </div>
               </td>
               <td>
-                <div style="font-weight: 600; color: var(--text-main);">${escapeHtml(o.batchName || 'Exam Batch')}</div>
-                <div style="font-size: 0.8rem; font-weight: 800; color: #059669;">
+                <div style="font-weight: 600; color: var(--text-main); font-size: 0.84rem;">${escapeHtml(o.batchName || 'Exam Batch')}</div>
+                <div style="font-size: 0.82rem; font-weight: 800; color: #059669; margin-top: 2px;">
                   ₹${Number(o.amount || 0).toLocaleString("en-IN")}
-                  ${o.couponUsed ? `<span style="font-size: 0.68rem; background: #eef2ff; color: #4f46e5; padding: 1px 5px; border-radius: 4px; font-weight: 700;">${o.couponUsed}</span>` : ''}
+                  ${o.couponUsed ? `<span style="font-size: 0.68rem; background: #eef2ff; color: #4f46e5; padding: 1px 5px; border-radius: 4px; font-weight: 700; margin-left: 4px;">${o.couponUsed}</span>` : ''}
                 </div>
               </td>
               <td>
@@ -1742,6 +1799,7 @@
                   <span class="badge-status badge-pending">⏳ Pending Verification</span>
                 ` : `
                   <span class="badge-status badge-approved">✓ Access Unlocked</span>
+                  ${o.approvedAt ? `<div style="font-size:0.68rem; color:#059669; margin-top:2px;">Approved</div>` : ''}
                 `}
               </td>
               <td>
@@ -1776,10 +1834,10 @@
           try { localStorage.setItem("pw_all_orders", JSON.stringify(all)); } catch(e){}
           try { localStorage.setItem("thor_orders", JSON.stringify(all)); } catch(e){}
           renderOrders();
-          showToast(`✓ Order ${orderId} Approved! Batch access is active.`);
+          showToast(`✓ Order ${orderId} Approved! Batch access is active (Saved permanently).`, "✓");
           
           // Update modal if currently viewing this order
-          if (currentViewingOrderId === orderId) {
+          if (currentViewingOrderId === orderId && modalProofStatusBadge) {
             modalProofStatusBadge.className = "badge-status badge-approved";
             modalProofStatusBadge.textContent = "✓ Access Unlocked";
           }
@@ -1791,13 +1849,14 @@
         const target = all.find(o => o.orderId === orderId);
         if (target) {
           target.status = "pending_verification";
+          target.approvedAt = null;
           saveOrders(all);
           try { localStorage.setItem("pw_all_orders", JSON.stringify(all)); } catch(e){}
           try { localStorage.setItem("thor_orders", JSON.stringify(all)); } catch(e){}
           renderOrders();
-          showToast(`Order ${orderId} set back to Pending.`);
+          showToast(`Order ${orderId} reverted to Pending.`, "⏳");
           
-          if (currentViewingOrderId === orderId) {
+          if (currentViewingOrderId === orderId && modalProofStatusBadge) {
             modalProofStatusBadge.className = "badge-status badge-pending";
             modalProofStatusBadge.textContent = "⏳ Pending";
           }
@@ -1812,7 +1871,7 @@
           try { localStorage.setItem("pw_all_orders", JSON.stringify(all)); } catch(e){}
           try { localStorage.setItem("thor_orders", JSON.stringify(all)); } catch(e){}
           renderOrders();
-          showToast(`Order ${orderId} permanently deleted.`);
+          showToast(`Order ${orderId} permanently deleted.`, "🗑️");
           
           if (currentViewingOrderId === orderId) {
             screenshotModal.classList.remove("open");
@@ -1932,8 +1991,16 @@
       });
 
       document.getElementById("btnRefreshOrders")?.addEventListener("click", () => {
+        const refreshed = getAllStoredOrders();
         renderOrders();
-        showToast("Orders refreshed from local & device databases!");
+        showToast(`✓ Database synchronized! All ${refreshed.length} orders loaded.`, "🔄");
+      });
+
+      // Cross-tab real-time sync
+      window.addEventListener("storage", (e) => {
+        if (e.key === "pw_orders" || e.key === "pw_all_orders" || e.key === "thor_orders") {
+          renderOrders();
+        }
       });
 
       btnFilterAll?.addEventListener("click", () => {
@@ -2571,9 +2638,11 @@
       // ====================================================================
       function populateSettings() {
         const cfg = APP_STATE.config || {};
-        document.getElementById("settingUpiId").value = cfg.UPI_ID || "7970870147@fam";
-        document.getElementById("settingUpiPhone").value = cfg.UPI_PHONE || "7970870147";
-        document.getElementById("settingPaymentName").value = cfg.PAYMENT_NAME || "Aditya Kumar Dubey";
+        const elUsername = document.getElementById("settingAdminUsername");
+        if (elUsername) elUsername.value = cfg.ADMIN_USERNAME || "Vivan1320";
+        document.getElementById("settingUpiId").value = cfg.UPI_ID || "kumarfreepw@fam";
+        document.getElementById("settingUpiPhone").value = cfg.UPI_PHONE || "kumarfreepw@fam";
+        document.getElementById("settingPaymentName").value = cfg.PAYMENT_NAME || "PW Batch Pass";
         document.getElementById("settingTxnNote").value = cfg.TRANSACTION_NOTE || "PW Batch Infinity Access";
         document.getElementById("settingQrImage").value = cfg.PRIMARY_QR_IMAGE || "payment_qr.jpg";
         document.getElementById("settingAccessLink").value = cfg.APP_PORTAL_LINK || cfg.ACCESS_PORTAL_LINK || "https://pwthor.live";
@@ -2583,17 +2652,16 @@
         document.getElementById("settingReferralPercent").value = cfg.REFERRAL_COMMISSION_PERCENT || 50;
         document.getElementById("settingMinOrderCoupon").value = cfg.MIN_ORDER_FOR_COUPON || 199;
         document.getElementById("settingAdminEmail").value = cfg.ADMIN_EMAIL || "onlyfaltu39@gmail.com";
-        document.getElementById("settingAdminPassword").value = cfg.ADMIN_PIN || "visuzero1";
-        document.getElementById("settingAdminSecurityCode").value = cfg.ADMIN_SECURITY_CODE || "0000";
+        document.getElementById("settingAdminPassword").value = cfg.ADMIN_PIN || "Vishu@001";
       }
 
       function executeSaveSettings(silent = false) {
         triggerAutoSaveStatus(true);
 
         const cfg = { ...APP_STATE.config };
-        cfg.UPI_ID = document.getElementById("settingUpiId").value.trim() || "7970870147@fam";
-        cfg.UPI_PHONE = document.getElementById("settingUpiPhone").value.trim() || "7970870147";
-        cfg.PAYMENT_NAME = document.getElementById("settingPaymentName").value.trim() || "Aditya Kumar Dubey";
+        cfg.UPI_ID = document.getElementById("settingUpiId").value.trim() || "kumarfreepw@fam";
+        cfg.UPI_PHONE = document.getElementById("settingUpiPhone").value.trim() || "kumarfreepw@fam";
+        cfg.PAYMENT_NAME = document.getElementById("settingPaymentName").value.trim() || "PW Batch Pass";
         cfg.TRANSACTION_NOTE = document.getElementById("settingTxnNote").value.trim() || "PW Batch Infinity Access";
         cfg.PRIMARY_QR_IMAGE = document.getElementById("settingQrImage").value.trim() || "payment_qr.jpg";
         cfg.APP_PORTAL_LINK = document.getElementById("settingAccessLink").value.trim() || "https://pwthor.live";
@@ -2603,13 +2671,13 @@
         cfg.SUPPORT_WHATSAPP = document.getElementById("settingSupportWhatsApp").value.trim() || "https://wa.me/917631442934";
         cfg.REFERRAL_COMMISSION_PERCENT = parseInt(document.getElementById("settingReferralPercent").value, 10) || 50;
         cfg.MIN_ORDER_FOR_COUPON = parseInt(document.getElementById("settingMinOrderCoupon").value, 10) || 199;
+
+        const u = document.getElementById("settingAdminUsername")?.value.trim();
+        if (u) cfg.ADMIN_USERNAME = u;
         cfg.ADMIN_EMAIL = document.getElementById("settingAdminEmail").value.trim() || "onlyfaltu39@gmail.com";
 
         const p = document.getElementById("settingAdminPassword").value.trim();
         if (p) cfg.ADMIN_PIN = p;
-
-        const c = document.getElementById("settingAdminSecurityCode").value.trim();
-        if (c && c.length === 4) cfg.ADMIN_SECURITY_CODE = c;
 
         saveConfig(cfg);
         try { localStorage.setItem("thor_config", JSON.stringify(cfg)); } catch(e){}

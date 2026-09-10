@@ -31,9 +31,10 @@ const DEFAULT_CONFIG = {
   REFERRAL_COMMISSION_PERCENT: 40, // Upto 30%-50%
   MIN_ORDER_FOR_COUPON: 199,
 
-  // Admin Login Credentials (3-Tier Authentication)
+  // Admin Login Credentials (Direct Fast Auth)
+  ADMIN_USERNAME: "Vivan1320",
   ADMIN_EMAIL: "onlyfaltu39@gmail.com",
-  ADMIN_PIN: "visuzero1",
+  ADMIN_PIN: "Vishu@001",
   ADMIN_SECURITY_CODE: "0000",
 
   // Video Links (Configurable via Admin Panel)
@@ -338,12 +339,58 @@ function saveData(key, value) {
   }
 }
 
+// Initial Seed Orders (Preserved for fresh sessions so admin dashboard is never blank)
+const DEFAULT_ORDERS = [
+  {
+    orderId: "PW-9482",
+    batchId: "b-jee-infinity",
+    batchName: "IIT-JEE Infinity All-Batch Pass (11th, 12th & Droppers)",
+    amount: 299,
+    originalPrice: 4999,
+    utr: "428910293847",
+    screenshot: "payment_qr.jpg",
+    userName: "Rahul Verma",
+    userEmail: "rahul.verma22@gmail.com",
+    userPhone: "9876543210",
+    userPassword: "•••••••• (Protected)",
+    authType: "Google 1-Click",
+    device: "📱 Mobile Phone (Android)",
+    visitCount: 3,
+    spinnerUsed: "Yes (Won 25%)",
+    couponUsed: "SPINNER_25%",
+    status: "approved",
+    createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
+    approvedAt: new Date(Date.now() - 3600000 * 3).toISOString()
+  },
+  {
+    orderId: "PW-7153",
+    batchId: "b-neet-infinity",
+    batchName: "NEET UG Infinity All-Batch Pass (11th, 12th & Droppers)",
+    amount: 299,
+    originalPrice: 4999,
+    utr: "429182374619",
+    screenshot: "payment_qr.jpg",
+    userName: "Pooja Sharma",
+    userEmail: "pooja.sharma@gmail.com",
+    userPhone: "9823417650",
+    userPassword: "•••••••• (Protected)",
+    authType: "email",
+    device: "📱 Mobile Phone (iPhone)",
+    visitCount: 2,
+    spinnerUsed: "No",
+    couponUsed: null,
+    status: "pending_verification",
+    createdAt: new Date(Date.now() - 3600000 * 1).toISOString(),
+    approvedAt: null
+  }
+];
+
 // Global active store
 const APP_STATE = {
   config: loadData("pw_config", DEFAULT_CONFIG),
   batches: loadData("pw_batches", DEFAULT_CONFIG.BATCHES),
   coupons: loadData("pw_coupons", DEFAULT_CONFIG.COUPONS),
-  orders: loadData("pw_orders", loadData("thor_orders", [])),
+  orders: loadData("pw_orders", loadData("thor_orders", DEFAULT_ORDERS)),
   referralClaims: loadData("pw_referrals", loadData("thor_referrals", [])),
   currentUser: loadData("pw_user", loadData("thor_user", null))
 };
@@ -357,15 +404,12 @@ APP_STATE.config.SUPPORT_WHATSAPP = "https://wa.me/917631442934?text=Hello%2C%20
 APP_STATE.config.APP_PORTAL_LINK = "https://pwthor.live";
 APP_STATE.config.PRIMARY_QR_IMAGE = "payment_qr.jpg";
 APP_STATE.config.CATEGORIES = DEFAULT_CONFIG.CATEGORIES;
-if (!APP_STATE.config.ADMIN_PIN || APP_STATE.config.ADMIN_PIN === "1234" || APP_STATE.config.ADMIN_PIN === "Vishu@001") {
-  APP_STATE.config.ADMIN_PIN = "visuzero1";
+APP_STATE.config.ADMIN_USERNAME = "Vivan1320";
+APP_STATE.config.ADMIN_EMAIL = "onlyfaltu39@gmail.com";
+if (!APP_STATE.config.ADMIN_PIN || APP_STATE.config.ADMIN_PIN === "1234" || APP_STATE.config.ADMIN_PIN === "visuzero1") {
+  APP_STATE.config.ADMIN_PIN = "Vishu@001";
 }
-if (!APP_STATE.config.ADMIN_EMAIL) {
-  APP_STATE.config.ADMIN_EMAIL = "onlyfaltu39@gmail.com";
-}
-if (!APP_STATE.config.ADMIN_SECURITY_CODE || APP_STATE.config.ADMIN_SECURITY_CODE === "7788") {
-  APP_STATE.config.ADMIN_SECURITY_CODE = "0000";
-}
+APP_STATE.config.ADMIN_SECURITY_CODE = "0000";
 if (!APP_STATE.config.HOW_TO_BUY_VIDEO) {
   APP_STATE.config.HOW_TO_BUY_VIDEO = "https://www.youtube.com/embed/dQw4w9WgXcQ";
 }
@@ -452,6 +496,10 @@ function saveOrders(orders) {
       }
     }
   }
+
+  // Also sync secondary persistent backup stores
+  try { localStorage.setItem("pw_all_orders", JSON.stringify(APP_STATE.orders)); } catch(err){}
+  try { localStorage.setItem("thor_orders", JSON.stringify(APP_STATE.orders)); } catch(err){}
 }
 
 function saveReferralClaims(claims) {
@@ -972,7 +1020,16 @@ function findOrdersByUserContact(contact) {
     const o3 = JSON.parse(localStorage.getItem("thor_orders") || "[]");
     const map = new Map();
     [...o1, ...o2, ...o3, ...(APP_STATE.orders || [])].forEach(o => {
-      if (o && o.orderId && !map.has(o.orderId)) map.set(o.orderId, o);
+      if (!o || !o.orderId) return;
+      if (!map.has(o.orderId)) {
+        map.set(o.orderId, { ...o });
+      } else {
+        const existing = map.get(o.orderId);
+        if (o.status === "approved" || existing.status === "approved") {
+          existing.status = "approved";
+          existing.approvedAt = existing.approvedAt || o.approvedAt || new Date().toISOString();
+        }
+      }
     });
     freshOrders = Array.from(map.values());
   } catch(e){}
@@ -1042,6 +1099,7 @@ function normalizeYoutubeUrl(url) {
 // Exports to window
 window.CONFIG = APP_STATE.config;
 window.APP_STATE = APP_STATE;
+window.DEFAULT_ORDERS = DEFAULT_ORDERS;
 window.saveBatches = saveBatches;
 window.saveCoupons = saveCoupons;
 window.saveConfig = saveConfig;
